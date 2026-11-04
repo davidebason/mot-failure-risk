@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "motrisk"
+version = "0.1.0"
+description = "Which problems a fleet vehicle's MOT tests will find this year, predicted from what they found the year before, from Great Britain's anonymised MOT records."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Davide Bason", email = "davidebason@gmail.com" }]
+dependencies = [
+    "azure-storage-blob>=12.20",
+    "duckdb>=1.1",
+    # Reads the Deflate64 members of the 2022 and 2023 results archives, which zipfile cannot.
+    "inflate64>=1.0",
+    "pandas>=2.2",
+    "scikit-learn>=1.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+# The dbt build under transform/. Kept out of dependencies because no module under src/ imports
+# dbt: it is run from the command line. Pinned, so that a build is reproducible.
+# Install with `pip install -e ".[transform]"`.
+transform = [
+    "dbt-core==1.12.6",
+    "dbt-duckdb==1.11.1",
+]
+# Making pictures, and exploring which picture to make. Install with `pip install -e ".[figures]"`.
+figures = [
+    "matplotlib>=3.9",
+    "jupyter>=1.1",
+    # Strips notebook outputs on commit, so a diff shows code rather than rendered images.
+    "nbstripout>=0.7",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

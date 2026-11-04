@@ -1,0 +1,10 @@
+# Where dbt builds. Committed because it holds no secret: the warehouse is a local DuckDB file.
+# dbt reads this file when it is run from this directory, so every dbt command runs from transform/.
+# The path is relative to transform/, and puts the database beside the other derived data.
+motrisk:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../data/processed/mot.duckdb
+      threads: 4
