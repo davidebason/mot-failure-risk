@@ -11,11 +11,17 @@ requires-python = ">=3.12"
 license = "MIT"
 authors = [{ name = "Davide Bason", email = "davidebason@gmail.com" }]
 dependencies = [
+    # Logs in to Azure: through `az login` on a workstation, through a managed identity in Azure.
+    "azure-identity>=1.27",
     "azure-storage-blob>=12.20",
+    # Reads the file links on DVSA's portal page, the only listing of the 2024 and 2025 extracts.
+    "beautifulsoup4>=4.15",
     "duckdb>=1.1",
     # Reads the Deflate64 members of the 2022 and 2023 results archives, which zipfile cannot.
     "inflate64>=1.0",
     "pandas>=2.2",
+    # Imported directly by the fetcher, so declared here even though azure-core also installs it.
+    "requests>=2.34",
     "scikit-learn>=1.5",
 ]
 
