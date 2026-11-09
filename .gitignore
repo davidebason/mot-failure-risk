@@ -40,3 +40,8 @@ htmlcov/
 .idea/
 .DS_Store
 *:Zone.Identifier
+
+# --- Azure Function: the package copied in by function/publish.sh, and Core Tools' local secrets ---
+function/motrisk/
+function/.python_packages/
+local.settings.json
