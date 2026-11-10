@@ -1,0 +1,38 @@
+Downloaded dft_test_result_2022.zip: 1164809596 bytes.
+Committing dft_test_result_2022/test_result_2022.csv: 857 blocks, 3593668893 bytes, the size the archive records.
+Downloaded dft_test_result_2023.zip: 1192881905 bytes.
+Committing dft_test_result_2023/test_result.csv: 873 blocks, 3661104239 bytes, the size the archive records.
+Downloaded dft_test_result_extracts_2024.zip: 4797842352 bytes.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202401.csv: 102 blocks, 424125972 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202402.csv: 97 blocks, 404159340 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202403.csv: 109 blocks, 455448924 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202404.csv: 84 blocks, 351362912 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202405.csv: 84 blocks, 351302793 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202406.csv: 88 blocks, 368927461 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202407.csv: 97 blocks, 405482417 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202408.csv: 95 blocks, 394562662 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202409.csv: 108 blocks, 450502316 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202410.csv: 114 blocks, 474511007 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202411.csv: 99 blocks, 413658910 bytes, the size the archive records.
+Committing dft_test_result_extracts_2024/dft_test_result_extract_202412.csv: 73 blocks, 303794844 bytes, the size the archive records.
+Downloaded dft_test_result_extracts_2025.zip: 4835709507 bytes.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202501.csv: 101 blocks, 421376936 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202502.csv: 94 blocks, 394120028 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202503.csv: 114 blocks, 474896299 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202504.csv: 88 blocks, 365166953 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202505.csv: 88 blocks, 365517419 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202506.csv: 93 blocks, 387416174 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202507.csv: 98 blocks, 409468173 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202508.csv: 91 blocks, 379598621 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202509.csv: 112 blocks, 466427395 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202510.csv: 112 blocks, 467073261 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202511.csv: 94 blocks, 392724263 bytes, the size the archive records.
+Committing dft_test_result_extracts_2025/dft_test_result_extract_202512.csv: 75 blocks, 311921191 bytes, the size the archive records.
+Downloaded lookup.zip: 254053 bytes.
+Committing lookup/item_detail.csv: 1 blocks, 3560191 bytes, the size the archive records.
+Committing lookup/item_group.csv: 1 blocks, 142641 bytes, the size the archive records.
+Committing lookup/mdr_fuel_types.csv: 1 blocks, 261 bytes, the size the archive records.
+Committing lookup/mdr_rfr_location.csv: 1 blocks, 2744 bytes, the size the archive records.
+Committing lookup/mdr_test_outcome.csv: 1 blocks, 132 bytes, the size the archive records.
+Committing lookup/mdr_test_type.csv: 1 blocks, 146 bytes, the size the archive records.
+exit 0
