@@ -94,5 +94,10 @@ echo "Created $GROUP: $ACCOUNT/$CONTAINER and $ACCOUNT/$CSV_CONTAINER, $VM, $WOR
 # and stop paying for its processor once it is done:
 #     az vm deallocate --resource-group rg-mot-failure-risk --name vm-motrisk
 #
+# If Azure refuses to start the machine for want of capacity at its size (AllocationFailed), switch
+# the deallocated machine to a size the region has room for, and start it again. On 2026-11-10 it
+# went from Standard_B2ats_v2 to Standard_B2ts_v2, the same 2 vCPUs and 1 GiB on Intel:
+#     az vm resize --resource-group rg-mot-failure-risk --name vm-motrisk --size Standard_B2ts_v2
+#
 # Deploy the watcher:
 #     ./function/publish.sh
