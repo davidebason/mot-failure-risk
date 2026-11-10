@@ -7,6 +7,9 @@ CLAUDE.md
 data/raw/*
 !data/raw/.gitkeep
 
+# --- the CSVs extracted from data/raw/ by src/motrisk/extract.py: about 51 GB, rebuilt at will ---
+data/extracted/
+
 # --- derived data stores ---
 *.duckdb
 *.duckdb.wal
