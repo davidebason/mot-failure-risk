@@ -12,7 +12,8 @@ GROUP=rg-mot-failure-risk
 REGION=northeurope       # the storage account, the logs and the Function
 VM_REGION=swedencentral  # the nearest region offering this subscription small virtual machines
 ACCOUNT=stmotrisk
-CONTAINER=raw
+CONTAINER=raw            # the files as published
+CSV_CONTAINER=csv        # the CSVs extracted from them
 VM=vm-motrisk
 WORKSPACE=log-motrisk
 APP=func-motrisk
@@ -24,14 +25,17 @@ for namespace in Microsoft.Storage Microsoft.Compute Microsoft.Network Microsoft
     az provider register --namespace "$namespace" --wait
 done
 
-# 2. The group, the storage account and its container. The container is created through Azure's
-#    management API, which needs no data role, so it does not wait for step 3's role to take effect.
+# 2. The group, the storage account and its two containers. The containers are created through
+#    Azure's management API, which needs no data role, so they do not wait for step 3's role to
+#    take effect.
 az group create --name "$GROUP" --location "$REGION" --output none
 az storage account create --resource-group "$GROUP" --name "$ACCOUNT" --location "$REGION" \
     --sku Standard_LRS --kind StorageV2 --min-tls-version TLS1_2 \
     --allow-blob-public-access false --output none
-az storage container-rm create --resource-group "$GROUP" --storage-account "$ACCOUNT" \
-    --name "$CONTAINER" --output none
+for container in "$CONTAINER" "$CSV_CONTAINER"; do
+    az storage container-rm create --resource-group "$GROUP" --storage-account "$ACCOUNT" \
+        --name "$container" --output none
+done
 account_id=$(az storage account show --resource-group "$GROUP" --name "$ACCOUNT" --query id -o tsv)
 
 # 3. The data role for whoever runs this script: Owner manages the account but cannot read its
@@ -65,7 +69,7 @@ app_principal=$(az functionapp identity show --resource-group "$GROUP" --name "$
 az role assignment create --role "$ROLE" --assignee-object-id "$app_principal" \
     --assignee-principal-type ServicePrincipal --scope "$account_id" --output none
 
-echo "Created $GROUP: $ACCOUNT/$CONTAINER, $VM, $WORKSPACE and $APP."
+echo "Created $GROUP: $ACCOUNT/$CONTAINER and $ACCOUNT/$CSV_CONTAINER, $VM, $WORKSPACE and $APP."
 
 # Then, by hand:
 #
