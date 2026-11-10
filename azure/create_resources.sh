@@ -4,8 +4,12 @@
 # Run once, logged in with `az login`, on a subscription where the names below are free.
 # Left to other files: the data, landed by src/motrisk/fetch.py run on the virtual machine (see
 # the end of this file), and the Function's code, deployed by function/publish.sh.
-# Everything sits in one resource group, so one command removes it all:
+# Everything this script creates sits in one resource group, so one command removes it all:
 #     az group delete --name rg-mot-failure-risk
+# Azure itself adds a second group, NetworkWatcherRG, when the virtual machine's network is
+# created, holding a Network Watcher for the machine's region. The command above leaves it, and
+#     az group delete --name NetworkWatcherRG
+# removes it as well.
 set -euo pipefail
 
 GROUP=rg-mot-failure-risk
