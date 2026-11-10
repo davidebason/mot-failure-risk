@@ -17,8 +17,9 @@ dependencies = [
     # Reads the file links on DVSA's portal page, the only listing of the 2024 and 2025 extracts.
     "beautifulsoup4>=4.15",
     "duckdb>=1.1",
-    # Reads the Deflate64 members of the 2022 and 2023 results archives, which zipfile cannot.
-    "inflate64>=1.0",
+    # Teaches zipfile to read the Deflate64 members of the 2022 and 2023 results archives. It
+    # ships no wheel for Python 3.12, so pip compiles it: a C compiler and Python's headers needed.
+    "zipfile-deflate64>=0.2",
     "pandas>=2.2",
     # Imported directly by the fetcher, so declared here even though azure-core also installs it.
     "requests>=2.34",
@@ -27,6 +28,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    # Writes the Deflate64 archives the tests read, which zipfile cannot write.
+    "inflate64>=1.0",
     "pytest>=8.0",
     "ruff>=0.5",
 ]

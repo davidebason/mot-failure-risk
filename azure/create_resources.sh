@@ -87,7 +87,7 @@ echo "Created $GROUP: $ACCOUNT/$CONTAINER and $ACCOUNT/$CSV_CONTAINER, $VM, $WOR
 #     rsync -av --exclude data/raw --exclude data/extracted --exclude .venv --exclude .git \
 #         --exclude '*.egg-info' ./ "azureuser@$ip:mot-failure-risk/"
 # then, on the machine (ssh "azureuser@$ip"), inside tmux so the run survives a dropped connection:
-#     sudo apt-get update && sudo apt-get install -y python3-venv tmux
+#     sudo apt-get update && sudo apt-get install -y python3-venv tmux build-essential python3-dev
 #     cd mot-failure-risk && python3 -m venv .venv && source .venv/bin/activate && pip install -e .
 #     python -u src/motrisk/fetch.py 2>&1 | tee fetch.log
 #     python -u src/motrisk/extract.py azure 2>&1 | tee extract.log
