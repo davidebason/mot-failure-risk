@@ -24,7 +24,7 @@ Each year is published as two files, **test results** and **failure items**, plu
 | 2017 | ZIP | not checked, and not used | | |
 | 2018 to 2020 | ZIP | four quarterly CSVs per table; in 2018 and 2019, also folder and `__MACOSX/` entries carrying no data | `,` | old set |
 | 2021 | ZIP | twelve CSVs per table, of equal size rather than one a month; the header in double quotes, and in the first row every value but `test_id`, `vehicle_id`, `rfr_id` and `location_id` | `,` | old set |
-| 2022 and 2023 | ZIP | one CSV per table | `\|` | old set |
+| 2022 and 2023 | ZIP | one CSV per table; in the 2022 failure items, also a `__MACOSX/` entry carrying no data | `\|` | old set |
 | 2024, first release, March 2025 | ZIP | twelve monthly CSVs per table, plus folder and `__MACOSX/` entries carrying no data | `,` | new set |
 | 2024 and 2025, extracts, June 2026 | ZIP, stored without compression | twelve monthly CSVs per table | `,` | new set |
 
