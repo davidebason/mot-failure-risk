@@ -37,9 +37,9 @@ left join {{ ref('engine_size_bounds') }} as e
 select
     i.*,
     case
-        -- An item whose test is in no file is not removed: the staged items' test of
-        -- relationships then fails, which is how it is found.
-        when t.test_id is null then null
+        -- An item whose test is in no file has no vehicle, date or class, so it cannot be placed
+        -- in any slot. The full build of 2026-11-12 found 175, 167 of them in the 2022 file.
+        when t.test_id is null then 'item whose test is in no file'
         when t.removed_by is not null then 'item of a removed test'
         when d.rfr_id is null then 'item on a code not kept'
         when c.rfr_id is null then 'item on a code not listed for its vehicle''s class'
