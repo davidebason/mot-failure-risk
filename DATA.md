@@ -185,6 +185,33 @@ From the post-2018 user guide, unless marked as from the portal.
 
 We convert each of the 106 CSVs once to a Parquet file. Each is read with the separator and quoting set out under "The files" above, and every column is kept as text, so that only the container changes and no value is reinterpreted. Each Parquet file is checked to hold exactly the rows [`evidence/09_csv_from_azure.py`](evidence/09_csv_from_azure.py) counted for its CSV. The build then reads the test results of every year in one query and the failure items in another, into two staged tables with the same columns for every year. The new column set's added and renamed columns are among those dropped below. The cleaning rules below are stated on values rather than on years, so they apply to every year alike.
 
+### Every row of the files is accounted for
+
+We built the staged tables over every year on 12 November 2026, with dbt on the Azure virtual machine, resized to 4 vCPUs and 32 GB, from the container `parquet` downloaded to its disk. Every row of the files is either kept or removed by exactly one rule, each counted on its own, and the counts add up to the rows of the files, as the model [`staging_row_counts`](transform/models/staging/staging_row_counts.sql) records in [`data/staging_row_counts_2026-11-12.log`](data/staging_row_counts_2026-11-12.log). A row that meets several rules is counted under the first, in the order of [`transform/macros/classified.sql`](transform/macros/classified.sql), which is why the counts of the bounds differ slightly from those of evidence 13.
+
+| Table | Kept, or removed because | Rows |
+|---|---|---|
+| tests | kept | 308,127,375 |
+|  | before 20 May 2018 | 15,665,371 |
+|  | aborted, `ABR` | 1,598,012 |
+|  | engine size outside its class's range | 341,084 |
+|  | age at the test over 50 years | 249,746 |
+|  | abandoned, `ABA` | 189,605 |
+|  | mileage above 900,000 | 10,451 |
+|  | aborted by a vehicle examiner, `ABRVE` | 234 |
+|  | **total, the rows of the files** | **326,181,878** |
+| failure items | kept | 633,027,171 |
+|  | of a removed test | 30,820,336 |
+|  | on a code not kept | 9,074,846 |
+|  | on a code not listed for its vehicle's class | 24,846 |
+|  | whose test is in no file | 175 |
+|  | recorded in a way the rules exclude | 1 |
+|  | **total, the rows of the files** | **672,947,375** |
+
+**A failure item whose test is in no file is removed.** 175 items belong to tests that appear in no results file of any year; with no vehicle, date or class, they cannot be placed in any slot.
+
+Every test of the build passes, as its records show: [`data/dbt_build_run_2026-11-12.log`](data/dbt_build_run_2026-11-12.log), [`data/dbt_retry_run_2026-11-12.log`](data/dbt_retry_run_2026-11-12.log) and [`data/dbt_items_run_2026-11-12.log`](data/dbt_items_run_2026-11-12.log). The first run filled the machine's disk with temporary files when four steps ran at once, and its failed steps were rerun one at a time; the third run rebuilt the failure items once those whose test is in no file had a rule of their own. 156,701 vehicles are tested in more than one class, reported as a warning, since each test's class is kept as recorded.
+
 ### Tests from 20 May 2018 to 31 December 2025
 
 We use tests from 20 May 2018, the day the 2018 rules came into force, to the end of 2025, the latest year published. The recent years describe modern cars and the current test, and starting on that date puts every test under one set of rules and one list of defect codes: for class 4, the 1,921 codes of the 2018 rules, rather than those and the 2,511 used before them. The tests of 1 January to 19 May 2018 are in the 2018 files and are excluded. The period cannot start earlier: none of the 29,051,275 failure items recorded before 20 May 2018 carries a code of the 2018 rules. These counts, and those of the next section, are produced by [`evidence/05_code_coverage.py`](evidence/05_code_coverage.py), over all tests, aborted and abandoned ones included, since a failure item carries no test result.

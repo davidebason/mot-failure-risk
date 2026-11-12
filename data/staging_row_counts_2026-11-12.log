@@ -1,0 +1,22 @@
+Where every row of the two sources goes, from the model staging_row_counts of the full
+build run on the Azure virtual machine on 12 November 2026.
+
+test_results    kept                                                       308,127,375
+test_results    test before 20 May 2018                                     15,665,371
+test_results    test aborted, ABR                                            1,598,012
+test_results    engine size outside its class's range                          341,084
+test_results    age at the test over 50 years                                  249,746
+test_results    test abandoned, ABA                                            189,605
+test_results    mileage above 900000                                            10,451
+test_results    test aborted by a vehicle examiner, ABRVE                          234
+test_results    total                                                      326,181,878
+
+failure_items   kept                                                       633,027,171
+failure_items   item of a removed test                                      30,820,336
+failure_items   item on a code not kept                                      9,074,846
+failure_items   item on a code not listed for its vehicle's class               24,846
+failure_items   item whose test is in no file                                      175
+failure_items   item recorded in a way the rules exclude                             1
+failure_items   total                                                      672,947,375
+
+rows in stg_test_results: 308,127,375; rows in stg_failure_items: 633,027,171

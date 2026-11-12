@@ -1,0 +1,53 @@
+started 2026-11-12 15:27:11 UTC
+15:27:13  Running with dbt=1.12.6
+15:27:13  Registered adapter: duckdb=1.11.1
+15:27:13  Unable to do partial parsing because profile has changed
+15:27:15  Found 3 models, 34 data tests, 3 seeds, 6 sources, 514 macros
+15:27:15  
+15:27:15  Concurrency: 1 threads (target='dev')
+15:27:15  
+15:27:15  1 of 11 START sql table model main.staging_row_counts .......................... [RUN]
+15:48:25  1 of 11 OK created sql table model main.staging_row_counts ..................... [OK in 1269.99s]
+15:48:25  2 of 11 START sql table model main.stg_failure_items ........................... [RUN]
+16:11:07  2 of 11 OK created sql table model main.stg_failure_items ...................... [OK in 1361.47s]
+16:11:07  3 of 11 START test unique_stg_test_results_test_id ............................. [RUN]
+16:11:43  3 of 11 PASS unique_stg_test_results_test_id ................................... [PASS in 35.81s]
+16:11:43  4 of 11 START test vehicle_keeps_its_class ..................................... [RUN]
+16:12:14  4 of 11 WARN 156701 vehicle_keeps_its_class .................................... [WARN 156701 in 31.58s]
+16:12:14  5 of 11 START test not_null_staging_row_counts_outcome ......................... [RUN]
+16:12:14  5 of 11 PASS not_null_staging_row_counts_outcome ............................... [PASS in 0.02s]
+16:12:14  6 of 11 START test accepted_values_stg_failure_items_rfr_type_code__F__P__M__A . [RUN]
+16:12:19  6 of 11 PASS accepted_values_stg_failure_items_rfr_type_code__F__P__M__A ....... [PASS in 5.08s]
+16:12:19  7 of 11 START test not_null_stg_failure_items_rfr_id ........................... [RUN]
+16:12:19  7 of 11 PASS not_null_stg_failure_items_rfr_id ................................. [PASS in 0.01s]
+16:12:19  8 of 11 START test not_null_stg_failure_items_test_id .......................... [RUN]
+16:12:19  8 of 11 PASS not_null_stg_failure_items_test_id ................................ [PASS in 0.01s]
+16:12:19  9 of 11 START test relationships_stg_failure_items_rfr_id__rfr_id__ref_code_dictionary_  [RUN]
+16:12:41  9 of 11 FAIL 5 relationships_stg_failure_items_rfr_id__rfr_id__ref_code_dictionary_  [FAIL 5 in 21.70s]
+16:12:41  10 of 11 START test relationships_stg_failure_items_test_id__test_id__ref_stg_test_results_  [RUN]
+16:13:19  10 of 11 FAIL 175 relationships_stg_failure_items_test_id__test_id__ref_stg_test_results_  [FAIL 175 in 37.67s]
+16:13:19  11 of 11 START test staging_rows_accounted ..................................... [RUN]
+16:13:19  11 of 11 PASS staging_rows_accounted ........................................... [PASS in 0.45s]
+16:13:19  
+16:13:19  Finished running 2 table models, 9 data tests in 0 hours 46 minutes and 3.94 seconds (2763.94s).
+16:13:19  
+16:13:19  Completed with 2 errors, 0 partial successes, and 1 warning:
+16:13:19  
+16:13:19  [ERROR]: in test relationships_stg_failure_items_rfr_id__rfr_id__ref_code_dictionary_ (models/staging/_staging.yml)
+16:13:19    Got 5 results, configured to fail if != 0
+16:13:19  
+16:13:19    compiled code at target/compiled/motrisk/models/staging/_staging.yml/relationships_stg_failure_item_00a2eb993c58b87c3a3f9022768d46d8.sql
+16:13:19  
+16:13:19  [ERROR]: in test relationships_stg_failure_items_test_id__test_id__ref_stg_test_results_ (models/staging/_staging.yml)
+16:13:19    Got 175 results, configured to fail if != 0
+16:13:19  
+16:13:19    compiled code at target/compiled/motrisk/models/staging/_staging.yml/relationships_stg_failure_item_740ce4ac9b4c949450fe451ef0baaf7b.sql
+16:13:19  
+16:13:19  [WARNING]: in test vehicle_keeps_its_class (tests/vehicle_keeps_its_class.sql)
+16:13:19  [WARNING]: Got 156701 results, configured to warn if != 0
+16:13:19  
+16:13:19    compiled code at target/compiled/motrisk/tests/vehicle_keeps_its_class.sql
+16:13:19  
+16:13:19  Done. PASS=8 WARN=1 ERROR=2 SKIP=0 NO-OP=0 REUSED=0 TOTAL=11
+exit 1
+ended 2026-11-12 16:13:22 UTC
