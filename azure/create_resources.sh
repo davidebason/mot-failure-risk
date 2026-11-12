@@ -2,9 +2,10 @@
 # Create every Azure resource the project uses, from nothing, each after the ones it needs.
 #
 # Run once, logged in with `az login`, on a subscription where the names below are free.
-# Left to other files: the data, landed by src/motrisk/fetch.py and extracted by
-# src/motrisk/extract.py, both run on the virtual machine (see the end of this file), and the
-# Function's code, deployed by function/publish.sh.
+# Left to other files: the data, landed by src/motrisk/fetch.py, extracted by
+# src/motrisk/extract.py and converted to Parquet by src/motrisk/convert.py, all run on the
+# virtual machine (see the end of this file), and the Function's code, deployed by
+# function/publish.sh.
 # Everything this script creates sits in one resource group, so one command removes it all:
 #     az group delete --name rg-mot-failure-risk
 # Azure itself adds a second group, NetworkWatcherRG, when the virtual machine's network is
@@ -19,6 +20,7 @@ VM_REGION=swedencentral  # the nearest region offering this subscription small v
 ACCOUNT=stmotrisk
 CONTAINER=raw            # the files as published
 CSV_CONTAINER=csv        # the CSVs extracted from them
+PARQUET_CONTAINER=parquet  # the same CSVs as Parquet, which the dbt build reads
 VM=vm-motrisk
 WORKSPACE=log-motrisk
 APP=func-motrisk
@@ -30,14 +32,14 @@ for namespace in Microsoft.Storage Microsoft.Compute Microsoft.Network Microsoft
     az provider register --namespace "$namespace" --wait
 done
 
-# 2. The group, the storage account and its two containers. The containers are created through
+# 2. The group, the storage account and its three containers. The containers are created through
 #    Azure's management API, which needs no data role, so they do not wait for step 3's role to
 #    take effect.
 az group create --name "$GROUP" --location "$REGION" --output none
 az storage account create --resource-group "$GROUP" --name "$ACCOUNT" --location "$REGION" \
     --sku Standard_LRS --kind StorageV2 --min-tls-version TLS1_2 \
     --allow-blob-public-access false --output none
-for container in "$CONTAINER" "$CSV_CONTAINER"; do
+for container in "$CONTAINER" "$CSV_CONTAINER" "$PARQUET_CONTAINER"; do
     az storage container-rm create --resource-group "$GROUP" --storage-account "$ACCOUNT" \
         --name "$container" --output none
 done
@@ -75,11 +77,12 @@ app_principal=$(az functionapp identity show --resource-group "$GROUP" --name "$
 az role assignment create --role "$ROLE" --assignee-object-id "$app_principal" \
     --assignee-principal-type ServicePrincipal --scope "$account_id" --output none
 
-echo "Created $GROUP: $ACCOUNT/$CONTAINER and $ACCOUNT/$CSV_CONTAINER, $VM, $WORKSPACE and $APP."
+echo "Created $GROUP: $ACCOUNT and its three containers, $VM, $WORKSPACE and $APP."
 
 # Then, by hand:
 #
-# Land the 17 files from the virtual machine, then extract their CSVs into the container csv.
+# Land the 17 files from the virtual machine, extract their CSVs into the container csv, then
+# convert those to Parquet into the container parquet.
 # Start the machine if it is deallocated, and copy the repository to it, from the laptop:
 #     az vm start --resource-group rg-mot-failure-risk --name vm-motrisk
 #     ip=$(az vm show --show-details --resource-group rg-mot-failure-risk --name vm-motrisk \
@@ -91,6 +94,7 @@ echo "Created $GROUP: $ACCOUNT/$CONTAINER and $ACCOUNT/$CSV_CONTAINER, $VM, $WOR
 #     cd mot-failure-risk && python3 -m venv .venv && source .venv/bin/activate && pip install -e .
 #     python -u src/motrisk/fetch.py 2>&1 | tee fetch.log
 #     python -u src/motrisk/extract.py azure 2>&1 | tee extract.log
+#     python -u src/motrisk/convert.py azure 2>&1 | tee convert.log
 # and stop paying for its processor once it is done:
 #     az vm deallocate --resource-group rg-mot-failure-risk --name vm-motrisk
 #
