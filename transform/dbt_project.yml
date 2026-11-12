@@ -13,3 +13,19 @@ snapshot-paths: ["snapshots"]
 
 target-path: "target"
 clean-targets: ["target", "dbt_packages"]
+
+models:
+  motrisk:
+    # Tables rather than views: the mart reads them many times, and the sources are 11 GB.
+    staging:
+      +materialized: table
+
+vars:
+  # Where the Parquet copies of the publisher's files are read from, relative to transform/: the
+  # full local copy by default; for the development slice,
+  # --vars '{parquet_root: ../data/parquet_slice}'.
+  parquet_root: ../data/parquet
+  # The bounds past which a value becomes missing in staging (DATA.md, "The vehicle columns,
+  # cleaned"; evidence/13). Engine size has its bounds per class, in seeds/engine_size_bounds.csv.
+  mileage_max: 900000
+  age_max_years: 50

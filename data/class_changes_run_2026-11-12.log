@@ -1,0 +1,11 @@
+kept tests: 308,728,656, vehicles: 48,229,038; failed or passed after rectification: 24.3%; not a normal test: 17.4%
+class changes: 169,568, on 158,304 vehicles, 0.33% of all
+  tests same day apart: 0 (0.0%)
+  tests 1 to 14 days apart: 89 (0.1%)
+  tests 15 days to 20 weeks apart: 837 (0.5%)
+  tests more than 20 weeks apart: 168,642 (99.5%)
+earlier test's result: P: 152,654, PRS: 10,263, F: 6,651
+later test's type: NT: 163,620, RT: 5,948
+direction: 7 to 4: 93,639, 4 to 7: 52,489, 5 to 4: 7,844, 2 to 1: 6,954, 5 to 7: 2,257, 1 to 2: 1,987, 4 to 5: 1,519, 2 to 3: 980, 3 to 4: 686, 7 to 5: 343, 4 to 3: 330, 3 to 2: 222, 2 to 4: 160, 4 to 2: 55, 4 to 1: 32, 3 to 1: 31, 1 to 3: 29, 1 to 4: 10, 7 to 1: 1
+changes per vehicle: 1: 147,511, 2: 10,334, 3: 447, 4: 12
+exit 0

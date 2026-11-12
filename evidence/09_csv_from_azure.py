@@ -18,18 +18,10 @@ run on the virtual machine, from the repository root:
 
 import duckdb
 
+from motrisk.convert import reading
+
 ACCOUNT = "stmotrisk"
 CONTAINER = "csv"
-
-
-def reading(path: str) -> str:
-    """The read_csv options DATA.md sets out for the CSV at path, from the archive it came from."""
-    archive = path.removeprefix(f"az://{CONTAINER}/").split("/")[0]
-    if archive == "lookup" or archive.endswith(("_2022", "_2023")):
-        return "delim = '|', quote = ''"
-    if archive == "dft_test_result_2021":
-        return "delim = ',', quote = '\"', escape = '\"'"
-    return "delim = ',', quote = '\"', escape = '\\'"
 
 
 def main() -> None:
@@ -52,7 +44,7 @@ def main() -> None:
     print(f"{'file':<100} {'bytes':>15} {'columns':>7} {'rows':>12} {'skipped':>7}")
     for path, size in files:
         name = path.removeprefix(f"az://{CONTAINER}/")
-        options = f"{reading(path)}, header = true, all_varchar = true"
+        options = f"{reading(name.split('/')[0])}, header = true, all_varchar = true"
         try:
             columns = len(
                 con.execute(f"DESCRIBE SELECT * FROM read_csv(?, {options})", [path]).fetchall()

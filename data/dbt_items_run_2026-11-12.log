@@ -1,0 +1,33 @@
+started 2026-11-12 16:17:27 UTC
+16:17:29  Running with dbt=1.12.6
+16:17:29  Registered adapter: duckdb=1.11.1
+16:17:31  Found 3 seeds, 34 data tests, 3 models, 6 sources, 514 macros
+16:17:31  
+16:17:31  Concurrency: 1 threads (target='dev')
+16:17:31  
+16:17:31  1 of 9 START sql table model main.staging_row_counts ........................... [RUN]
+16:37:29  1 of 9 OK created sql table model main.staging_row_counts ...................... [OK in 1198.45s]
+16:37:29  2 of 9 START sql table model main.stg_failure_items ............................ [RUN]
+16:59:57  2 of 9 OK created sql table model main.stg_failure_items ....................... [OK in 1348.31s]
+16:59:57  3 of 9 START test not_null_staging_row_counts_outcome .......................... [RUN]
+16:59:58  3 of 9 PASS not_null_staging_row_counts_outcome ................................ [PASS in 0.06s]
+16:59:58  4 of 9 START test accepted_values_stg_failure_items_rfr_type_code__F__P__M__A .. [RUN]
+17:00:03  4 of 9 PASS accepted_values_stg_failure_items_rfr_type_code__F__P__M__A ........ [PASS in 4.98s]
+17:00:03  5 of 9 START test not_null_stg_failure_items_rfr_id ............................ [RUN]
+17:00:03  5 of 9 PASS not_null_stg_failure_items_rfr_id .................................. [PASS in 0.02s]
+17:00:03  6 of 9 START test not_null_stg_failure_items_test_id ........................... [RUN]
+17:00:03  6 of 9 PASS not_null_stg_failure_items_test_id ................................. [PASS in 0.02s]
+17:00:03  7 of 9 START test relationships_stg_failure_items_rfr_id__rfr_id__ref_code_dictionary_  [RUN]
+17:00:22  7 of 9 PASS relationships_stg_failure_items_rfr_id__rfr_id__ref_code_dictionary_  [PASS in 19.16s]
+17:00:22  8 of 9 START test relationships_stg_failure_items_test_id__test_id__ref_stg_test_results_  [RUN]
+17:01:26  8 of 9 PASS relationships_stg_failure_items_test_id__test_id__ref_stg_test_results_  [PASS in 64.35s]
+17:01:26  9 of 9 START test staging_rows_accounted ....................................... [RUN]
+17:01:27  9 of 9 PASS staging_rows_accounted ............................................. [PASS in 0.46s]
+17:01:27  
+17:01:27  Finished running 2 table models, 7 data tests in 0 hours 43 minutes and 55.94 seconds (2635.94s).
+17:01:27  
+17:01:27  Completed successfully
+17:01:27  
+17:01:27  Done. PASS=9 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=9
+exit 0
+ended 2026-11-12 17:01:29 UTC
