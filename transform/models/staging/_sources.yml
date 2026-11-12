@@ -13,12 +13,55 @@ sources:
           external_location: >-
             read_parquet('{{ var("parquet_root") }}/dft_test_result_*/*.parquet',
             union_by_name = true, filename = true)
+        columns:
+          - name: test_id
+            data_tests:
+              - not_null
+              - matches_type: {arguments: {kind: whole_number}}
+          - name: vehicle_id
+            data_tests:
+              - not_null
+              - matches_type: {arguments: {kind: whole_number}}
+          - name: test_date
+            data_tests:
+              - not_null
+              - matches_type: {arguments: {kind: iso_date}}
+          - name: test_class_id
+            data_tests:
+              - accepted_values: {arguments: {values: ["1", "2", "3", "4", "5", "7"]}}
+          - name: test_type
+            data_tests:
+              - accepted_values: {arguments: {values: [NT, RT, PL, PV, ES, EI]}}
+          - name: test_result
+            data_tests:
+              - accepted_values: {arguments: {values: [P, F, PRS, ABR, ABA, ABRVE]}}
+          - name: test_mileage
+            data_tests:
+              - matches_type: {arguments: {kind: whole_number}}
+          - name: cylinder_capacity
+            data_tests:
+              - matches_type: {arguments: {kind: whole_number}}
+          - name: first_use_date
+            data_tests:
+              - matches_type: {arguments: {kind: iso_date}}
       - name: failure_items
         description: "One row per defect or advisory recorded in a test, every year."
         meta:
           external_location: >-
             read_parquet('{{ var("parquet_root") }}/dft_test_item_*/*.parquet',
             union_by_name = true, filename = true)
+        columns:
+          - name: test_id
+            data_tests:
+              - not_null
+              - matches_type: {arguments: {kind: whole_number}}
+          - name: rfr_id
+            data_tests:
+              - not_null
+              - matches_type: {arguments: {kind: whole_number}}
+          - name: rfr_type_code
+            data_tests:
+              - accepted_values: {arguments: {values: [F, P, M, A]}}
       - name: item_detail
         description: "One row per defect code per vehicle class, from the lookup tables."
         meta:
