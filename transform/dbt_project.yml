@@ -19,6 +19,9 @@ models:
     # Tables rather than views: the mart reads them many times, and the sources are 11 GB.
     staging:
       +materialized: table
+    # Tables too: each is read by the next model and by its tests.
+    intermediate:
+      +materialized: table
 
 vars:
   # Where the Parquet copies of the publisher's files are read from, relative to transform/: the
@@ -29,3 +32,6 @@ vars:
   # cleaned"; evidence/13). Engine size has its bounds per class, in seeds/engine_size_bounds.csv.
   mileage_max: 900000
   age_max_years: 50
+  # Two consecutive tests of a vehicle more than this many weeks apart fall in different slots
+  # (DATA.md, "What the model predicts"; evidence/14).
+  slot_gap_weeks: 20

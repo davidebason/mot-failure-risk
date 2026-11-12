@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_test_slots
+    description: >-
+      One row per staged test, with the number of its vehicle's slot it falls in, and whether it is
+      the slot's first test (DATA.md, "What the model predicts").
+    columns:
+      - name: test_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships: {arguments: {to: ref('stg_test_results'), field: test_id}}
+      - name: slot_number
+        data_tests: [not_null]

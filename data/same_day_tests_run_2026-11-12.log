@@ -1,0 +1,6 @@
+tests of 2024 and 2025, 5% of vehicles, stopped tests removed: 4,242,439
+pairs of a vehicle's tests on one day: 300,045
+  the lower test_id completed first: 149,761; later: 150,282; at the same time: 2
+  a normal test and a test of another type: the normal test completed first 297,173, later 1,285
+  two normal tests: the lower mileage completed first 760, later 48; mileage equal or missing 769
+  pairs whose mileages differ: 95,121
