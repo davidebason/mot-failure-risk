@@ -219,9 +219,15 @@ From the test results we keep `test_id` and `vehicle_id`, which link the tables 
 
 We keep tests of every class, from motorcycles to goods vehicles of up to 3,500 kg, not cars alone. Each class has its own list of defect codes and its own age at first test, as set out under "The lookup tables" and "Test results: one row per test" above.
 
-### Aborted and abandoned tests are removed
+### Tests stopped before their end are removed
 
-A test recorded as `ABR` was stopped because of a problem with the testing equipment or the tester, not with the vehicle, so it says nothing about the vehicle's condition and we remove it. An abandoned test, `ABA`, was stopped by the tester because it was unsafe to continue or because some items could not be inspected. What that says about the vehicle lies in how the test ended, and the model predicts the problems a vehicle had, not how its tests ended, so we remove abandoned tests as well. They are removed before the tests are grouped into slots (below), so they neither start nor extend one. The failure items recorded in a removed test are removed with it.
+**The model predicts the problems a vehicle actually has, not how its tests end.** A test stopped before its end carries no information on the problem itself: it says only that this test did not finish, while we train the model to predict the vehicle's problems, which a fleet manager needs in order to decide which parts to inspect. The model does not predict that a test fails or is stopped. A vehicle whose test is stopped is normally tested again, and that complete test finds what is wrong, which is what the model aims to predict. A stopped test also leaves parts uninspected, and the absence of a record for them would read as nothing found. So we remove the three kinds of stopped test, with the failure items recorded in them:
+
+- `ABR`, aborted because of a problem with the testing equipment or the tester, not with the vehicle;
+- `ABA`, abandoned by the tester because it was unsafe to continue or because some items could not be inspected;
+- `ABRVE`, aborted by a DVSA vehicle examiner, a result the user guide does not describe.
+
+They are removed before the tests are grouped into slots (below), so they neither start nor extend one.
 
 ### What the model predicts: every problem recorded in the vehicle's next slot of tests
 
