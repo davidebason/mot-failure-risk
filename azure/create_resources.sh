@@ -103,5 +103,13 @@ echo "Created $GROUP: $ACCOUNT and its three containers, $VM, $WORKSPACE and $AP
 # went from Standard_B2ats_v2 to Standard_B2ts_v2, the same 2 vCPUs and 1 GiB on Intel:
 #     az vm resize --resource-group rg-mot-failure-risk --name vm-motrisk --size Standard_B2ts_v2
 #
+# On the 1 GiB machine, a long run can be killed for want of memory when a system service wakes:
+# on 2026-11-12 the firmware updater fwupd did, five files into the conversion. Before a long run,
+# stop it and switch on a swap file; the file stays on disk, but swapon lasts until the machine
+# stops, so after a restart only the last command is needed:
+#     sudo systemctl stop fwupd.service
+#     sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile
+#     sudo swapon /swapfile
+#
 # Deploy the watcher:
 #     ./function/publish.sh
