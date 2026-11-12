@@ -1,0 +1,11 @@
+Wrote dft_test_item_2018/dft_test_item-from-2018-01-01_00-00-01-to-2018-04-01_00-00-01.csv: 18172242 rows, as evidence/09 counted; 78485250 bytes.
+Uploaded dft_test_item_2018/dft_test_item-from-2018-01-01_00-00-01-to-2018-04-01_00-00-01.parquet.
+Wrote dft_test_item_2018/dft_test_item-from-2018-04-01_00-00-01-to-2018-07-01_00-00-01.csv: 20014106 rows, as evidence/09 counted; 85893217 bytes.
+Uploaded dft_test_item_2018/dft_test_item-from-2018-04-01_00-00-01-to-2018-07-01_00-00-01.parquet.
+Wrote dft_test_item_2018/dft_test_item-from-2018-07-01_00-00-01-to-2018-10-01_00-00-01.csv: 19194334 rows, as evidence/09 counted; 82548790 bytes.
+Uploaded dft_test_item_2018/dft_test_item-from-2018-07-01_00-00-01-to-2018-10-01_00-00-01.parquet.
+Wrote dft_test_item_2018/dft_test_item-from-2018-10-01_00-00-01-to-2019-01-01_00-00-01.csv: 17310586 rows, as evidence/09 counted; 73395377 bytes.
+Uploaded dft_test_item_2018/dft_test_item-from-2018-10-01_00-00-01-to-2019-01-01_00-00-01.parquet.
+Wrote dft_test_item_2019/dft_test_item-from-2019-01-01_00-00-01-to-2019-04-01_00-00-01.csv: 20391088 rows, as evidence/09 counted; 87149235 bytes.
+Uploaded dft_test_item_2019/dft_test_item-from-2019-01-01_00-00-01-to-2019-04-01_00-00-01.parquet.
+exit 137
