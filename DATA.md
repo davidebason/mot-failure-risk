@@ -298,3 +298,24 @@ The vehicle columns of each entry test are cleaned as below before they enter th
 - **Any other missing number is dirty data, and the training row that needs it is left out of the training table**, while the test and its defects stay: a mileage or an age missing at the target slot's first test, or an engine size missing at the previous slot's first test on a vehicle that is not electric. Among the kept tests, 1,530,658 lack a mileage, 133,451 an engine size on a vehicle that is not electric, and 26,348 an age (evidence 15). Leaving out only the row, rather than the test, keeps the test's defects wherever they serve as the input of another row.
 - **Make and model are trimmed and put in capitals**, which changes at most 0.003% of makes. `UNCLASSIFIED`, which the publisher gives a vehicle with no valid record in its vehicle dataset, is kept as a value of its own: about 0.3% of models a year.
 - **A make or model ending in a backslash is kept, without the backslash.** Four rows of the 2018 to 2020 results end a value with a backslash just before the separator: the make `MOTOGUZZ\` in 2018 and 2020, and the model `VITESSE\` twice in 2019, the same two vehicles each time. Python's `csv`, reading a backslash as the escape, takes `\,` for a comma inside the value and joins two values into one; DuckDB, which the build reads with, applies the escape only inside double quotes, and splits all four rows into as many values as their header has columns, as [`evidence/10_backslash_rows.py`](evidence/10_backslash_rows.py) shows. No other row of any year fails to split, as [`evidence/09_csv_from_azure.py`](evidence/09_csv_from_azure.py) shows. Changed 2026-11-10, the author's decision; superseded wording, kept so the change stays visible: *Rows that do not split into as many values as their header has columns number at most 2 a year, all in 2018 to 2020, blank lines among them, and are skipped.*
+
+### The training table: every possible row accounted for
+
+**Every possible training row is either kept or left out by exactly one rule, each counted on its own, so that the rows the model learns from trace back to every pair of consecutive slots**, as the rows of the staged tables trace back to the files. A possible row is two consecutive slots of a vehicle, which makes as many rows as there are slots that are not a vehicle's first. We built the table on 12 November 2026 with dbt on the Azure virtual machine, from the staged tables of every year, in 35 minutes, and every test of the build passes, as its record [`data/dbt_mart_run_2026-11-12.log`](data/dbt_mart_run_2026-11-12.log) shows. The tests check that each staged test is in exactly one slot, with the slots split where and only where two consecutive tests are more than 20 weeks apart; that the table holds one row per vehicle and target slot; that every entry of an input or a label is one of the 4,821 and every group one of theirs; that the counts below add up to the possible rows and their kept rows to the table; and that every kept row has a mileage, age and engine size within its bounds, and a class among 1, 2, 3, 4, 5 and 7.
+
+The model [`training_row_counts`](transform/models/marts/training_row_counts.sql) counts the rows per year of the target slot, as recorded in [`data/training_row_counts_2026-11-12.log`](data/training_row_counts_2026-11-12.log). A row that meets several rules is counted under the first, in the order of [`transform/macros/training_pairs.sql`](transform/macros/training_pairs.sql).
+
+| Target year | Kept | Mileage missing at the target slot's first test | Age unknown at the target slot's first test | Engine size missing at the previous slot's first test, not electric | Possible rows |
+|---|---|---|---|---|---|
+| 2019 | 16,129,855 | 41,254 | 2,590 | 8,840 | 16,182,539 |
+| 2020 | 27,230,182 | 67,635 | 3,163 | 12,736 | 27,313,716 |
+| 2021 | 29,290,438 | 75,707 | 291 | 12,706 | 29,379,142 |
+| 2022 | 30,581,637 | 77,719 | 215 | 11,917 | 30,671,488 |
+| 2023 | 31,654,601 | 78,192 | 179 | 12,132 | 31,745,104 |
+| 2024 | 31,942,228 | 77,179 | 156 | 10,926 | 32,030,489 |
+| 2025 | 32,244,374 | 73,787 | 142 | 9,812 | 32,328,115 |
+| **2019 to 2025** | **199,073,315** | **491,473** | **6,736** | **79,069** | **199,650,593** |
+
+A further 52,824 pairs have a target slot that starts in 2018, from 20 May, and are counted under their own rule, since the first year predicted is 2019: 199,703,417 possible rows in all.
+
+**Each vector is stored as the list of its entries that are 1**, every other entry being 0, and the groups the same way: the previous slot's entries, its groups and the label are three such lists on each row, sorted, with no repeats, and empty for a slot whose tests recorded nothing.
