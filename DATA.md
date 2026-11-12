@@ -265,6 +265,8 @@ They are removed before the tests are grouped into slots (below), so they neithe
 - the vehicle's mileage and age at the target slot's first test, since both are known when the vehicle arrives for it, the moment of decision; and its other details as recorded at the previous slot's first test;
 - the number of weeks between the first tests of the two slots.
 
+**A row's class is that of the previous slot's first test**, since that slot is what the row learns from. When a vehicle's class differs between the two slots, which [`evidence/12_class_changes.py`](evidence/12_class_changes.py) finds for 0.33% of vehicles, a defect listed only for the target slot's class cannot be predicted for that row.
+
 The prediction is made when the vehicle arrives for the target slot's first test, when that test's date is known. A vehicle's first slot serves only as input, and a vehicle with no later slot, whether scrapped, exported or off the road, gives no further row. A vehicle with more than one slot starting in a year has a row for each. The outcome of a test, `P`, `F`, `PRS` or `ABA`, is not predicted: what matters is the problems the vehicle had, not how its tests ended.
 
 **Rows go to training or test by the year of the target slot's first test.** A slot that starts in December can hold a retest from the following January, so a fold's training rows can hold a few tests from the first weeks of its test year. None of them is a test label, since each belongs to a slot that starts before the test year. We accept this. At the other end, a slot that starts late in 2025 loses any test in 2026, which the data does not hold.
