@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_test_results
+    description: >-
+      One row per test from 20 May 2018 to the end of 2025, stopped tests (ABR, ABA, ABRVE)
+      removed, typed, with the vehicle columns cleaned (DATA.md).
+    columns:
+      - name: test_id
+        data_tests: [unique, not_null]
+      - name: vehicle_id
+        data_tests: [not_null]
+      - name: test_date
+        data_tests: [not_null]
+      - name: test_class_id
+        data_tests:
+          - accepted_values: {arguments: {values: [1, 2, 3, 4, 5, 7], quote: false}}
+      - name: test_type
+        data_tests:
+          - accepted_values: {arguments: {values: [NT, RT, PL, PV, ES, EI]}}
+      - name: test_result
+        data_tests:
+          - accepted_values: {arguments: {values: [P, F, PRS]}}
+      - name: fuel_type
+        data_tests:
+          - relationships:
+              arguments: {to: "source('mot', 'mdr_fuel_types')", field: type_code}
+
+  - name: stg_failure_items
+    description: >-
+      One row per defect or advisory recorded in a kept test, on a kept code listed for the
+      vehicle's class and recorded in a way the rules allow, with the code as published (DATA.md).
+    columns:
+      - name: test_id
+        data_tests:
+          - not_null
+          - relationships: {arguments: {to: ref('stg_test_results'), field: test_id}}
+      - name: rfr_id
+        data_tests:
+          - not_null
+          - relationships: {arguments: {to: ref('code_dictionary'), field: rfr_id}}
+      - name: rfr_type_code
+        data_tests:
+          - accepted_values: {arguments: {values: [F, P, M, A]}}
+
+  - name: staging_row_counts
+    description: "Where every row of the two sources goes: kept, or removed by one rule."
+    columns:
+      - name: outcome
+        data_tests: [not_null]
