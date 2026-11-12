@@ -12,6 +12,8 @@ data/extracted/
 
 # --- the same CSVs as Parquet, written by src/motrisk/convert.py: rebuilt at will ---
 data/parquet/
+# --- links to a few of those files, the slice the dbt models are developed on ---
+data/parquet_slice/
 
 # --- derived data stores ---
 *.duckdb

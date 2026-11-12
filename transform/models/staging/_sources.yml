@@ -1,0 +1,38 @@
+version: 2
+
+# The Parquet copies of the publisher's files, one per CSV, written by src/motrisk/convert.py with
+# every column as text. They are read from the folder the variable parquet_root names (see
+# dbt_project.yml); each row carries the file it came from, so that rows can be counted per file.
+sources:
+  - name: mot
+    description: "The anonymised MOT tests and results of Great Britain, as Parquet; see DATA.md."
+    tables:
+      - name: test_results
+        description: "One row per test, every year from 2018 to 2025, in both column sets."
+        meta:
+          external_location: >-
+            read_parquet('{{ var("parquet_root") }}/dft_test_result_*/*.parquet',
+            union_by_name = true, filename = true)
+      - name: failure_items
+        description: "One row per defect or advisory recorded in a test, every year."
+        meta:
+          external_location: >-
+            read_parquet('{{ var("parquet_root") }}/dft_test_item_*/*.parquet',
+            union_by_name = true, filename = true)
+      - name: item_detail
+        description: "One row per defect code per vehicle class, from the lookup tables."
+        meta:
+          external_location: >-
+            read_parquet('{{ var("parquet_root") }}/lookup/item_detail.parquet')
+      - name: mdr_test_type
+        meta:
+          external_location: >-
+            read_parquet('{{ var("parquet_root") }}/lookup/mdr_test_type.parquet')
+      - name: mdr_test_outcome
+        meta:
+          external_location: >-
+            read_parquet('{{ var("parquet_root") }}/lookup/mdr_test_outcome.parquet')
+      - name: mdr_fuel_types
+        meta:
+          external_location: >-
+            read_parquet('{{ var("parquet_root") }}/lookup/mdr_fuel_types.parquet')
