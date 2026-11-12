@@ -1,0 +1,19 @@
+sample: 2,405,234 vehicles, 15,404,802 tests, 12,999,568 consecutive pairs
+          0 to 1 weeks:  2,418,945   18.61%  up to here  18.61%
+          1 to 2 weeks:    313,139    2.41%  up to here  21.02%
+          2 to 4 weeks:    105,532    0.81%  up to here  21.83%
+          4 to 8 weeks:     62,662    0.48%  up to here  22.31%
+         8 to 12 weeks:     38,246    0.29%  up to here  22.60%
+        12 to 16 weeks:     36,016    0.28%  up to here  22.88%
+        16 to 20 weeks:     39,939    0.31%  up to here  23.19%
+        20 to 24 weeks:     51,208    0.39%  up to here  23.58%
+        24 to 30 weeks:    153,661    1.18%  up to here  24.77%
+        30 to 40 weeks:    201,294    1.55%  up to here  26.31%
+        40 to 46 weeks:    181,480    1.40%  up to here  27.71%
+        46 to 50 weeks:    809,624    6.23%  up to here  33.94%
+        50 to 54 weeks:  6,423,233   49.41%  up to here  83.35%
+        54 to 58 weeks:  1,157,166    8.90%  up to here  92.25%
+        58 to 70 weeks:    510,880    3.93%  up to here  96.18%
+        70 to 90 weeks:    355,395    2.73%  up to here  98.91%
+     90 and more weeks:    141,148    1.09%  up to here 100.00%
+exit 0
