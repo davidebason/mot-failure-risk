@@ -22,21 +22,33 @@ select
     cast(k.test_class_id as integer) as test_class_id,
     k.test_type,
     k.test_result,
-    -- Missing mileage is blank before 2024 and 0 from 2024: both become missing.
-    nullif(cast(k.test_mileage as integer), 0) as test_mileage,
+    -- Missing mileage is blank before 2024 and 0 from 2024: both become missing, and so does a
+    -- mileage above the bound every class shares (DATA.md; evidence/13).
+    case
+        when cast(k.test_mileage as integer) between 1 and {{ var('mileage_max') }}
+            then cast(k.test_mileage as integer)
+    end as test_mileage,
     -- Trimmed and in capitals, without the backslash four rows of 2018 to 2020 end with.
     rtrim(upper(trim(k.make)), '\') as make,
     rtrim(upper(trim(k.model)), '\') as model,
     coalesce(f.type_code, k.fuel_type) as fuel_type,
-    -- Blank or 0: missing.
-    nullif(cast(k.cylinder_capacity as integer), 0) as cylinder_capacity,
-    -- 1 January 1971 stands for an unknown date, and a first use after the test is impossible:
-    -- both, like a blank, leave the date, and so the age, unknown.
+    -- Blank, 0, or outside its class's bounds (seeds/engine_size_bounds.csv): missing.
+    case
+        when cast(k.cylinder_capacity as integer) between e.lowest and e.highest
+            then cast(k.cylinder_capacity as integer)
+    end as cylinder_capacity,
+    -- 1 January 1971 stands for an unknown date, a first use after the test is impossible, and an
+    -- age over the bound is taken for a mistake: each, like a blank, leaves the date, and so the
+    -- age, unknown.
     case
         when k.first_use_date <> '1971-01-01'
             and cast(k.first_use_date as date) <= cast(k.test_date as date)
+            and cast(k.first_use_date as date)
+                >= cast(k.test_date as date) - interval {{ var('age_max_years') }} year
             then cast(k.first_use_date as date)
     end as first_use_date
 from kept as k
 left join fuel_names as f
     on f.name = upper(trim(k.fuel_type))
+left join {{ ref('engine_size_bounds') }} as e
+    on e.test_class_id = cast(k.test_class_id as integer)
