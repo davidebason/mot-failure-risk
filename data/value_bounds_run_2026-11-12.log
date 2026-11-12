@@ -7,3 +7,16 @@ mileage: class 5's 99.9% point 896,760; bound for every class 900,000
   class 5: 359 of 375,136 mileages above it (0.096%)
   class 7: 2,561 of 8,706,753 mileages above it (0.029%)
 engine size, cc: 0.1% and 99.9% points, rounded bounds, sizes outside them
+  class 1: points 48 and 999; bounds 40 to 1,000; 2,005 of 1,853,386 outside (0.108%)
+  class 2: points 108 and 2,294; bounds 100 to 2,300; 9,406 of 5,955,483 outside (0.158%)
+  class 3: points 49 and 4,000; bounds 40 to 4,000; 87 of 79,464 outside (0.109%)
+  class 4: points 698 and 5,998; bounds 600 to 6,000; 317,288 of 289,656,444 outside (0.110%)
+  class 5: points 1,200 and 11,600; bounds 1,200 to 11,600; 726 of 381,833 outside (0.190%)
+  class 7: points 1,499 and 3,500; bounds 1,400 to 3,500; 11,611 of 8,755,542 outside (0.133%)
+age: 256,468 of 308,701,422 known ages over 50 years (0.083%)
+vehicles touched by each bound, and those whose every test is past it:
+  mileage: 10,451 tests, 5,677 vehicles, 625 losing every test
+  engine size: 341,123 tests, 77,443 vehicles, 75,558 losing every test
+  age: 256,468 tests, 110,463 vehicles, 80,985 losing every test
+  any of the three: 601,281 tests, 190,149 vehicles, 154,825 losing every test
+exit 0

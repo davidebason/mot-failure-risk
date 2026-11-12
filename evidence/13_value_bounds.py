@@ -10,6 +10,9 @@ with a zero mileage or engine size already counted as missing, this prints:
 - for each class, the 0.1% and 99.9% points of its engine sizes, from which its bounds come, and
   how many sizes lie outside those bounds once rounded outward;
 - how many ages at the test, from the first-use dates staging keeps, are over 50 years.
+- for each bound, and for the three together, how many tests are past it, how many vehicles
+  they belong to, and how many of those vehicles have every test past it, so that removing the
+  tests removes the vehicle.
 
 The rounded bounds are read from transform/dbt_project.yml and
 transform/seeds/engine_size_bounds.csv, which staging applies; yaml comes with dbt.
@@ -28,7 +31,8 @@ PROJECT = Path("transform/dbt_project.yml")
 ENGINE = Path("transform/seeds/engine_size_bounds.csv")
 
 KEPT = """(
-    SELECT test_class_id AS class,
+    SELECT vehicle_id,
+           test_class_id AS class,
            test_date::DATE AS test_date,
            nullif(test_mileage::INT, 0) AS mileage,
            nullif(cylinder_capacity::INT, 0) AS engine_size,
@@ -85,6 +89,42 @@ def main() -> None:
             FROM kept"""
     ).fetchall()
     print(f"age: {over:,} of {total:,} known ages over {age_max} years ({over / total:.3%})")
+
+    # A test past any bound is removed, so the vehicles it touches lose that test; a vehicle whose
+    # every test is past a bound leaves the data altogether.
+    con.execute("CREATE TABLE bounds AS SELECT * FROM read_csv(?, header = true)", [str(ENGINE)])
+    con.execute(
+        f"""CREATE TABLE per_vehicle AS
+            SELECT vehicle_id, count(*) AS tests,
+                   count(*) FILTER (WHERE mileage_past) AS mileage,
+                   count(*) FILTER (WHERE engine_past) AS engine,
+                   count(*) FILTER (WHERE age_past) AS age,
+                   count(*) FILTER (WHERE mileage_past OR engine_past OR age_past) AS any_past
+            FROM (
+                SELECT k.vehicle_id,
+                       coalesce(k.mileage > {mileage_max}, false) AS mileage_past,
+                       coalesce(k.engine_size NOT BETWEEN b.lowest AND b.highest, false)
+                           AS engine_past,
+                       coalesce(k.first_use_date < k.test_date - INTERVAL {age_max} YEAR, false)
+                           AS age_past
+                FROM kept AS k
+                JOIN bounds AS b ON b.test_class_id = k.class::INT
+            )
+            GROUP BY vehicle_id"""
+    )
+    print("vehicles touched by each bound, and those whose every test is past it:")
+    for label, col in [
+        ("mileage", "mileage"),
+        ("engine size", "engine"),
+        ("age", "age"),
+        ("any of the three", "any_past"),
+    ]:
+        [(tests, touched, all_tests)] = con.execute(
+            f"""SELECT sum({col}), count(*) FILTER (WHERE {col} > 0),
+                       count(*) FILTER (WHERE {col} > 0 AND {col} = tests)
+                FROM per_vehicle"""
+        ).fetchall()
+        print(f"  {label}: {tests:,} tests, {touched:,} vehicles, {all_tests:,} losing every test")
 
 
 if __name__ == "__main__":

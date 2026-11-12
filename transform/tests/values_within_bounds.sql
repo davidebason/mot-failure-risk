@@ -1,5 +1,5 @@
 -- No staged mileage, engine size or age lies outside its bounds (DATA.md, "The vehicle columns,
--- cleaned"): staging turns every such value missing. Returns the tests that still have one.
+-- cleaned"): a test with one is removed (macros/classified.sql). Returns any that remain.
 
 select t.test_id, t.test_class_id, t.test_mileage, t.cylinder_capacity, t.first_use_date
 from {{ ref('stg_test_results') }} as t

@@ -7,15 +7,29 @@
 
 {% macro classified_test_results() %}
 select
-    *,
+    r.*,
     case
         -- test_date is text here, in ISO form, so it compares as a date does.
-        when test_date < '2018-05-20' then 'test before 20 May 2018'
-        when test_result = 'ABR' then 'test aborted, ABR'
-        when test_result = 'ABA' then 'test abandoned, ABA'
-        when test_result = 'ABRVE' then 'test aborted by a vehicle examiner, ABRVE'
+        when r.test_date < '2018-05-20' then 'test before 20 May 2018'
+        when r.test_result = 'ABR' then 'test aborted, ABR'
+        when r.test_result = 'ABA' then 'test abandoned, ABA'
+        when r.test_result = 'ABRVE' then 'test aborted by a vehicle examiner, ABRVE'
+        -- The bounds of dbt_project.yml and seeds/engine_size_bounds.csv (DATA.md, "The vehicle
+        -- columns, cleaned"). A blank or zero value is missing, not past a bound.
+        when try_cast(r.test_mileage as integer) > {{ var('mileage_max') }}
+            then 'mileage above {{ var("mileage_max") }}'
+        when try_cast(r.cylinder_capacity as integer) > 0
+            and try_cast(r.cylinder_capacity as integer) not between e.lowest and e.highest
+            then 'engine size outside its class''s range'
+        when r.first_use_date <> '1971-01-01'
+            and try_cast(r.first_use_date as date) <= try_cast(r.test_date as date)
+            and try_cast(r.first_use_date as date)
+                < try_cast(r.test_date as date) - interval {{ var('age_max_years') }} year
+            then 'age at the test over {{ var("age_max_years") }} years'
     end as removed_by
-from {{ source('mot', 'test_results') }}
+from {{ source('mot', 'test_results') }} as r
+left join {{ ref('engine_size_bounds') }} as e
+    on e.test_class_id = try_cast(r.test_class_id as integer)
 {% endmacro %}
 
 
