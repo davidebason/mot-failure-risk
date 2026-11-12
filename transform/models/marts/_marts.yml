@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: training_rows
+    description: >-
+      The training table: one row per vehicle and target slot starting from 2019 to 2025, its
+      inputs from the slot before and its label (DATA.md, "What the model predicts").
+    columns:
+      - name: vehicle_id
+        data_tests: [not_null]
+      - name: target_start
+        data_tests: [not_null]
+      - name: target_year
+        data_tests:
+          - accepted_values:
+              arguments: {values: [2019, 2020, 2021, 2022, 2023, 2024, 2025], quote: false}
+      - name: previous_start
+        data_tests: [not_null]
+      - name: weeks_between
+        data_tests: [not_null]
+      - name: test_class_id
+        data_tests:
+          - accepted_values: {arguments: {values: [1, 2, 3, 4, 5, 7], quote: false}}
+      - name: previous_entries
+        data_tests: [not_null]
+      - name: previous_group_ids
+        data_tests: [not_null]
+      - name: label_entries
+        data_tests: [not_null]
+
+  - name: training_row_counts
+    description: "Where every possible training row goes, per target year: kept, or left out by one rule."
+    columns:
+      - name: outcome
+        data_tests: [not_null]

@@ -1,0 +1,11 @@
+codes listed under more than one group across classes: 0
+kept defects: 2,321, under 452 groups by the code each is numbered by; without a group: 0
+renumbered pairs kept: 36; with their codes under different groups: 8
+  31589 under 21048, renumbered 32102 under 22002
+  31590 under 21048, renumbered 32103 under 22002
+  31591 under 21048, renumbered 32104 under 22002
+  31592 under 21048, renumbered 32105 under 22002
+  31593 under 21048, renumbered 32106 under 22002
+  31594 under 21048, renumbered 32107 under 22002
+  31667 under 21032, renumbered 32127 under 21015
+  31668 under 21032, renumbered 32128 under 21015

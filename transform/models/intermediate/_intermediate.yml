@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: int_entry_groups
+    description: "Each of the 4,821 entries of the vector, with the group directly above its defect."
+    columns:
+      - name: entry
+        data_tests: [unique, not_null]
+      - name: group_id
+        data_tests: [not_null]
+
+  - name: int_test_slots
+    description: >-
+      One row per staged test, with the number of its vehicle's slot it falls in, and whether it is
+      the slot's first test (DATA.md, "What the model predicts").
+    columns:
+      - name: test_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships: {arguments: {to: ref('stg_test_results'), field: test_id}}
+      - name: slot_number
+        data_tests: [not_null]
+
+  - name: int_slots
+    description: >-
+      One row per vehicle and slot: the details of its first test, and the entries recorded on any
+      of its tests with their groups.
+    columns:
+      - name: slot_start
+        data_tests: [not_null]
+      - name: entries
+        data_tests: [not_null]
+      - name: group_ids
+        data_tests: [not_null]
