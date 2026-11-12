@@ -262,7 +262,7 @@ They are removed before the tests are grouped into slots (below), so they neithe
 
 **Each slot is predicted from the slot before it.** The label is every problem recorded on any test of the slot: each defect code, together with the way it was recorded, as a failure, a failure rectified at the station, a minor defect or an advisory. The inputs are:
 - the same record of the previous slot, however long before;
-- the vehicle's details as recorded at the previous slot's first test;
+- the vehicle's mileage and age at the target slot's first test, since both are known when the vehicle arrives for it, the moment of decision; and its other details as recorded at the previous slot's first test;
 - the number of weeks between the first tests of the two slots.
 
 The prediction is made when the vehicle arrives for the target slot's first test, when that test's date is known. A vehicle's first slot serves only as input, and a vehicle with no later slot, whether scrapped, exported or off the road, gives no further row. A vehicle with more than one slot starting in a year has a row for each. The outcome of a test, `P`, `F`, `PRS` or `ABA`, is not predicted: what matters is the problems the vehicle had, not how its tests ended.
