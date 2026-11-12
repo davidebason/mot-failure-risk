@@ -19,8 +19,11 @@ models:
     # Tables rather than views: the mart reads them many times, and the sources are 11 GB.
     staging:
       +materialized: table
-    # Tables too: each is read by the next model and by its tests.
+    # Tables too: each is read by the next model and by its tests, and the training table is
+    # downloaded once built.
     intermediate:
+      +materialized: table
+    marts:
       +materialized: table
 
 vars:
@@ -35,3 +38,6 @@ vars:
   # Two consecutive tests of a vehicle more than this many weeks apart fall in different slots
   # (DATA.md, "What the model predicts"; evidence/14).
   slot_gap_weeks: 20
+  # The first year whose slots are predicted: a slot starting in 2018 serves only as an input
+  # (DATA.md, "What the model predicts").
+  first_target_year: 2019
