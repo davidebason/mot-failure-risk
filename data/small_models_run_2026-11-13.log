@@ -1,0 +1,27 @@
+started 2026-11-13 14:14:36 UTC
+model 2020: d 50,469, days mean 357.54 sd 44.34, tiers {'full': 7, 'small': 2458, 'base_rate': 1921, 'none': 435}, 15 s
+  17.11 s wall, 949740 kB peak
+shuffled 2020: d 50,469, days mean 357.54 sd 44.34, tiers {'full': 7, 'small': 2458, 'base_rate': 1921, 'none': 435}, 25 s
+  27.09 s wall, 917992 kB peak
+model 2021: d 69,121, days mean 379.14 sd 69.29, tiers {'full': 21, 'small': 3009, 'base_rate': 1565, 'none': 226}, 25 s
+  27.71 s wall, 1192864 kB peak
+shuffled 2021: d 69,121, days mean 379.14 sd 69.29, tiers {'full': 21, 'small': 3009, 'base_rate': 1565, 'none': 226}, 28 s
+  30.43 s wall, 1251372 kB peak
+model 2022: d 77,036, days mean 379.75 sd 76.35, tiers {'full': 38, 'small': 3258, 'base_rate': 1401, 'none': 124}, 34 s
+  35.48 s wall, 1493264 kB peak
+shuffled 2022: d 77,036, days mean 379.75 sd 76.35, tiers {'full': 38, 'small': 3258, 'base_rate': 1401, 'none': 124}, 30 s
+  32.16 s wall, 1467260 kB peak
+model 2023: d 83,516, days mean 378.16 sd 77.93, tiers {'full': 52, 'small': 3426, 'base_rate': 1247, 'none': 96}, 44 s
+  45.98 s wall, 1882260 kB peak
+shuffled 2023: d 83,516, days mean 378.16 sd 77.93, tiers {'full': 52, 'small': 3426, 'base_rate': 1247, 'none': 96}, 33 s
+  34.76 s wall, 1920260 kB peak
+model 2024: d 89,627, days mean 377.12 sd 80.04, tiers {'full': 64, 'small': 3530, 'base_rate': 1148, 'none': 79}, 41 s
+  43.55 s wall, 2586752 kB peak
+shuffled 2024: d 89,627, days mean 377.12 sd 80.04, tiers {'full': 64, 'small': 3530, 'base_rate': 1148, 'none': 79}, 40 s
+  41.84 s wall, 2366120 kB peak
+model 2025: d 94,773, days mean 376.57 sd 82.46, tiers {'full': 75, 'small': 3617, 'base_rate': 1072, 'none': 57}, 80 s
+  82.28 s wall, 3068324 kB peak
+shuffled 2025: d 94,773, days mean 376.57 sd 82.46, tiers {'full': 75, 'small': 3617, 'base_rate': 1072, 'none': 57}, 64 s
+  69.63 s wall, 3005032 kB peak
+exit 0
+ended 2026-11-13 14:22:44 UTC
