@@ -21,6 +21,8 @@ dependencies = [
     # ships no wheel for Python 3.12, so pip compiles it: a C compiler and Python's headers needed.
     "zipfile-deflate64>=0.2",
     "pandas>=2.2",
+    # Hands DuckDB's list columns to numpy as offsets and values, for the full models' inputs.
+    "pyarrow>=17",
     # Imported directly by the fetcher, so declared here even though azure-core also installs it.
     "requests>=2.34",
     "scikit-learn>=1.5",
