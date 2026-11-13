@@ -132,9 +132,10 @@ def cells(con, years: list[int], shuffled: bool):
     """The counts of these years added up: entry, u, g, days, y and n, as numpy arrays."""
     files = [str(COUNTS / kind(shuffled) / f"{y}.parquet") for y in years]
     t = con.execute(
-        f"""SELECT entry, u, g, days_between, y, sum(n) AS n
+        f"""SELECT CAST(entry AS SMALLINT) AS entry, u, g,
+                   CAST(days_between AS SMALLINT) AS days_between, y, CAST(sum(n) AS BIGINT) AS n
             FROM read_parquet({files})
-            GROUP BY ALL ORDER BY entry"""
+            GROUP BY entry, u, g, days_between, y ORDER BY entry"""
     ).fetchnumpy()
     return {k: np.asarray(v) for k, v in t.items()}
 
