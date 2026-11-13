@@ -1,0 +1,32 @@
+started 2026-11-13 13:45:56 UTC
+[     62 s, peak   0.4 GB] model 2025: d 94,773
+[     85 s, peak   0.8 GB] 75 full entries, fitting 1 with 1 workers
+[    157 s, peak  25.1 GB] training matrix: 166,828,941 rows, 1,683,841,049 values
+[    181 s, peak  26.9 GB] test matrix: 32,244,374 rows, 330,806,774 values
+[    435 s, peak  26.9 GB] entry 0: 30 iterations, 253 s
+[    435 s, peak  26.9 GB] measurement only: nothing written
+	Command being timed: "python src/motrisk/full_models.py 2025 --entries 1 --workers 1 --memory 8GB"
+	User time (seconds): 444.05
+	System time (seconds): 33.47
+	Percent of CPU this job got: 109%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 7:16.39
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 26887048
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 247
+	Minor (reclaiming a frame) page faults: 4541842
+	Voluntary context switches: 38141
+	Involuntary context switches: 11862
+	Swaps: 0
+	File system inputs: 8463632
+	File system outputs: 104
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+exit 0
+ended 2026-11-13 13:53:12 UTC

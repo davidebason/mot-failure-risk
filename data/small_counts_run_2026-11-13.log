@@ -1,0 +1,24 @@
+started 2026-11-13 11:04:25 UTC
+model 2019: 4,406,979 cells, 12 s
+shuffled 2019: 4,302,098 cells, 49 s
+  rows left their own label: 0.1516; by chance within a class: 0.1515
+model 2020: 7,743,843 cells, 27 s
+shuffled 2020: 7,538,308 cells, 127 s
+  rows left their own label: 0.1534; by chance within a class: 0.1534
+model 2021: 10,397,783 cells, 29 s
+shuffled 2021: 10,120,527 cells, 154 s
+  rows left their own label: 0.1536; by chance within a class: 0.1535
+model 2022: 12,355,699 cells, 29 s
+shuffled 2022: 12,081,140 cells, 156 s
+  rows left their own label: 0.1510; by chance within a class: 0.1510
+model 2023: 14,379,940 cells, 29 s
+shuffled 2023: 14,099,926 cells, 165 s
+  rows left their own label: 0.1497; by chance within a class: 0.1498
+model 2024: 16,261,844 cells, 34 s
+shuffled 2024: 15,991,230 cells, 194 s
+  rows left their own label: 0.1454; by chance within a class: 0.1455
+model 2025: 18,193,446 cells, 29 s
+shuffled 2025: 17,918,997 cells, 167 s
+  rows left their own label: 0.1452; by chance within a class: 0.1452
+exit 0
+ended 2026-11-13 11:30:14 UTC
