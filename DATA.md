@@ -319,3 +319,5 @@ The model [`training_row_counts`](transform/models/marts/training_row_counts.sql
 A further 52,824 pairs have a target slot that starts in 2018, from 20 May, and are counted under their own rule, since the first year predicted is 2019: 199,703,417 possible rows in all.
 
 **Each vector is stored as the list of its entries that are 1**, every other entry being 0, and the groups the same way: the previous slot's entries, its groups and the label are three such lists on each row, sorted, with no repeats, and empty for a slot whose tests recorded nothing.
+
+**The table is copied to the author's computer for the steps that run there**, since the Azure credit ends on 21 November 2026. We exported it on 13 November 2026 from the virtual machine as one Parquet file per target year, 4.3 GB in all, each file holding the kept rows `training_row_counts` counts for its year, as its record [`data/training_rows_export_run_2026-11-13.log`](data/training_rows_export_run_2026-11-13.log) shows, and downloaded it into `data/training_rows/`, which git ignores; each file's SHA-256 matched its copy on the machine.
