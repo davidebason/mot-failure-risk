@@ -1,0 +1,27 @@
+started 2026-11-13 10:41:25 UTC
+10:41:30  Running with dbt=1.12.6
+10:41:30  Registered adapter: duckdb=1.11.1
+10:41:32  Found 9 models, 63 data tests, 3 seeds, 6 sources, 515 macros
+10:41:32  
+10:41:32  Concurrency: 1 threads (target='dev')
+10:41:32  
+10:41:33  1 of 5 START sql table model main.most_popular ................................. [RUN]
+10:42:06  1 of 5 OK created sql table model main.most_popular ............................ [OK in 32.80s]
+10:42:06  2 of 5 START test most_popular_is_top_k ........................................ [RUN]
+10:42:15  2 of 5 PASS most_popular_is_top_k .............................................. [PASS in 9.08s]
+10:42:15  3 of 5 START test not_null_most_popular_entry .................................. [RUN]
+10:42:15  3 of 5 PASS not_null_most_popular_entry ........................................ [PASS in 0.03s]
+10:42:15  4 of 5 START test not_null_most_popular_k ...................................... [RUN]
+10:42:15  4 of 5 PASS not_null_most_popular_k ............................................ [PASS in 0.02s]
+10:42:15  5 of 5 START test relationships_most_popular_entry__entry__ref_int_entry_groups_  [RUN]
+10:42:15  5 of 5 PASS relationships_most_popular_entry__entry__ref_int_entry_groups_ ..... [PASS in 0.02s]
+10:42:15  
+10:42:15  Finished running 1 table model, 4 data tests in 0 hours 0 minutes and 43.20 seconds (43.20s).
+10:42:15  
+10:42:15  Completed successfully
+10:42:15  
+10:42:15  Done. PASS=5 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=5
+exit 0
+[(2018, 1, 1, 1854, 2798227, 18049853), (2019, 1, 1, 1854, 5195342, 31005444), (2020, 1, 1, 1854, 5090535, 30586173), (2021, 1, 1, 1854, 5257444, 32285442), (2022, 1, 1, 1854, 5168330, 33459715), (2023, 1, 1, 1854, 5158889, 33833921), (2024, 1, 1, 1854, 5380650, 34181732), (2025, 1, 1, 1854, 5307972, 34375350)]
+csv exit 0
+ended 2026-11-13 10:42:17 UTC

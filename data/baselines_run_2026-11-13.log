@@ -1,0 +1,13 @@
+repeat 2020: tp 6,678,084 fp 35,946,438 fn 41,697,706 precision 0.1567 recall 0.1380
+most_popular 2020: tp 4,715,744 fp 21,854,301 fn 43,660,046 precision 0.1775 recall 0.0975
+repeat 2021: tp 7,739,805 fp 38,072,055 fn 44,801,590 precision 0.1689 recall 0.1473
+most_popular 2021: tp 4,902,522 fp 23,568,033 fn 47,638,873 precision 0.1722 recall 0.0933
+repeat 2022: tp 8,527,822 fp 39,785,672 fn 46,582,503 precision 0.1765 recall 0.1547
+most_popular 2022: tp 4,838,747 fp 24,887,527 fn 50,271,578 precision 0.1628 recall 0.0878
+repeat 2023: tp 9,263,723 fp 41,528,027 fn 48,179,186 precision 0.1824 recall 0.1613
+most_popular 2023: tp 4,922,818 fp 25,854,880 fn 52,520,091 precision 0.1599 recall 0.0857
+repeat 2024: tp 9,832,059 fp 42,290,671 fn 49,506,174 precision 0.1886 recall 0.1657
+most_popular 2024: tp 5,118,113 fp 25,948,111 fn 54,220,120 precision 0.1647 recall 0.0863
+repeat 2025: tp 10,562,876 fp 43,233,195 fn 49,230,886 precision 0.1964 recall 0.1767
+most_popular 2025: tp 5,060,111 fp 26,284,440 fn 54,733,651 precision 0.1614 recall 0.0846
+wrote data/processed/baseline_counts.csv

@@ -28,6 +28,18 @@ models:
       - name: label_entries
         data_tests: [not_null]
 
+  - name: most_popular
+    description: >-
+      Most popular's list for each year: the k entries on the most slots starting that year, k the
+      median number of entries per slot (DATA.md, "The baselines").
+    columns:
+      - name: entry
+        data_tests:
+          - not_null
+          - relationships: {arguments: {to: ref('int_entry_groups'), field: entry}}
+      - name: k
+        data_tests: [not_null]
+
   - name: training_row_counts
     description: "Where every possible training row goes, per target year: kept, or left out by one rule."
     columns:
