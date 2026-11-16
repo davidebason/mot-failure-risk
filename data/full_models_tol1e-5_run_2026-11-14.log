@@ -1,0 +1,77 @@
+started 2026-11-14 09:47:24 UTC, 2 workers, tolerance 1e-5
+[      6 s, peak   0.3 GB] model 2020: d 69,756, tolerance 1e-05
+[      8 s, peak   0.5 GB] 6 full entries, fitting 6 with 2 workers
+[     16 s, peak   5.2 GB] training matrix: 16,129,855 rows, 148,329,320 values
+[     37 s, peak  11.6 GB] test matrix: 27,230,182 rows, 263,696,785 values
+[     37 s, peak  11.6 GB] starting 0 of 6 entries from data/processed/train/full_model_2019_coefs.npz
+[    917 s, peak  11.6 GB] entry 291: cold, 891 iterations, 880 s, tp 26 fp 155 fn 2,007,647
+[    970 s, peak  11.6 GB] entry 247: cold, 951 iterations, 933 s, tp 201,315 fp 217,896 fn 1,039,328
+[   1782 s, peak  11.6 GB] entry 305: cold, 900 iterations, 865 s, tp 5,880 fp 9,294 fn 2,172,387
+[   2563 s, peak  11.6 GB] entry 3387: cold, 815 iterations, 781 s, tp 93,055 fp 114,170 fn 1,076,928
+[   2843 s, peak  11.6 GB] entry 1854: cold, 1618 iterations, 1873 s, tp 3,559 fp 9,405 fn 4,712,185
+[   3222 s, peak  11.6 GB] entry 3583: cold, 760 iterations, 659 s, tp 720 fp 1,423 fn 1,735,350
+[   3222 s, peak  11.6 GB] wrote data/processed/train/full_model_2020_*
+model 2020 exit 0
+[      1 s, peak   0.3 GB] shuffled 2020: d 69,756, tolerance 1e-05
+[      2 s, peak   0.5 GB] 6 full entries, fitting 6 with 2 workers
+[     30 s, peak   9.3 GB] training matrix: 16,129,855 rows, 148,329,320 values
+[     44 s, peak   9.9 GB] test matrix: 27,230,182 rows, 263,696,785 values
+[     44 s, peak   9.9 GB] starting 0 of 6 entries from data/processed/train/full_shuffled_2019_coefs.npz
+[    556 s, peak   9.9 GB] entry 247: cold, 540 iterations, 512 s, tp 2 fp 11 fn 1,240,641
+[    928 s, peak   9.9 GB] entry 291: cold, 943 iterations, 884 s, tp 2 fp 27 fn 2,007,671
+[   1469 s, peak   9.9 GB] entry 305: cold, 978 iterations, 913 s, tp 2 fp 9 fn 2,178,265
+[   2102 s, peak   9.9 GB] entry 3387: cold, 684 iterations, 633 s, tp 5 fp 5 fn 1,169,978
+[   2228 s, peak   9.9 GB] entry 1854: cold, 1192 iterations, 1300 s, tp 52 fp 184 fn 4,715,692
+[   2672 s, peak   9.9 GB] entry 3583: cold, 687 iterations, 570 s, tp 0 fp 8 fn 1,736,070
+[   2672 s, peak   9.9 GB] wrote data/processed/train/full_shuffled_2020_*
+shuffled 2020 exit 0
+[      2 s, peak   0.4 GB] model 2021: d 88,408, tolerance 1e-05
+[      4 s, peak   0.7 GB] 17 full entries, fitting 17 with 2 workers
+[     25 s, peak  11.6 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     47 s, peak  14.9 GB] test matrix: 29,290,438 rows, 277,084,834 values
+[     49 s, peak  14.9 GB] starting 6 of 17 entries from data/processed/train/full_model_2020_coefs.npz
+[    732 s, peak  14.9 GB] entry 2: cold, 288 iterations, 683 s, tp 86 fp 260 fn 666,144
+[    962 s, peak  14.9 GB] entry 46: cold, 392 iterations, 913 s, tp 48,597 fp 54,361 fn 609,430
+[   1415 s, peak  14.9 GB] entry 247: warm, 221 iterations, 683 s, tp 251,131 fp 245,106 fn 1,094,559
+[   2090 s, peak  14.9 GB] entry 292: cold, 293 iterations, 675 s, tp 8 fp 91 fn 522,672
+[   2473 s, peak  14.9 GB] entry 291: warm, 634 iterations, 1511 s, tp 18 fp 70 fn 2,089,953
+[   3142 s, peak  14.9 GB] entry 1239: cold, 291 iterations, 669 s, tp 25,545 fp 34,873 fn 717,381
+[   3740 s, peak  14.9 GB] entry 305: warm, 684 iterations, 1650 s, tp 6,918 fp 10,375 fn 2,434,890
+[   4101 s, peak  14.9 GB] entry 1386: cold, 415 iterations, 959 s, tp 546 fp 4,032 fn 612,573
+[   4841 s, peak  14.9 GB] entry 1647: cold, 473 iterations, 1101 s, tp 2,305 fp 7,872 fn 873,908
+[   5537 s, peak  14.9 GB] entry 1854: warm, 491 iterations, 1436 s, tp 2,517 fp 6,544 fn 4,900,005
+[   5745 s, peak  14.9 GB] entry 1855: cold, 395 iterations, 904 s, tp 60 fp 848 fn 761,737
+[   6384 s, peak  14.9 GB] entry 1922: cold, 367 iterations, 847 s, tp 47,806 fp 54,098 fn 736,030
+[   6957 s, peak  14.9 GB] entry 1925: cold, 524 iterations, 1213 s, tp 19 fp 106 fn 914,059
+[   7099 s, peak  14.9 GB] entry 2001: cold, 307 iterations, 715 s, tp 7,197 fp 14,041 fn 776,350
+[   8353 s, peak  14.9 GB] entry 3387: warm, 530 iterations, 1255 s, tp 125,723 fp 129,844 fn 1,213,037
+[   8637 s, peak  14.9 GB] entry 2121: cold, 725 iterations, 1679 s, tp 26,193 fp 41,482 fn 1,278,961
+[   9434 s, peak  14.9 GB] entry 3583: warm, 471 iterations, 1081 s, tp 943 fp 1,364 fn 2,175,222
+[   9435 s, peak  14.9 GB] wrote data/processed/train/full_model_2021_*
+model 2021 exit 0
+[      2 s, peak   0.4 GB] shuffled 2021: d 88,408, tolerance 1e-05
+[      4 s, peak   0.7 GB] 17 full entries, fitting 17 with 2 workers
+[    268 s, peak  16.7 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[    283 s, peak  16.7 GB] test matrix: 29,290,438 rows, 277,084,834 values
+[    285 s, peak  16.7 GB] starting 6 of 17 entries from data/processed/train/full_shuffled_2020_coefs.npz
+[    578 s, peak  16.7 GB] entry 46: cold, 127 iterations, 292 s, tp 0 fp 0 fn 658,027
+[    698 s, peak  16.7 GB] entry 2: cold, 180 iterations, 413 s, tp 0 fp 0 fn 666,230
+[   1182 s, peak  16.7 GB] entry 247: warm, 139 iterations, 604 s, tp 1 fp 2 fn 1,345,689
+[   1472 s, peak  16.7 GB] entry 292: cold, 124 iterations, 290 s, tp 0 fp 0 fn 522,680
+[   1809 s, peak  16.7 GB] entry 305: warm, 89 iterations, 337 s, tp 1 fp 1 fn 2,441,807
+[   2127 s, peak  16.7 GB] entry 291: warm, 623 iterations, 1429 s, tp 0 fp 0 fn 2,089,971
+[   2167 s, peak  16.7 GB] entry 1239: cold, 155 iterations, 358 s, tp 0 fp 0 fn 742,926
+[   2449 s, peak  16.7 GB] entry 1386: cold, 110 iterations, 322 s, tp 0 fp 0 fn 613,119
+[   2547 s, peak  16.7 GB] entry 1647: cold, 150 iterations, 380 s, tp 0 fp 0 fn 876,213
+[   3047 s, peak  16.7 GB] entry 1855: cold, 223 iterations, 500 s, tp 0 fp 0 fn 761,797
+[   3405 s, peak  16.7 GB] entry 1922: cold, 157 iterations, 358 s, tp 0 fp 0 fn 783,836
+[   3800 s, peak  16.7 GB] entry 1925: cold, 152 iterations, 394 s, tp 0 fp 0 fn 914,078
+[   4179 s, peak  16.7 GB] entry 1854: warm, 651 iterations, 1729 s, tp 0 fp 5 fn 4,902,522
+[   4394 s, peak  16.7 GB] entry 2001: cold, 259 iterations, 594 s, tp 0 fp 0 fn 783,547
+[   4856 s, peak  16.7 GB] entry 2121: cold, 297 iterations, 677 s, tp 0 fp 0 fn 1,305,154
+[   4920 s, peak  16.7 GB] entry 3583: warm, 9 iterations, 64 s, tp 3 fp 10 fn 2,176,162
+[   5071 s, peak  16.7 GB] entry 3387: warm, 297 iterations, 677 s, tp 0 fp 0 fn 1,338,760
+[   5072 s, peak  16.7 GB] wrote data/processed/train/full_shuffled_2021_*
+shuffled 2021 exit 0
+[      2 s, peak   0.4 GB] model 2022: d 96,323, tolerance 1e-05
+[      6 s, peak   0.8 GB] 27 full entries, fitting 27 with 2 workers

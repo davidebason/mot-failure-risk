@@ -1,0 +1,7 @@
+kind,test_year,entry,tier,tp,fp,fn,n_iter
+shuffled,2020,247,full,2,11,1240641,540
+shuffled,2020,291,full,2,27,2007671,943
+shuffled,2020,305,full,2,9,2178265,978
+shuffled,2020,1854,full,52,184,4715692,1192
+shuffled,2020,3387,full,5,5,1169978,684
+shuffled,2020,3583,full,0,8,1736070,687
