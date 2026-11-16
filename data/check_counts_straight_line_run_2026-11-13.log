@@ -1,0 +1,11 @@
+entry 1859 (most often g without u), 15,758,485 rows, 1,152 ones
+  every row: [-9.618921  1.458687  0.436259 -0.051363]
+  counts:    [-9.618921  1.458687  0.436259 -0.051363]
+entry 4356 (listed only for motorcycles), 371,370 rows, 19,139 ones
+  every row: [-3.052694  0.662819  0.591309  0.107729]
+  counts:    [-3.052694  0.662819  0.591309  0.107729]
+entry 172 (fewest ones), 15,758,485 rows, 30 ones
+  every row: [-1.3191481e+01 -7.3000000e-05  9.7378700e-01  2.0870900e-01]
+  counts:    [-1.3191481e+01 -7.3000000e-05  9.7378700e-01  2.0870900e-01]
+the weights agree to six decimals
+34.47 s wall, 2127476 kB peak

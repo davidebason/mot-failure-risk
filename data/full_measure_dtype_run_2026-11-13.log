@@ -1,0 +1,45 @@
+started 2026-11-13 20:00:08 UTC
+== 32-bit 1e-5
+[      1 s, peak   0.3 GB] model 2021: d 88,408, tolerance 1e-05
+[      4 s, peak   0.7 GB] 17 full entries, fitting 1 with 1 workers
+[     24 s, peak  12.1 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     38 s, peak  14.8 GB] test matrix: 29,290,438 rows, 277,084,834 values
+/usr/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=25647) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  self.pid = os.fork()
+[   1527 s, peak  14.8 GB] entry 247: 631 iterations, 1489 s, tp 251,976 fp 245,959 fn 1,093,714
+[   1527 s, peak  14.8 GB] measurement only: nothing written
+  1527.93 s wall, 14750956 kB peak
+== 32-bit 1e-6
+[      1 s, peak   0.3 GB] model 2021: d 88,408, tolerance 1e-06
+[      4 s, peak   0.7 GB] 17 full entries, fitting 1 with 1 workers
+[     24 s, peak  12.1 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     38 s, peak  14.9 GB] test matrix: 29,290,438 rows, 277,084,834 values
+/usr/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=30881) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  self.pid = os.fork()
+[   1518 s, peak  14.9 GB] entry 247: 621 iterations, 1479 s, tp 251,617 fp 245,551 fn 1,094,073
+[   1518 s, peak  14.9 GB] measurement only: nothing written
+  1518.79 s wall, 14878860 kB peak
+== --float64 1e-5
+[      1 s, peak   0.3 GB] model 2021: d 88,408, tolerance 1e-05
+[      4 s, peak   0.7 GB] 17 full entries, fitting 1 with 1 workers
+[     25 s, peak  13.9 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     39 s, peak  17.3 GB] test matrix: 29,290,438 rows, 277,084,834 values
+/usr/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=35086) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  self.pid = os.fork()
+[   2616 s, peak  17.3 GB] entry 247: 1104 iterations, 2576 s, tp 251,826 fp 245,821 fn 1,093,864
+[   2616 s, peak  17.3 GB] measurement only: nothing written
+  2617.07 s wall, 17276264 kB peak
+== --float64 1e-6
+[      1 s, peak   0.3 GB] model 2021: d 88,408, tolerance 1e-06
+[      4 s, peak   0.7 GB] 17 full entries, fitting 1 with 1 workers
+[     25 s, peak  13.5 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     39 s, peak  17.4 GB] test matrix: 29,290,438 rows, 277,084,834 values
+/usr/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=35483) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  self.pid = os.fork()
+[   6500 s, peak  17.4 GB] entry 247: 2750 iterations, 6460 s, tp 252,350 fp 246,439 fn 1,093,340
+[   6500 s, peak  17.4 GB] measurement only: nothing written
+  6500.77 s wall, 17377392 kB peak
+1e-05_float32 against 1e-06_float32: mean |dp| 0.06268, largest 0.9861, rows changing side 888,995
+1e-05_float64 against 1e-06_float64: mean |dp| 0.06596, largest 0.9918, rows changing side 934,190
+1e-06_float32 against 1e-06_float64: mean |dp| 0.06281, largest 0.9957, rows changing side 890,435
+ended 2026-11-13 23:22:54 UTC

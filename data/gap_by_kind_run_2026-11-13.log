@@ -1,0 +1,24 @@
+training rows of the fold of 2025: 166,828,941
+  under 300 days    4.74%
+  300 to 430       86.48%
+  431 to 730        8.06%
+  731 to 1,095      0.55%
+  over 1,095        0.18%
+share of rows holding the entry, pooled over every entry, by band:
+  the entry before    9.193%   18.104%   14.211%   12.813%   10.840%
+  its group only      0.388%    0.559%    0.571%    0.554%    0.494%
+  neither             0.021%    0.041%    0.053%    0.066%    0.068%
+entry 2546, vehicles that had it before, by band:
+  observed                                  15.1%   26.6%   20.2%   16.1%   13.6%
+  straight line                             19.8%   24.2%   29.8%   44.0%   66.4%
+  straight line capped at 2 years           16.8%   23.7%   33.6%   48.9%   48.9%
+  bands, one curve for all                  11.2%   24.1%   32.5%   45.0%   49.3%
+  bands, a curve per kind                   15.1%   26.6%   20.2%   16.1%   13.7%
+  bands, a curve per kind, default tolerance  15.8%   24.6%   34.4%   28.0%   26.0%
+entry 4810, vehicles that had it before, by band:
+  observed                                  33.9%   47.5%   40.4%   36.9%   32.2%
+  straight line                             43.4%   44.3%   45.4%   47.4%   50.8%
+  straight line capped at 2 years           42.6%   44.1%   46.1%   48.3%   48.3%
+  bands, one curve for all                  46.2%   43.8%   46.8%   47.5%   49.0%
+  bands, a curve per kind                   33.9%   47.4%   40.4%   36.9%   32.2%
+  bands, a curve per kind, default tolerance  35.5%   47.1%   40.7%   37.7%   42.4%

@@ -1,0 +1,32 @@
+started 2026-11-13 19:27:49 UTC
+[      5 s, peak   0.4 GB] model 2025: d 114,060, tolerance 0.0001
+[     14 s, peak   0.8 GB] 64 full entries, fitting 1 with 1 workers
+[     91 s, peak  24.7 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[    107 s, peak  25.9 GB] test matrix: 32,244,374 rows, 308,332,182 values
+[    496 s, peak  25.9 GB] entry 247: 32 iterations, 389 s, tp 326,696 fp 281,290 fn 958,725
+[    496 s, peak  25.9 GB] measurement only: nothing written
+  497.20 s wall, 25855968 kB peak
+tol 1e-4 exit 0
+tol 0.0001: 607,986 rows at 0.5 or more, mean p 0.04604
+[      5 s, peak   0.4 GB] model 2025: d 114,060, tolerance 1e-05
+[     14 s, peak   0.8 GB] 64 full entries, fitting 1 with 1 workers
+[     91 s, peak  24.7 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[    107 s, peak  25.8 GB] test matrix: 32,244,374 rows, 308,332,182 values
+[    711 s, peak  25.8 GB] entry 247: 36 iterations, 604 s, tp 316,146 fp 271,199 fn 969,275
+[    712 s, peak  25.8 GB] measurement only: nothing written
+  712.80 s wall, 25781464 kB peak
+tol 1e-5 exit 0
+tol 0.0001: 607,986 rows at 0.5 or more, mean p 0.04604
+tol 1e-05: 587,345 rows at 0.5 or more, mean p 0.04530; against 1e-4, mean |dp| 0.06344, largest 0.9899, rows changing side of 0.5 1,172,363
+[      5 s, peak   0.4 GB] model 2025: d 114,060, tolerance 1e-06
+[     13 s, peak   0.8 GB] 64 full entries, fitting 1 with 1 workers
+[     91 s, peak  24.8 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[    107 s, peak  26.4 GB] test matrix: 32,244,374 rows, 308,332,182 values
+[    609 s, peak  26.4 GB] entry 247: 35 iterations, 502 s, tp 339,341 fp 294,468 fn 946,080
+[    609 s, peak  26.4 GB] measurement only: nothing written
+  610.61 s wall, 26361800 kB peak
+tol 1e-6 exit 0
+tol 0.0001: 607,986 rows at 0.5 or more, mean p 0.04604
+tol 1e-05: 587,345 rows at 0.5 or more, mean p 0.04530; against 1e-4, mean |dp| 0.06344, largest 0.9899, rows changing side of 0.5 1,172,363
+tol 1e-06: 633,809 rows at 0.5 or more, mean p 0.04746; against 1e-4, mean |dp| 0.06037, largest 0.9887, rows changing side of 0.5 1,136,787
+ended 2026-11-13 19:58:12 UTC

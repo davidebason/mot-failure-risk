@@ -1,0 +1,51 @@
+started 2026-11-13 17:35:02 UTC
+entry 1859 (most often g without u), 15,758,485 rows, 1,152 ones
+  every row: [-9.673814  1.447798  0.464733  0.461461  0.595572  0.        0.
+ -0.070714 -0.021414  0.        0.       -0.176648 -0.460144  0.
+  0.      ]
+  counts:    [-9.673814  1.447798  0.464733  0.461461  0.595572  0.        0.
+ -0.070714 -0.021414  0.        0.       -0.176648 -0.460144  0.
+  0.      ]
+entry 4356 (listed only for motorcycles), 371,370 rows, 19,139 ones
+  every row: [-3.022253  0.660316  0.597471 -0.765266  0.035071  0.        0.
+  0.072683 -0.049597  0.        0.        0.267093 -0.139434  0.
+  0.      ]
+  counts:    [-3.022253  0.660316  0.597471 -0.765266  0.035071  0.        0.
+  0.072683 -0.049597  0.        0.        0.267093 -0.139434  0.
+  0.      ]
+entry 1267 (fewest ones), 15,758,485 rows, 150 ones
+  every row: [-1.1653891e+01  9.4757400e-01  2.4541370e+00  2.1400000e-01
+  1.4764800e+00  0.0000000e+00  0.0000000e+00  9.8429600e-01
+ -6.4890000e-03  0.0000000e+00  0.0000000e+00 -3.0771000e-02
+ -8.2988000e-02  0.0000000e+00  0.0000000e+00]
+  counts:    [-1.1653891e+01  9.4757400e-01  2.4541370e+00  2.1400000e-01
+  1.4764800e+00  0.0000000e+00  0.0000000e+00  9.8429600e-01
+ -6.4890000e-03  0.0000000e+00  0.0000000e+00 -3.0771000e-02
+ -8.2988000e-02  0.0000000e+00  0.0000000e+00]
+the weights agree to six decimals
+model 2020: d 69,756, tiers {'full': 6, 'small': 1565, 'base_rate': 2815, 'none': 435}, 33 s
+  35.46 s wall, 931752 kB peak
+shuffled 2020: d 69,756, tiers {'full': 6, 'small': 1565, 'base_rate': 2815, 'none': 435}, 32 s
+  33.86 s wall, 930536 kB peak
+model 2021: d 88,408, tiers {'full': 17, 'small': 2057, 'base_rate': 2521, 'none': 226}, 67 s
+  108.73 s wall, 1219224 kB peak
+shuffled 2021: d 88,408, tiers {'full': 17, 'small': 2057, 'base_rate': 2521, 'none': 226}, 61 s
+  22.48 s wall, 1158576 kB peak
+model 2022: d 96,323, tiers {'full': 27, 'small': 2347, 'base_rate': 2323, 'none': 124}, 127 s
+  129.19 s wall, 1515092 kB peak
+shuffled 2022: d 96,323, tiers {'full': 27, 'small': 2347, 'base_rate': 2323, 'none': 124}, 97 s
+  139.26 s wall, 1441312 kB peak
+model 2023: d 102,803, tiers {'full': 41, 'small': 2507, 'base_rate': 2177, 'none': 96}, 129 s
+  90.40 s wall, 1927980 kB peak
+shuffled 2023: d 102,803, tiers {'full': 41, 'small': 2507, 'base_rate': 2177, 'none': 96}, 103 s
+  105.30 s wall, 1874660 kB peak
+model 2024: d 108,914, tiers {'full': 52, 'small': 2646, 'base_rate': 2044, 'none': 79}, 207 s
+  208.62 s wall, 2590528 kB peak
+shuffled 2024: d 108,914, tiers {'full': 52, 'small': 2646, 'base_rate': 2044, 'none': 79}, 137 s
+  138.69 s wall, 2343764 kB peak
+model 2025: d 114,060, tiers {'full': 64, 'small': 2740, 'base_rate': 1960, 'none': 57}, 175 s
+  217.14 s wall, 3071548 kB peak
+shuffled 2025: d 114,060, tiers {'full': 64, 'small': 2740, 'base_rate': 1960, 'none': 57}, 148 s
+  149.97 s wall, 3008644 kB peak
+exit 0
+ended 2026-11-13 17:59:27 UTC

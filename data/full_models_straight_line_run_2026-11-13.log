@@ -1,0 +1,258 @@
+started 2026-11-13 13:53:43 UTC, 2 workers
+[      1 s, peak   0.3 GB] model 2020: d 50,469
+[      2 s, peak   0.5 GB] 7 full entries, fitting 7 with 2 workers
+[      8 s, peak   5.2 GB] training matrix: 16,129,855 rows, 160,685,457 values
+[     20 s, peak  11.0 GB] test matrix: 27,230,182 rows, 273,854,057 values
+[     68 s, peak  11.0 GB] entry 291: 48 iterations, 48 s
+[    107 s, peak  11.0 GB] entry 247: 88 iterations, 87 s
+[    142 s, peak  11.0 GB] entry 305: 76 iterations, 74 s
+/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 100 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=100).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[    222 s, peak  11.0 GB] entry 1854: 100 iterations, 114 s
+[    225 s, peak  11.0 GB] entry 2121: 87 iterations, 83 s
+[    288 s, peak  11.0 GB] entry 3583: 66 iterations, 64 s
+/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 100 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=100).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[    314 s, peak  11.0 GB] entry 3387: 100 iterations, 92 s
+[    314 s, peak  11.0 GB] wrote data/processed/train/full_model_2020_*
+model 2020 exit 0
+[      1 s, peak   0.3 GB] shuffled 2020: d 50,469
+[      2 s, peak   0.5 GB] 7 full entries, fitting 7 with 2 workers
+[     29 s, peak  11.2 GB] training matrix: 16,129,855 rows, 160,685,457 values
+[     41 s, peak  11.2 GB] test matrix: 27,230,182 rows, 273,854,057 values
+[     60 s, peak  11.2 GB] entry 247: 19 iterations, 19 s
+[     63 s, peak  11.2 GB] entry 291: 21 iterations, 21 s
+[     80 s, peak  11.2 GB] entry 305: 19 iterations, 20 s
+[    100 s, peak  11.2 GB] entry 1854: 33 iterations, 37 s
+[    104 s, peak  11.2 GB] entry 2121: 23 iterations, 24 s
+[    120 s, peak  11.2 GB] entry 3387: 19 iterations, 20 s
+[    127 s, peak  11.2 GB] entry 3583: 24 iterations, 23 s
+[    127 s, peak  11.2 GB] wrote data/processed/train/full_shuffled_2020_*
+shuffled 2020 exit 0
+[      2 s, peak   0.4 GB] model 2021: d 69,121
+[      4 s, peak   0.7 GB] 21 full entries, fitting 21 with 2 workers
+[     22 s, peak  11.7 GB] training matrix: 43,360,037 rows, 434,564,879 values
+[     34 s, peak  14.3 GB] test matrix: 29,290,438 rows, 294,521,762 values
+[     94 s, peak  14.3 GB] entry 0: 25 iterations, 57 s
+[    139 s, peak  14.3 GB] entry 2: 44 iterations, 102 s
+[    153 s, peak  14.3 GB] entry 46: 23 iterations, 59 s
+[    366 s, peak  14.3 GB] entry 291: 92 iterations, 212 s
+/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 100 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=100).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[    376 s, peak  14.3 GB] entry 247: 100 iterations, 237 s
+[    442 s, peak  14.3 GB] entry 292: 32 iterations, 76 s
+[    535 s, peak  14.3 GB] entry 1239: 39 iterations, 93 s
+[    577 s, peak  14.3 GB] entry 305: 83 iterations, 202 s
+[    620 s, peak  14.3 GB] entry 1298: 37 iterations, 86 s
+[    669 s, peak  14.3 GB] entry 1386: 39 iterations, 92 s
+[    709 s, peak  14.3 GB] entry 1474: 38 iterations, 89 s
+[    787 s, peak  14.3 GB] entry 1647: 51 iterations, 118 s
+[    867 s, peak  14.3 GB] entry 1855: 34 iterations, 80 s
+/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 100 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=100).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[    989 s, peak  14.3 GB] entry 1854: 100 iterations, 280 s
+[    998 s, peak  14.3 GB] entry 1922: 57 iterations, 131 s
+[   1138 s, peak  14.3 GB] entry 1925: 64 iterations, 149 s
+[   1141 s, peak  14.3 GB] entry 2001: 63 iterations, 143 s
+[   1248 s, peak  14.3 GB] entry 2588: 47 iterations, 107 s
+[   1320 s, peak  14.3 GB] entry 2121: 80 iterations, 182 s
+[   1385 s, peak  14.3 GB] entry 3387: 58 iterations, 137 s
+[   1427 s, peak  14.3 GB] entry 3583: 46 iterations, 107 s
+[   1427 s, peak  14.3 GB] wrote data/processed/train/full_model_2021_*
+model 2021 exit 0
+[      2 s, peak   0.3 GB] shuffled 2021: d 69,121
+[      4 s, peak   0.7 GB] 21 full entries, fitting 21 with 2 workers
+[    279 s, peak  16.9 GB] training matrix: 43,360,037 rows, 434,564,879 values
+[    292 s, peak  16.9 GB] test matrix: 29,290,438 rows, 294,521,762 values
+[    338 s, peak  16.9 GB] entry 0: 19 iterations, 44 s
+[    355 s, peak  16.9 GB] entry 2: 26 iterations, 60 s
+[    384 s, peak  16.9 GB] entry 46: 20 iterations, 46 s
+[    410 s, peak  16.9 GB] entry 247: 22 iterations, 55 s
+[    435 s, peak  16.9 GB] entry 291: 22 iterations, 50 s
+[    453 s, peak  16.9 GB] entry 292: 18 iterations, 43 s
+[    488 s, peak  16.9 GB] entry 305: 22 iterations, 53 s
+[    497 s, peak  16.9 GB] entry 1239: 19 iterations, 44 s
+[    534 s, peak  16.9 GB] entry 1298: 20 iterations, 46 s
+[    540 s, peak  16.9 GB] entry 1386: 18 iterations, 43 s
+[    577 s, peak  16.9 GB] entry 1474: 18 iterations, 42 s
+[    586 s, peak  16.9 GB] entry 1647: 19 iterations, 46 s
+[    634 s, peak  16.9 GB] entry 1855: 21 iterations, 48 s
+[    640 s, peak  16.9 GB] entry 1854: 23 iterations, 63 s
+[    684 s, peak  16.9 GB] entry 1922: 22 iterations, 50 s
+[    693 s, peak  16.9 GB] entry 1925: 22 iterations, 53 s
+[    738 s, peak  16.9 GB] entry 2001: 23 iterations, 53 s
+[    740 s, peak  16.9 GB] entry 2121: 20 iterations, 47 s
+[    780 s, peak  16.9 GB] entry 2588: 18 iterations, 42 s
+[    788 s, peak  16.9 GB] entry 3387: 21 iterations, 48 s
+[    933 s, peak  16.9 GB] entry 3583: 28 iterations, 153 s
+[    933 s, peak  16.9 GB] wrote data/processed/train/full_shuffled_2021_*
+shuffled 2021 exit 0
+[      3 s, peak   0.4 GB] model 2022: d 77,036
+[      6 s, peak   0.8 GB] 38 full entries, fitting 38 with 2 workers
+[     37 s, peak  15.1 GB] training matrix: 72,650,475 rows, 729,098,849 values
+[     50 s, peak  17.6 GB] test matrix: 30,581,637 rows, 308,462,332 values
+[    165 s, peak  17.6 GB] entry 0: 30 iterations, 109 s
+[    196 s, peak  17.6 GB] entry 2: 38 iterations, 140 s
+[    341 s, peak  17.6 GB] entry 8: 48 iterations, 176 s
+[    400 s, peak  17.6 GB] entry 27: 54 iterations, 203 s
+[    447 s, peak  17.6 GB] entry 46: 27 iterations, 106 s
+[    655 s, peak  17.6 GB] entry 248: 57 iterations, 208 s
+/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 100 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=100).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[    792 s, peak  17.6 GB] entry 247: 100 iterations, 392 s
+[    876 s, peak  17.6 GB] entry 291: 57 iterations, 221 s
+[    891 s, peak  17.6 GB] entry 292: 27 iterations, 99 s
+[   1000 s, peak  17.6 GB] entry 300: 33 iterations, 125 s
+[   1126 s, peak  17.6 GB] entry 607: 33 iterations, 126 s
+[   1172 s, peak  17.6 GB] entry 305: 75 iterations, 280 s
+[   1276 s, peak  17.6 GB] entry 870: 40 iterations, 149 s
+[   1278 s, peak  17.6 GB] entry 1239: 27 iterations, 106 s
+[   1390 s, peak  17.6 GB] entry 1311: 29 iterations, 112 s
+[   1432 s, peak  17.6 GB] entry 1298: 42 iterations, 157 s
+[   1575 s, peak  17.6 GB] entry 1387: 38 iterations, 142 s
+[   1617 s, peak  17.6 GB] entry 1386: 60 iterations, 227 s
+[   1741 s, peak  17.6 GB] entry 1474: 45 iterations, 166 s
+[   1803 s, peak  17.6 GB] entry 1840: 16 iterations, 62 s
+[   1897 s, peak  17.6 GB] entry 1647: 75 iterations, 280 s
+[   1901 s, peak  17.6 GB] entry 1844: 27 iterations, 98 s
+[   2053 s, peak  17.6 GB] entry 1855: 41 iterations, 152 s
+[   2263 s, peak  17.6 GB] entry 1922: 57 iterations, 209 s
+/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 100 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=100).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[   2337 s, peak  17.6 GB] entry 1854: 100 iterations, 440 s
+[   2572 s, peak  17.6 GB] entry 2001: 60 iterations, 236 s
+[   2585 s, peak  17.6 GB] entry 1925: 86 iterations, 322 s
+[   2719 s, peak  17.6 GB] entry 2118: 40 iterations, 147 s
+[   2772 s, peak  17.6 GB] entry 2119: 51 iterations, 187 s
+[   2921 s, peak  17.6 GB] entry 2122: 40 iterations, 150 s
+[   3061 s, peak  17.6 GB] entry 2285: 37 iterations, 140 s
+[   3101 s, peak  17.6 GB] entry 2121: 99 iterations, 382 s
+[   3247 s, peak  17.6 GB] entry 2740: 39 iterations, 146 s
+[   3253 s, peak  17.6 GB] entry 2588: 52 iterations, 192 s
+[   3451 s, peak  17.6 GB] entry 2743: 54 iterations, 204 s
+[   3465 s, peak  17.6 GB] entry 3387: 54 iterations, 212 s
+[   3557 s, peak  17.6 GB] entry 3533: 29 iterations, 106 s
+[   3714 s, peak  17.6 GB] entry 3583: 65 iterations, 250 s
+[   3714 s, peak  17.6 GB] wrote data/processed/train/full_model_2022_*
+model 2022 exit 0
+[      3 s, peak   0.4 GB] shuffled 2022: d 77,036
+[      6 s, peak   0.8 GB] 38 full entries, fitting 38 with 2 workers
+[    627 s, peak  20.7 GB] training matrix: 72,650,475 rows, 729,098,849 values
+[    640 s, peak  20.7 GB] test matrix: 30,581,637 rows, 308,462,332 values
+[    726 s, peak  20.7 GB] entry 2: 21 iterations, 79 s
+[    727 s, peak  20.7 GB] entry 0: 21 iterations, 79 s
+[    785 s, peak  20.7 GB] entry 27: 15 iterations, 59 s
+[    798 s, peak  20.7 GB] entry 8: 19 iterations, 72 s
+[    848 s, peak  20.7 GB] entry 46: 16 iterations, 62 s
+[    870 s, peak  20.7 GB] entry 247: 18 iterations, 72 s
+[    913 s, peak  20.7 GB] entry 248: 17 iterations, 65 s
+[    942 s, peak  20.7 GB] entry 291: 18 iterations, 72 s
+[   1065 s, peak  20.7 GB] entry 292: 21 iterations, 152 s
+[   1083 s, peak  20.7 GB] entry 300: 19 iterations, 141 s
+[   1231 s, peak  20.7 GB] entry 607: 20 iterations, 148 s
+[   1244 s, peak  20.7 GB] entry 305: 23 iterations, 179 s
+[   1290 s, peak  20.7 GB] entry 870: 15 iterations, 58 s
+[   1316 s, peak  20.7 GB] entry 1239: 19 iterations, 72 s
+[   1355 s, peak  20.7 GB] entry 1298: 17 iterations, 65 s
+[   1388 s, peak  20.7 GB] entry 1311: 19 iterations, 72 s
+[   1454 s, peak  20.7 GB] entry 1386: 24 iterations, 99 s
+[   1467 s, peak  20.7 GB] entry 1387: 21 iterations, 79 s
+[   1513 s, peak  20.7 GB] entry 1474: 15 iterations, 59 s
+[   1542 s, peak  20.7 GB] entry 1647: 20 iterations, 75 s
+[   1567 s, peak  20.7 GB] entry 1840: 14 iterations, 55 s
+[   1614 s, peak  20.7 GB] entry 1844: 18 iterations, 72 s
+[   1781 s, peak  20.7 GB] entry 1855: 23 iterations, 168 s
+[   1808 s, peak  20.7 GB] entry 1854: 28 iterations, 241 s
+[   2063 s, peak  20.7 GB] entry 1925: 25 iterations, 255 s
+[   2128 s, peak  20.7 GB] entry 2001: 17 iterations, 65 s
+[   2129 s, peak  20.7 GB] entry 1922: 26 iterations, 348 s
+[   2186 s, peak  20.7 GB] entry 2118: 15 iterations, 58 s
+[   2201 s, peak  20.7 GB] entry 2119: 19 iterations, 72 s
+[   2269 s, peak  20.7 GB] entry 2122: 18 iterations, 68 s
+[   2334 s, peak  20.7 GB] entry 2285: 17 iterations, 65 s
+[   2396 s, peak  20.7 GB] entry 2588: 15 iterations, 62 s
+[   2463 s, peak  20.7 GB] entry 2121: 36 iterations, 277 s
+[   2464 s, peak  20.7 GB] entry 2740: 18 iterations, 68 s
+[   2530 s, peak  20.7 GB] entry 3387: 15 iterations, 66 s
+[   2542 s, peak  20.7 GB] entry 2743: 20 iterations, 79 s
+[   2591 s, peak  20.7 GB] entry 3533: 16 iterations, 62 s
+[   2665 s, peak  20.7 GB] entry 3583: 16 iterations, 123 s
+[   2666 s, peak  20.7 GB] wrote data/processed/train/full_shuffled_2022_*
+shuffled 2022 exit 0
+[      4 s, peak   0.4 GB] model 2023: d 83,516
+[      9 s, peak   0.8 GB] 52 full entries, fitting 52 with 2 workers
+[     53 s, peak  18.4 GB] training matrix: 103,232,112 rows, 1,037,576,873 values
+[     66 s, peak  20.3 GB] test matrix: 31,654,601 rows, 320,786,015 values
+[    236 s, peak  20.3 GB] entry 0: 29 iterations, 158 s
+[    334 s, peak  20.3 GB] entry 2: 49 iterations, 256 s
+[    400 s, peak  20.3 GB] entry 8: 31 iterations, 164 s
+[    539 s, peak  20.3 GB] entry 46: 26 iterations, 139 s
+[    587 s, peak  20.3 GB] entry 27: 49 iterations, 253 s
+[    931 s, peak  20.3 GB] entry 248: 50 iterations, 344 s
+[    946 s, peak  20.3 GB] entry 247: 79 iterations, 407 s
+[   1164 s, peak  20.3 GB] entry 292: 42 iterations, 218 s
+[   1254 s, peak  20.3 GB] entry 291: 61 iterations, 323 s
+[   1354 s, peak  20.3 GB] entry 300: 38 iterations, 190 s
+[   1499 s, peak  20.3 GB] entry 607: 27 iterations, 145 s
+[   1684 s, peak  20.3 GB] entry 305: 78 iterations, 429 s
+[   1709 s, peak  20.3 GB] entry 869: 40 iterations, 211 s
+[   1871 s, peak  20.3 GB] entry 1239: 28 iterations, 161 s
+[   1944 s, peak  20.3 GB] entry 870: 49 iterations, 260 s
+[   1980 s, peak  20.3 GB] entry 1295: 20 iterations, 110 s
+[   2105 s, peak  20.3 GB] entry 1304: 23 iterations, 125 s
+[   2132 s, peak  20.3 GB] entry 1298: 35 iterations, 188 s
+[   2296 s, peak  20.3 GB] entry 1311: 36 iterations, 191 s
+[   2350 s, peak  20.3 GB] entry 1386: 42 iterations, 218 s
+[   2496 s, peak  20.3 GB] entry 1387: 37 iterations, 200 s
+[   2602 s, peak  20.3 GB] entry 1474: 46 iterations, 252 s
+[   2675 s, peak  20.3 GB] entry 1475: 34 iterations, 180 s
+[   2816 s, peak  20.3 GB] entry 1529: 40 iterations, 213 s
+[   2942 s, peak  20.3 GB] entry 1647: 52 iterations, 267 s
+[   3066 s, peak  20.3 GB] entry 1794: 23 iterations, 124 s
+[   3071 s, peak  20.3 GB] entry 1649: 49 iterations, 256 s
+[   3161 s, peak  20.3 GB] entry 1840: 17 iterations, 90 s
+[   3180 s, peak  20.3 GB] entry 1839: 22 iterations, 114 s
+[   3312 s, peak  20.3 GB] entry 1844: 28 iterations, 151 s
+[   3531 s, peak  20.3 GB] entry 1855: 40 iterations, 218 s

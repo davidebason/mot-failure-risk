@@ -1,0 +1,12 @@
+model 2020, 6 full entries:
+  default, 1e-4  tp   298,714 fp   342,157 fn  12,749,666  precision  46.61%  recall  2.29%  iterations 565
+  1e-5           tp   304,555 fp   352,343 fn  12,743,825  precision  46.36%  recall  2.33%  iterations 5,935
+model 2021, 17 full entries:
+  default, 1e-4  tp   535,418 fp   601,804 fn  22,387,105  precision  47.08%  recall  2.34%  iterations 676
+  1e-5           tp   545,612 fp   605,367 fn  22,376,911  precision  47.40%  recall  2.38%  iterations 7,501
+shuffled 2020, 6 full entries:
+  default, 1e-4  tp         0 fp         0 fn  13,048,380  precision    -     recall  0.00%  iterations 129
+  1e-5           tp        63 fp       244 fn  13,048,317  precision  20.52%  recall  0.00%  iterations 5,024
+shuffled 2021, 17 full entries:
+  default, 1e-4  tp         0 fp         0 fn  22,922,523  precision    -     recall  0.00%  iterations 277
+  1e-5           tp         5 fp        18 fn  22,922,518  precision  21.74%  recall  0.00%  iterations 3,742
