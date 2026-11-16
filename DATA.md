@@ -276,6 +276,11 @@ They are removed before the tests are grouped into slots (below), so they neithe
 
 **A row's class is that of the previous slot's first test**, since that slot is what the row learns from. When a vehicle's class differs between the two slots, which [`evidence/12_class_changes.py`](evidence/12_class_changes.py) finds for 0.33% of vehicles, a defect listed only for the target slot's class cannot be predicted for that row.
 
+**A row whose two slots differ in class is learnt from and scored only for the defects listed for its previous slot's class**, the author's decision of 14 November 2026, taken as a marginal limit, because:
+- about 169,000 rows have their two slots in different classes, 0.08% of the training table (evidence 12);
+- most entries are listed for both classes such a vehicle moves between, mostly 4 and 7, so for them these rows already count; only the entries listed for one of the two and not the other lose them, 152 of the 4,821 for classes 4 and 7, as [`transform/seeds/year_vector_entries.csv`](transform/seeds/year_vector_entries.csv) lists;
+- counting such a row for either class would take about half a day of rebuilds and reruns, for an effect no score would show.
+
 The prediction is made when the vehicle arrives for the target slot's first test, when that test's date is known. A vehicle's first slot serves only as input, and a vehicle with no later slot, whether scrapped, exported or off the road, gives no further row. A vehicle with more than one slot starting in a year has a row for each. The outcome of a test, `P`, `F`, `PRS` or `ABA`, is not predicted: what matters is the problems the vehicle had, not how its tests ended.
 
 **Rows go to training or test by the year of the target slot's first test.** A slot that starts in December can hold a retest from the following January, so a fold's training rows can hold a few tests from the first weeks of its test year. None of them is a test label, since each belongs to a slot that starts before the test year. We accept this. At either end of the period a slot can be cut: a slot under way on 20 May 2018 loses its tests before that date, so a retest from 20 May starts the vehicle's first slot, and a slot that starts late in 2025 loses any test in 2026, which the data does not hold.
