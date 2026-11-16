@@ -1,0 +1,22 @@
+pooled, precision / recall; beats Repeat, Most popular; shuffled passes; off
+2020  0.1: model  18.85%  22.63%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  YY  shuffled passes  off False
+2020 0.25: model  31.56%   6.58%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off False
+2020  0.5: model  46.61%   0.62%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off True
+2021  0.1: model  19.19%  23.44%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  YY  shuffled passes  off False
+2021 0.25: model  33.43%   7.12%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  nn  shuffled passes  off False
+2021  0.5: model  47.08%   1.02%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  nn  shuffled passes  off True
+2022  0.1: model  19.02%  24.30%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  YY  shuffled passes  off False
+2022 0.25: model  33.37%   8.22%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  nn  shuffled passes  off False
+2022  0.5: model  47.22%   1.38%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  nn  shuffled passes  off True
+2023  0.1: model  19.20%  25.11%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  YY  shuffled passes  off False
+2023 0.25: model  33.57%   8.84%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  nY  shuffled passes  off False
+2023  0.5: model  47.50%   1.69%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  nn  shuffled passes  off True
+2024  0.1: model  19.49%  25.90%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  YY  shuffled passes  off False
+2024 0.25: model  34.23%   9.33%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  nY  shuffled passes  off False
+2024  0.5: model  47.71%   1.91%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  nn  shuffled passes  off True
+2025  0.1: model  19.48%  27.07%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nY  shuffled passes  off False
+2025 0.25: model  34.60%  10.33%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nY  shuffled passes  off False
+2025  0.5: model  48.28%   2.30%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nn  shuffled passes  off True
+2025 beside the prediction written down before any score was computed:
+  tau 0.5: precision  48.28%, predicted  42.00% to  58.00%; recall   2.30%, predicted   1.00% to   2.00%
+  tau 0.1: precision  19.48%, predicted  18.00% to  32.00%; recall  27.07%, predicted  13.00% to  25.00%
