@@ -160,7 +160,7 @@ def sizes(con, year: int) -> tuple[int, int]:
     return rows, previous + groups + crossed + pairs + banded + fixed * rows
 
 
-def design(con, years: list[int], shuffled: bool, cols: dict):
+def design(con, years: list[int], shuffled: bool, cols: dict, dtype=np.float32):
     """The inputs of these years' rows as one CSR matrix, with each row's class and its labels.
 
     The arrays are allocated once at their final size and filled one year at a time, so that only
@@ -175,7 +175,7 @@ def design(con, years: list[int], shuffled: bool, cols: dict):
     if nnz >= 2**31:
         raise SystemExit(f"{nnz:,} values do not fit 32-bit offsets")
     indptr = np.zeros(n + 1, dtype=np.int32)
-    data = np.ones(nnz, dtype=np.float32)
+    data = np.ones(nnz, dtype=dtype)
     indices = np.empty(nnz, dtype=np.int32)
     classes = np.empty(n, dtype=np.int8)
     label_rows, label_entries = [], []
@@ -246,13 +246,18 @@ def fit_one(entry: int):
     listed = s["entry_classes"][entry]
     weight = np.isin(s["train_classes"], listed).astype(np.float32)
     y = labels(s["train_label_rows"], s["train_label_entries"], s["x_train"].shape[0], entry)
-    model = LogisticRegression(C=1.0).fit(s["x_train"], y, sample_weight=weight)
+    model = LogisticRegression(C=1.0, tol=s["tol"], max_iter=folds.MAX_ITER).fit(
+        s["x_train"], y, sample_weight=weight
+    )
     mask = np.isin(s["test_classes"], listed)
-    z = s["x_test"] @ model.coef_[0].astype(np.float32) + np.float32(model.intercept_[0])
+    dtype = s["x_test"].dtype
+    z = s["x_test"] @ model.coef_[0].astype(dtype) + dtype.type(model.intercept_[0])
     p = 1.0 / (1.0 + np.exp(-z[mask].astype(np.float64)))
     y_test = labels(s["test_label_rows"], s["test_label_entries"], s["x_test"].shape[0], entry)[
         mask
     ]
+    if s.get("save_p"):
+        np.save(s["save_p"].format(entry=entry), p.astype(np.float32))
     tp, fp, fn, band_rows, band_ones = folds.tally(p, np.ones(len(p), dtype=np.int64), y_test)
     folds.check_tally(entry, tp, fp, fn, band_rows, band_ones, len(p), int(y_test.sum()))
     return {
@@ -275,6 +280,9 @@ def run(
     entries_max: int | None,
     workers: int,
     memory: str,
+    tol: float,
+    only: int | None = None,
+    dtype=np.float32,
 ) -> None:
     started = time.perf_counter()
     kind = small_models.kind(shuffled)
@@ -283,7 +291,7 @@ def run(
     d = small_models.fold_inputs(con, test_year)
     if cols["d"] != d:
         raise SystemExit(f"the matrix has {cols['d']} columns, the fold {d} inputs")
-    say(started, f"{kind} {test_year}: d {d:,}")
+    say(started, f"{kind} {test_year}: d {d:,}, tolerance {tol}")
 
     years = folds.training_years(test_year)
     ones_from_rows: dict[int, int] = {}
@@ -292,6 +300,10 @@ def run(
             ones_from_rows[e] = ones_from_rows.get(e, 0) + k
     full = sorted(e for e, k in ones_from_rows.items() if folds.tier(k, d) == "full")
     chosen = full[:entries_max] if entries_max else full
+    if only is not None:
+        if only not in full:
+            raise SystemExit(f"entry {only} has no full model in this fold")
+        chosen, entries_max = [only], 1
     entry_classes: dict[int, list[int]] = {}
     for e, c in con.execute("SELECT entry, test_class_id FROM entry_classes").fetchall():
         entry_classes.setdefault(e, []).append(c)
@@ -299,11 +311,11 @@ def run(
     say(started, f"{len(full)} full entries, fitting {len(chosen)} with {workers} workers")
 
     x_train, train_classes, train_label_rows, train_label_entries = design(
-        con, years, shuffled, cols
+        con, years, shuffled, cols, dtype
     )
     say(started, f"training matrix: {x_train.shape[0]:,} rows, {x_train.nnz:,} values")
     x_test, test_classes, test_label_rows, test_label_entries = design(
-        con, [test_year], False, cols
+        con, [test_year], False, cols, dtype
     )
     say(started, f"test matrix: {x_test.shape[0]:,} rows, {x_test.nnz:,} values")
     con.close()
@@ -329,6 +341,11 @@ def run(
         test_label_rows=test_label_rows,
         test_label_entries=test_label_entries,
         entry_classes=entry_classes,
+        tol=tol,
+        # A measurement keeps the test year's probabilities, to compare tolerances.
+        save_p=f"data/measure/p_{test_year}_{{entry}}_{tol:g}_{np.dtype(dtype).name}.npy"
+        if entries_max
+        else None,
     )
     results = []
     with multiprocessing.get_context("fork").Pool(workers) as pool:
@@ -339,7 +356,11 @@ def run(
                     f"entry {r['entry']}: {scored} ones scored, the baselines {should}"
                 )
             results.append(r)
-            say(started, f"entry {r['entry']}: {r['n_iter']} iterations, {r['seconds']:.0f} s")
+            say(
+                started,
+                f"entry {r['entry']}: {r['n_iter']} iterations, {r['seconds']:.0f} s, "
+                f"tp {r['tp']:,} fp {r['fp']:,} fn {r['fn']:,}",
+            )
 
     if entries_max:
         say(started, "measurement only: nothing written")
@@ -378,8 +399,12 @@ def main() -> None:
     parser.add_argument("--entries", type=int, help="fit only the first this many full entries")
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--memory", default="6GB", help="DuckDB's memory limit")
+    parser.add_argument("--tol", type=float, default=1e-4, help="the solver's tolerance")
+    parser.add_argument("--entry", type=int, help="measure only this full entry")
+    parser.add_argument("--float64", action="store_true", help="64-bit inputs, not 32-bit")
     a = parser.parse_args()
-    run(a.test_year, a.shuffled, a.entries, a.workers, a.memory)
+    dtype = np.float64 if a.float64 else np.float32
+    run(a.test_year, a.shuffled, a.entries, a.workers, a.memory, a.tol, a.entry, dtype)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,13 @@
+started 2026-11-13 17:34:50 UTC
+[      5 s, peak   0.4 GB] model 2025: d 114,060, tolerance 0.0001
+[     13 s, peak   0.8 GB] 64 full entries, fitting 1 with 1 workers
+[     92 s, peak  24.7 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[    107 s, peak  25.9 GB] test matrix: 32,244,374 rows, 308,332,182 values
+[    314 s, peak  25.9 GB] entry 0: 24 iterations, 207 s, tp 0 fp 0 fn 590,379
+[    315 s, peak  25.9 GB] measurement only: nothing written
+  315.79 s wall, 25913604 kB peak
+tol 1e-4 exit 0
+[      5 s, peak   0.4 GB] model 2025: d 114,060, tolerance 1e-07
+[     13 s, peak   0.8 GB] 64 full entries, fitting 1 with 1 workers
+[     91 s, peak  25.3 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[    107 s, peak  26.5 GB] test matrix: 32,244,374 rows, 308,332,182 values

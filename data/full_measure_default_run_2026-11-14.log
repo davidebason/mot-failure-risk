@@ -1,0 +1,10 @@
+started 2026-11-14 09:13:18 UTC
+[     14 s, peak   0.3 GB] model 2021: d 88,408, tolerance 0.0001
+[     20 s, peak   0.7 GB] 17 full entries, fitting 1 with 1 workers
+[     42 s, peak  11.8 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     64 s, peak  14.6 GB] test matrix: 29,290,438 rows, 277,084,834 values
+[    384 s, peak  14.6 GB] entry 247: 141 iterations, 320 s, tp 246,080 fp 239,373 fn 1,099,610
+[    384 s, peak  14.6 GB] measurement only: nothing written
+  392.20 s wall, 14612084 kB peak
+exit 0
+ended 2026-11-14 09:19:50 UTC
