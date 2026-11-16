@@ -1,11 +1,12 @@
 """The small and base-rate models, fitted on counts on the author's computer (DATA.md).
 
-A small model has three inputs: u, whether the previous slot recorded the entry; g, whether it
-recorded any entry of the entry's group; and the days between the two slots' first tests. Rows
-with the same three inputs and the same label add the same term to the loss, so the model is
-fitted on the count of rows of each combination, weighted by that count, which gives the same
-weights as every row. The counts of a test year score it in the same way, since the prediction
-depends on the three inputs alone.
+A small model's inputs come from three facts about a row: u, whether the previous slot recorded
+the entry; g, whether it recorded any entry of the entry's group; and the days between the two
+slots' first tests, in bands, each kind of vehicle with a curve of its own across them
+(folds.py). Rows with the same three facts and the same label add the same term to the loss, so
+the model is fitted on the count of rows of each combination, weighted by that count, which
+gives the same weights as every row. The counts of a test year score it in the same way, since
+the prediction depends on the three facts alone.
 
 Run from the repository's root, one piece at a time, each writing its own files so that a piece
 stopped halfway is simply run again:
@@ -114,8 +115,9 @@ def count_year(con, year: int, shuffled: bool, rows: Path | None = None) -> Path
 
 
 def fold_inputs(con, test_year: int, rows: Path | None = None) -> int:
-    """d, the number of inputs of the fold's full model: one per entry, group, class, fuel and
-    make-and-model pair found in its training rows, and the four numbers."""
+    """d, the number of inputs of the fold's full model: one per entry, group, entry and band of
+    the gap, class, fuel and make-and-model pair found in its training rows, the three numbers,
+    and one per band of the gap."""
     rows = rows or folds.ROWS
     files = [str(rows / f"{y}.parquet") for y in folds.training_years(test_year)]
     (classes, fuels, pairs) = con.execute(
@@ -125,7 +127,8 @@ def fold_inputs(con, test_year: int, rows: Path | None = None) -> int:
     ).fetchall()[0]
     (entries,) = con.execute("SELECT count(DISTINCT entry) FROM entry_classes").fetchall()[0]
     (groups,) = con.execute("SELECT count(DISTINCT group_id) FROM entry_groups").fetchall()[0]
-    return entries + groups + classes + fuels + pairs + len(folds.NUMBERS)
+    bands = len(folds.BANDS_KEPT)
+    return entries + groups + entries * bands + classes + fuels + pairs + len(folds.NUMBERS) + bands
 
 
 def cells(con, years: list[int], shuffled: bool):
@@ -147,10 +150,30 @@ def by_entry(c: dict) -> dict[int, slice]:
     return {int(e): slice(s, t) for e, s, t in zip(entries, starts, ends, strict=True)}
 
 
-def fit_counts(u, g, z, y, n, tol: float = 1e-4) -> LogisticRegression:
-    """The small model fitted on counts: inputs u, g and the standardised days z, weights n."""
-    x = np.column_stack([u, g, z]).astype(np.float64)
-    return LogisticRegression(C=1.0, tol=tol).fit(x, y.astype(int), sample_weight=n)
+SMALL_WEIGHTS = [
+    "w_u",
+    "w_g",
+    *(f"w_band{b}" for b in folds.BANDS_KEPT),
+    *(f"w_u_band{b}" for b in folds.BANDS_KEPT),
+    *(f"w_g_band{b}" for b in folds.BANDS_KEPT),
+]
+
+
+def small_inputs(u, g, days) -> np.ndarray:
+    """The small model's 14 inputs: u, g, the bands of the gap, and the bands crossed with u and
+    with g where u is 0, so that each of the three kinds of vehicle has its own curve."""
+    u = np.asarray(u, dtype=np.float64)
+    g = np.asarray(g, dtype=np.float64)
+    band = folds.gap_band(days)
+    b = np.column_stack([band == k for k in folds.BANDS_KEPT]).astype(np.float64)
+    return np.column_stack([u, g, b, b * u[:, None], b * (g * (1 - u))[:, None]])
+
+
+def fit_counts(u, g, days, y, n, tol: float = 1e-4) -> LogisticRegression:
+    """The small model fitted on counts, weighted by them."""
+    return LogisticRegression(C=1.0, tol=tol).fit(
+        small_inputs(u, g, days), np.asarray(y).astype(int), sample_weight=n
+    )
 
 
 def expected_ones(test_year: int) -> dict[int, int]:
@@ -182,18 +205,6 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
         for e, n in baselines.label_ones(con, folds.ROWS / f"{y}.parquet").items():
             ones_from_rows[e] = ones_from_rows.get(e, 0) + n
 
-    # The days are standardised on all the fold's training rows, of every class, as the
-    # numbers of the full model are.
-    files = [str(folds.ROWS / f"{y}.parquet") for y in years]
-    totals = con.execute(
-        f"""SELECT CAST(round(weeks_between * 7) AS INTEGER) AS days_between, count(*) AS n
-            FROM read_parquet({files})
-            GROUP BY ALL"""
-    ).fetchnumpy()
-    w = totals["n"].astype(np.float64)
-    mean = float(np.average(totals["days_between"], weights=w))
-    sd = float(np.sqrt(np.average((totals["days_between"] - mean) ** 2, weights=w)))
-
     expected = expected_ones(test_year)
     scores, bands, coefs = [], [], []
     entries = [e for (e,) in con.execute("SELECT DISTINCT entry FROM entry_classes").fetchall()]
@@ -213,12 +224,8 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
         tu, tg, tdays, ty, tn = (test[k][st] for k in ("u", "g", "days_between", "y", "n"))
         iterations = ""
         if t == "small":
-            model = fit_counts(
-                train["u"][s], train["g"][s], (train["days_between"][s] - mean) / sd, y, n
-            )
-            p = model.predict_proba(
-                np.column_stack([tu, tg, (tdays - mean) / sd]).astype(np.float64)
-            )[:, 1]
+            model = fit_counts(train["u"][s], train["g"][s], train["days_between"][s], y, n)
+            p = model.predict_proba(small_inputs(tu, tg, tdays))[:, 1]
             iterations = int(model.n_iter_[0])
             coefs.append(
                 [
@@ -251,7 +258,7 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
         ("bands", ["kind", "test_year", "entry", "band", "rows", "ones"], bands),
         (
             "coefs",
-            ["kind", "test_year", "entry", "intercept", "w_u", "w_g", "w_days", "n_iter"],
+            ["kind", "test_year", "entry", "intercept", *SMALL_WEIGHTS, "n_iter"],
             coefs,
         ),
     ):
@@ -261,7 +268,7 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
             out.writerows(rows)
     tiers = {t: sum(1 for r in scores if r[3] == t) for t in ("full", "small", "base_rate", "none")}
     print(
-        f"{kind(shuffled)} {test_year}: d {d:,}, days mean {mean:.2f} sd {sd:.2f}, tiers {tiers}, "
+        f"{kind(shuffled)} {test_year}: d {d:,}, tiers {tiers}, "
         f"{time.perf_counter() - started:.0f} s",
         flush=True,
     )
@@ -310,8 +317,8 @@ def check_counts(con, test_year: int = 2020) -> None:
 
     Three of the fold's small-model entries, chosen to cover the cases: the one whose rows most
     often have g = 1 without u, one listed only for motorcycles, and the one with the fewest
-    ones. Both fits run the solver to a tight tolerance, so that only the counting can differ.
-    Stops unless the four weights agree to six decimals.
+    ones. Both fits run the solver to the same tight tolerance, so only the counting can differ.
+    Stops unless the weights agree to six decimals.
     """
     (year,) = folds.training_years(test_year)
     d = fold_inputs(con, test_year)
@@ -340,21 +347,12 @@ def check_counts(con, test_year: int = 2020) -> None:
     }
     for why, e in chosen.items():
         r = every_row(con, e, year)
-        days = r["days_between"].astype(np.float64)
-        mean, sd = days.mean(), days.std()
-        a = fit_counts(r["u"], r["g"], (days - mean) / sd, r["y"], np.ones(len(days)), tol=1e-10)
+        a = fit_counts(r["u"], r["g"], r["days_between"], r["y"], np.ones(len(r["y"])), tol=1e-10)
         s = at[e]
-        b = fit_counts(
-            c["u"][s],
-            c["g"][s],
-            (c["days_between"][s] - mean) / sd,
-            c["y"][s],
-            c["n"][s],
-            tol=1e-10,
-        )
+        b = fit_counts(c["u"][s], c["g"][s], c["days_between"][s], c["y"][s], c["n"][s], tol=1e-10)
         wa = np.r_[a.intercept_, a.coef_[0]]
         wb = np.r_[b.intercept_, b.coef_[0]]
-        print(f"entry {e} ({why}), {len(days):,} rows, {small[e][0]:,} ones")
+        print(f"entry {e} ({why}), {len(r['y']):,} rows, {small[e][0]:,} ones")
         print(f"  every row: {np.round(wa, 6)}")
         print(f"  counts:    {np.round(wb, 6)}")
         if np.abs(wa - wb).max() >= 1e-6:

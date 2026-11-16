@@ -3,9 +3,15 @@
 - **Folds.** Walking forward by target year: the fold of test year Y trains on the rows of target
   years 2019 to Y - 1 and is tested on those of Y (DATA.md, "The models").
 - **Tiers.** In each fold, an entry with at least 10(d + 1) ones in its training rows gets the
-  full model, with all d inputs; one with at least 30 the small model; one with fewer its base
-  rate, the share of its training rows that hold it, 0 when none does. An entry's ones and rows
-  are counted on rows of the classes it is listed for only, as everything else here is.
+  full model, with all d inputs; one with at least 10 per weight of the small model, 150, the
+  small model; one with fewer its base rate, the share of its training rows that hold it, 0 when
+  none does. An entry's ones and rows are counted on rows of the classes it is listed for only,
+  as everything else here is.
+- **The gap.** The days between the two slots enter as bands: under 300 days, about a year (300
+  to 430), 431 to 730, 731 to 1,095, and over 1,095. About a year is the reference, so each other
+  band is one 0/1 input. Each kind of vehicle gets a curve of its own across the bands: in the
+  small models the bands are crossed with u and g, in the full models with each entry of the
+  previous slot (DATA.md, "The models").
 - **Shuffle.** For the shuffled-label check, the labels are permuted among the rows of each
   target year and class, by a fixed hash, so that each entry keeps its ones in every year and
   the pairing of inputs and labels is broken. The same SQL serves both machines.
@@ -24,8 +30,12 @@ FIRST_YEAR = 2019
 TEST_YEARS = range(2020, 2026)
 TAU = 0.5
 BANDS = 100
-SMALLEST_SMALL = 30
-NUMBERS = ["test_mileage", "age_years", "cylinder_capacity", "days_between"]
+# The small model's inputs: u, g, the four bands, and the bands crossed with u and with g alone.
+SMALL_INPUTS = 14
+NUMBERS = ["test_mileage", "age_years", "cylinder_capacity"]
+# The gap's band edges in days, the author's of 2026-11-13; band 1, about a year, is the reference.
+BAND_EDGES = (300, 431, 731, 1096)
+BANDS_KEPT = (0, 2, 3, 4)
 # The columns of a training row the models read, besides its label and the gap in days.
 INPUTS = [
     "vehicle_id",
@@ -52,9 +62,14 @@ def tier(ones: int, d: int) -> str:
     """The model an entry gets in a fold from its ones in the training rows, with d inputs."""
     if ones >= 10 * (d + 1):
         return "full"
-    if ones >= SMALLEST_SMALL:
+    if ones >= 10 * (SMALL_INPUTS + 1):
         return "small"
     return "base_rate" if ones > 0 else "none"
+
+
+def gap_band(days) -> np.ndarray:
+    """Each gap's band, 0 to 4: under 300 days, about a year, 1 to 2 years, 2 to 3, over 3."""
+    return np.digitize(np.asarray(days), BAND_EDGES)
 
 
 def load_entry_groups(con, lookup: Path = LOOKUP) -> None:

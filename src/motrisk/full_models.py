@@ -7,11 +7,12 @@ Run from the repository's root, for the fold of one test year:
     python src/motrisk/full_models.py 2025 --entries 1 --workers 1    # measure one fit
 
 The inputs of a fold (DATA.md, "The models"): one column per entry of the previous slot, per group,
-per class, per fuel and per make-and-model pair found in the fold's training rows, then mileage,
-age, engine size and the days between the slots, each standardised with the mean and deviation of
-the fold's training rows. A pair, fuel or class not found in the training rows has no column, so a
-test row carrying one has none set. The columns are held as a sparse matrix of 32-bit floats,
-built in place year by year, since the six-year fold has about 1.7 billion values set.
+per entry and band of the gap, per class, per fuel and per make-and-model pair found in the fold's
+training rows, then mileage, age and engine size, each standardised with the mean and deviation of
+the fold's training rows, and one column per band of the gap. About a year is the reference band,
+with no column. A pair, fuel or class not found in the training rows has no column, so a test row
+carrying one has none set. The columns are held as a sparse matrix of 32-bit floats, built in
+place year by year, since the six-year fold sets about 1.6 billion values.
 
 An entry's model is trained on the rows of its classes, the other rows given a weight of 0, which
 leaves the fit as if they were not there, without copying the matrix. The entries are fitted in
@@ -55,14 +56,16 @@ def say(started: float, message: str) -> None:
 
 
 def prepare(con, test_year: int) -> dict:
-    """The fold's columns: the maps of class, fuel and pair to a column, and the scaling."""
+    """The fold's columns, in this order: entries, groups, entries by band, classes, fuels, pairs,
+    the three numbers, the bands; the maps to them, and the numbers' scaling."""
     years = folds.training_years(test_year)
     files = [str(folds.ROWS / f"{y}.parquet") for y in years]
     groups = [
         g
         for (g,) in con.execute("SELECT DISTINCT group_id FROM entry_groups ORDER BY 1").fetchall()
     ]
-    base = N_ENTRIES + len(groups)
+    entry_band = N_ENTRIES + len(groups)
+    base = entry_band + N_ENTRIES * len(folds.BANDS_KEPT)
     con.execute(
         f"""CREATE OR REPLACE TEMP TABLE class_col AS
             SELECT test_class_id, {base} + row_number() OVER (ORDER BY test_class_id) - 1 AS col
@@ -84,20 +87,31 @@ def prepare(con, test_year: int) -> dict:
     )
     (n_pairs,) = con.execute("SELECT count(*) FROM pair_col").fetchall()[0]
     base += n_pairs
-    numbers = ", ".join(
-        f"avg({c}), stddev_pop({c})"
-        for c in ["test_mileage", "age_years", "cylinder_capacity", "round(weeks_between * 7)"]
-    )
+    numbers = ", ".join(f"avg({c}), stddev_pop({c})" for c in folds.NUMBERS)
     scaling = np.array(
         con.execute(f"SELECT {numbers} FROM read_parquet({files})").fetchall()[0]
-    ).reshape(4, 2)
+    ).reshape(len(folds.NUMBERS), 2)
     group_col = np.full(max(groups) + 1, -1, dtype=np.int32)
     group_col[groups] = N_ENTRIES + np.arange(len(groups), dtype=np.int32)
-    return {"group_col": group_col, "first_number": base, "d": base + 4, "scaling": scaling}
+    first_band = base + len(folds.NUMBERS)
+    return {
+        "group_col": group_col,
+        "entry_band": entry_band,
+        "first_number": base,
+        "first_band": first_band,
+        "d": first_band + len(folds.BANDS_KEPT),
+        "scaling": scaling,
+    }
+
+
+# For each band of the gap, its place among the kept bands; -1 for the reference, about a year.
+KEPT = np.full(len(folds.BAND_EDGES) + 1, -1, dtype=np.int64)
+KEPT[list(folds.BANDS_KEPT)] = np.arange(len(folds.BANDS_KEPT))
 
 
 def year_arrays(con, year: int, shuffled: bool, cols: dict) -> dict:
-    """One target year's rows as numpy arrays: list offsets and values, columns, numbers, labels."""
+    """One target year's rows as numpy arrays: list offsets and values, columns, numbers, labels,
+    and each row's band of the gap among the kept bands, -1 for about a year."""
     rel = con.sql(
         f"""SELECT r.test_class_id, c.col AS class_col, f.col AS fuel_col, p.col AS pair_col,
                    r.test_mileage, r.age_years, r.cylinder_capacity, r.days_between,
@@ -119,12 +133,10 @@ def year_arrays(con, year: int, shuffled: bool, cols: dict) -> dict:
     for name in ("test_class_id", "class_col", "fuel_col", "pair_col"):
         out[name] = t.column(name).to_numpy(zero_copy_only=False)
     raw = np.column_stack(
-        [
-            t.column(c).to_numpy(zero_copy_only=False).astype(np.float64)
-            for c in ("test_mileage", "age_years", "cylinder_capacity", "days_between")
-        ]
+        [t.column(c).to_numpy(zero_copy_only=False).astype(np.float64) for c in folds.NUMBERS]
     )
     out["numbers"] = ((raw - cols["scaling"][:, 0]) / cols["scaling"][:, 1]).astype(np.float32)
+    out["band"] = KEPT[folds.gap_band(t.column("days_between").to_numpy(zero_copy_only=False))]
     return out
 
 
@@ -136,13 +148,16 @@ def within(offsets: np.ndarray) -> np.ndarray:
 
 def sizes(con, year: int) -> tuple[int, int]:
     """One target year's rows, and the values its rows set in the matrix."""
-    rows, previous, groups, pairs = con.execute(
+    low, high = folds.BAND_EDGES[0], folds.BAND_EDGES[1]
+    off = f"CASE WHEN r.days_between >= {low} AND r.days_between < {high} THEN 0 ELSE 1 END"
+    rows, previous, groups, crossed, pairs, banded = con.execute(
         f"""SELECT count(*), sum(len(r.previous_entries)), sum(len(r.previous_group_ids)),
-                   count(p.col)
+                   sum(len(r.previous_entries) * {off}), count(p.col), sum({off})
             FROM ({folds.rows_sql(year, False)}) AS r
             LEFT JOIN pair_col AS p USING (make, model)"""
     ).fetchall()[0]
-    return rows, previous + groups + pairs + (2 + 4) * rows
+    fixed = 2 + len(folds.NUMBERS)
+    return rows, previous + groups + crossed + pairs + banded + fixed * rows
 
 
 def design(con, years: list[int], shuffled: bool, cols: dict):
@@ -150,8 +165,9 @@ def design(con, years: list[int], shuffled: bool, cols: dict):
 
     The arrays are allocated once at their final size and filled one year at a time, so that only
     one year's rows are ever held besides the matrix. Offsets and column numbers are 32-bit, which
-    holds up to 2,147,483,647 values; SciPy would otherwise widen both to 64-bit. Returns the
-    matrix, the class of each row, and for every label value its row and its entry.
+    holds up to 2,147,483,647 values; SciPy would otherwise widen both to 64-bit. Each row's
+    columns are in increasing order. Returns the matrix, the class of each row, and for every
+    label value its row and its entry.
     """
     counted = [sizes(con, y) for y in years]
     n = sum(rows for rows, _ in counted)
@@ -163,6 +179,7 @@ def design(con, years: list[int], shuffled: bool, cols: dict):
     indices = np.empty(nnz, dtype=np.int32)
     classes = np.empty(n, dtype=np.int8)
     label_rows, label_entries = [], []
+    n_numbers, n_kept = len(folds.NUMBERS), len(folds.BANDS_KEPT)
 
     first = 0
     for y in years:
@@ -172,21 +189,35 @@ def design(con, years: list[int], shuffled: bool, cols: dict):
             if np.isnan(p[name].astype(np.float64)).any():
                 raise SystemExit(f"{y}: a {name[:-4]} not found in the training rows")
         h = ~np.isnan(p["pair_col"].astype(np.float64))
+        band = p["band"]
+        off = band >= 0
         po, pv = p["previous_entries"]
         go, gv = p["previous_group_ids"]
         lp, lg = np.diff(po), np.diff(go)
-        indptr[first + 1 : first + m + 1] = indptr[first] + np.cumsum(lp + lg + 2 + h + 4)
+        lc = lp * off
+        indptr[first + 1 : first + m + 1] = indptr[first] + np.cumsum(
+            lp + lg + lc + 2 + h + n_numbers + off
+        )
         start = indptr[first : first + m].astype(np.int64)
-        indices[np.repeat(start, lp) + within(po)] = pv
+        place_in_list = within(po)
+        indices[np.repeat(start, lp) + place_in_list] = pv
         indices[np.repeat(start + lp, lg) + within(go)] = cols["group_col"][gv]
-        after = start + lp + lg
+        # Each entry of the previous slot crossed with the row's band, when it is not about a year.
+        crossed = np.repeat(off, lp)
+        row_of = np.repeat(np.arange(m), lp)[crossed]
+        indices[start[row_of] + lp[row_of] + lg[row_of] + place_in_list[crossed]] = (
+            cols["entry_band"] + pv[crossed].astype(np.int64) * n_kept + band[row_of]
+        )
+        after = start + lp + lg + lc
         indices[after] = p["class_col"].astype(np.int32)
         indices[after + 1] = p["fuel_col"].astype(np.int32)
         indices[after[h] + 2] = p["pair_col"][h].astype(np.int32)
-        for k in range(4):
+        for k in range(n_numbers):
             place = after + 2 + h + k
             indices[place] = cols["first_number"] + k
             data[place] = p["numbers"][:, k]
+        last = (after + 2 + h + n_numbers)[off]
+        indices[last] = cols["first_band"] + band[off]
         classes[first : first + m] = p["test_class_id"]
         lo, lv = p["label_entries"]
         label_rows.append(first + np.repeat(np.arange(m, dtype=np.int32), np.diff(lo)))
@@ -238,7 +269,13 @@ def fit_one(entry: int):
     }
 
 
-def run(test_year: int, shuffled: bool, entries_max: int | None, workers: int, memory: str) -> None:
+def run(
+    test_year: int,
+    shuffled: bool,
+    entries_max: int | None,
+    workers: int,
+    memory: str,
+) -> None:
     started = time.perf_counter()
     kind = small_models.kind(shuffled)
     con = small_models.connect(memory_limit=memory)

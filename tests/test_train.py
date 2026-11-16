@@ -92,10 +92,22 @@ def toy(tmp_path, monkeypatch):
 
 
 def test_the_tier_rule():
-    d = 10
-    assert folds.tier(110, d) == "full"
-    assert [folds.tier(k, d) for k in (109, 30)] == ["small", "small"]
-    assert [folds.tier(k, d) for k in (29, 1, 0)] == ["base_rate", "base_rate", "none"]
+    # Full at ten ones per weight of the full model, small at ten per weight of the small one.
+    d = 100
+    assert folds.tier(1010, d) == "full"
+    assert [folds.tier(k, d) for k in (1009, 150)] == ["small", "small"]
+    assert [folds.tier(k, d) for k in (149, 1, 0)] == ["base_rate", "base_rate", "none"]
+
+
+def test_each_kind_of_vehicle_has_its_own_curve_across_the_bands():
+    # Over 3 years: the same entry before; about a year: group only; 1 to 2 years: neither.
+    x = small_models.small_inputs([1, 0, 0], [1, 1, 0], [2000, 365, 500])
+    names = small_models.SMALL_WEIGHTS
+    assert x.shape == (3, folds.SMALL_INPUTS) and len(names) == folds.SMALL_INPUTS
+    on = [{names[j] for j in np.flatnonzero(row)} for row in x]
+    assert on[0] == {"w_u", "w_g", "w_band4", "w_u_band4"}
+    assert on[1] == {"w_g"}
+    assert on[2] == {"w_band2"}
 
 
 def test_the_tally_and_its_bands():
@@ -151,12 +163,11 @@ def test_a_fit_on_counts_is_the_fit_on_every_row(toy):
     e = CAR[0]
     s = small_models.by_entry(c)[e]
     r = small_models.every_row(toy, e, 2019)
-    mean, sd = r["days_between"].mean(), r["days_between"].std()
     a = small_models.fit_counts(
-        r["u"], r["g"], (r["days_between"] - mean) / sd, r["y"], np.ones(len(r["y"])), tol=1e-10
+        r["u"], r["g"], r["days_between"], r["y"], np.ones(len(r["y"])), tol=1e-10
     )
     b = small_models.fit_counts(
-        c["u"][s], c["g"][s], (c["days_between"][s] - mean) / sd, c["y"][s], c["n"][s], tol=1e-10
+        c["u"][s], c["g"][s], c["days_between"][s], c["y"][s], c["n"][s], tol=1e-10
     )
     assert np.allclose(np.r_[a.intercept_, a.coef_[0]], np.r_[b.intercept_, b.coef_[0]], atol=1e-6)
 
@@ -181,11 +192,45 @@ def test_the_full_inputs_come_from_the_training_years_only(toy):
     )
     z = (first["test_mileage"] - cols["scaling"][0, 0]) / cols["scaling"][0, 1]
     assert np.isclose(dense[cols["first_number"]], z, atol=1e-5)
-    assert (
-        len(set_columns)
-        == len(first["previous_entries"]) + len(first["previous_group_ids"]) + 3 + 4
+    kept = full_models.KEPT[folds.gap_band(first["days_between"])]
+    crossed = len(first["previous_entries"]) if kept >= 0 else 0
+    banded = 1 if kept >= 0 else 0
+    assert len(set_columns) == (
+        len(first["previous_entries"]) + len(first["previous_group_ids"]) + crossed + 3 + 3 + banded
     )
     assert classes[0] == first["test_class_id"]
+
+
+def test_the_entries_are_crossed_with_the_band_of_the_gap(toy):
+    cols = full_models.prepare(toy, 2021)
+    x, *_ = full_models.design(toy, [2019, 2020], False, cols)
+    # Year by year, in the order the matrix is built: a UNION would not keep the years in order.
+    rows = [
+        r
+        for year in (2019, 2020)
+        for r in toy.execute(
+            f"SELECT previous_entries, days_between FROM ({folds.rows_sql(year, False)})"
+        ).fetchall()
+    ]
+    n_kept = len(folds.BANDS_KEPT)
+    seen_off = 0
+    for i, (previous, days) in enumerate(rows):
+        kept = int(full_models.KEPT[folds.gap_band(days)])
+        set_columns = set(x[i].indices)
+        crossed = {
+            c
+            for c in set_columns
+            if cols["entry_band"] <= c < cols["entry_band"] + full_models.N_ENTRIES * n_kept
+        }
+        bands = {c for c in set_columns if c >= cols["first_band"]}
+        if kept < 0:
+            assert not crossed and not bands
+        else:
+            seen_off += 1
+            assert crossed == {cols["entry_band"] + e * n_kept + kept for e in previous}
+            assert bands == {cols["first_band"] + kept}
+        assert list(x[i].indices) == sorted(x[i].indices)
+    assert seen_off > 0
 
     # A make and model first seen in the test year has no column there.
     x_test, *_ = full_models.design(toy, [2021], False, cols)
@@ -193,13 +238,20 @@ def test_the_full_inputs_come_from_the_training_years_only(toy):
         f"""SELECT make, len(previous_entries), len(previous_group_ids)
             FROM ({folds.rows_sql(2021, False)})"""
     ).fetchall()
+    test_days = [
+        d
+        for (d,) in toy.execute(
+            f"SELECT days_between FROM ({folds.rows_sql(2021, False)})"
+        ).fetchall()
+    ]
     tesla = [i for i, r in enumerate(test_rows) if r[0] == "TESLA"]
     assert tesla
     pair_columns = set(range(cols["first_number"] - len(PAIRS), cols["first_number"]))
     for i in tesla:
         _, previous, groups = test_rows[i]
-        # Its entries, its groups, class, fuel and the four numbers: no pair.
-        assert x_test[i].nnz == previous + groups + 2 + 4
+        # Its entries, groups, crossed entries, class, fuel, numbers and band: no pair.
+        kept = full_models.KEPT[folds.gap_band(test_days[i])]
+        assert x_test[i].nnz == previous + groups + (previous + 1) * (kept >= 0) + 2 + 3
         assert not set(x_test[i].indices) & pair_columns
 
 
