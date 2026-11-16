@@ -163,12 +163,8 @@ def test_a_fit_on_counts_is_the_fit_on_every_row(toy):
     e = CAR[0]
     s = small_models.by_entry(c)[e]
     r = small_models.every_row(toy, e, 2019)
-    a = small_models.fit_counts(
-        r["u"], r["g"], r["days_between"], r["y"], np.ones(len(r["y"])), tol=1e-10
-    )
-    b = small_models.fit_counts(
-        c["u"][s], c["g"][s], c["days_between"][s], c["y"][s], c["n"][s], tol=1e-10
-    )
+    a = small_models.fit_counts(r["u"], r["g"], r["days_between"], r["y"], np.ones(len(r["y"])))
+    b = small_models.fit_counts(c["u"][s], c["g"][s], c["days_between"][s], c["y"][s], c["n"][s])
     assert np.allclose(np.r_[a.intercept_, a.coef_[0]], np.r_[b.intercept_, b.coef_[0]], atol=1e-6)
 
 

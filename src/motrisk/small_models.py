@@ -169,9 +169,9 @@ def small_inputs(u, g, days) -> np.ndarray:
     return np.column_stack([u, g, b, b * u[:, None], b * (g * (1 - u))[:, None]])
 
 
-def fit_counts(u, g, days, y, n, tol: float = 1e-4) -> LogisticRegression:
-    """The small model fitted on counts, weighted by them."""
-    return LogisticRegression(C=1.0, tol=tol).fit(
+def fit_counts(u, g, days, y, n, tol: float = folds.SMALL_TOL) -> LogisticRegression:
+    """The small model fitted on counts, weighted by them, run to a tight tolerance."""
+    return LogisticRegression(C=1.0, tol=tol, max_iter=folds.MAX_ITER).fit(
         small_inputs(u, g, days), np.asarray(y).astype(int), sample_weight=n
     )
 
@@ -227,6 +227,8 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
             model = fit_counts(train["u"][s], train["g"][s], train["days_between"][s], y, n)
             p = model.predict_proba(small_inputs(tu, tg, tdays))[:, 1]
             iterations = int(model.n_iter_[0])
+            if iterations >= folds.MAX_ITER:
+                raise SystemExit(f"{test_year} entry {e}: the fit did not converge")
             coefs.append(
                 [
                     kind(shuffled),
@@ -347,9 +349,9 @@ def check_counts(con, test_year: int = 2020) -> None:
     }
     for why, e in chosen.items():
         r = every_row(con, e, year)
-        a = fit_counts(r["u"], r["g"], r["days_between"], r["y"], np.ones(len(r["y"])), tol=1e-10)
+        a = fit_counts(r["u"], r["g"], r["days_between"], r["y"], np.ones(len(r["y"])))
         s = at[e]
-        b = fit_counts(c["u"][s], c["g"][s], c["days_between"][s], c["y"][s], c["n"][s], tol=1e-10)
+        b = fit_counts(c["u"][s], c["g"][s], c["days_between"][s], c["y"][s], c["n"][s])
         wa = np.r_[a.intercept_, a.coef_[0]]
         wb = np.r_[b.intercept_, b.coef_[0]]
         print(f"entry {e} ({why}), {len(r['y']):,} rows, {small[e][0]:,} ones")

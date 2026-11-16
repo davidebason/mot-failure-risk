@@ -36,6 +36,10 @@ NUMBERS = ["test_mileage", "age_years", "cylinder_capacity"]
 # The gap's band edges in days, the author's of 2026-11-13; band 1, about a year, is the reference.
 BAND_EDGES = (300, 431, 731, 1096)
 BANDS_KEPT = (0, 2, 3, 4)
+# scikit-learn divides the loss by the rows' total weight, so its default tolerance stops a fit
+# before the weights of rare inputs settle. The small models are run to this one.
+SMALL_TOL = 1e-10
+MAX_ITER = 10_000
 # The columns of a training row the models read, besides its label and the gap in days.
 INPUTS = [
     "vehicle_id",
