@@ -264,3 +264,58 @@ def test_rows_of_other_classes_weigh_nothing(toy):
     subset = LogisticRegression(**fit).fit(x[car], y[car])
     assert np.allclose(weighted.coef_, subset.coef_, atol=1e-6)
     assert np.isclose(weighted.intercept_[0], subset.intercept_[0], atol=1e-6)
+
+
+def test_a_warm_start_ends_where_a_cold_one_does(toy):
+    cols = full_models.prepare(toy, 2021)
+    x, classes, label_rows, label_entries = full_models.design(toy, [2019, 2020], False, cols)
+    x = x.astype(np.float64)
+    y = full_models.labels(label_rows, label_entries, x.shape[0], CAR[0])
+    fit = dict(C=1.0, tol=1e-10, max_iter=10_000)
+    cold = LogisticRegression(**fit).fit(x, y)
+    warm = LogisticRegression(warm_start=True, **fit)
+    rng = np.random.default_rng(1)
+    warm.coef_ = cold.coef_ + rng.normal(0, 0.5, cold.coef_.shape)
+    warm.intercept_ = cold.intercept_ + 1.0
+    warm.fit(x, y)
+    assert np.allclose(warm.coef_, cold.coef_, atol=1e-5)
+    assert np.isclose(warm.intercept_[0], cold.intercept_[0], atol=1e-5)
+
+
+def test_the_weights_carry_over_column_by_column(tmp_path):
+    # The previous fold had pairs A, B, C; this one B, D, C, A, and one column more for D.
+    n_tail = len(folds.NUMBERS) + len(folds.BANDS_KEPT)
+    first_pair = 10
+    old_pairs = [("A", "1"), ("B", "1"), ("C", "1")]
+    new_pairs = [("B", "1"), ("D", "1"), ("C", "1"), ("A", "1")]
+    old_d = first_pair + len(old_pairs) + n_tail
+    w = np.arange(old_d, dtype=np.float32) + 1
+    path = tmp_path / "previous.npz"
+    np.savez(
+        path,
+        entries=np.array([5]),
+        coef=w[None, :],
+        intercept=np.array([-3.0]),
+        pair_makes=np.array([m for m, _ in old_pairs]),
+        pair_models=np.array([m for _, m in old_pairs]),
+        first_pair=first_pair,
+        first_number=first_pair + len(old_pairs),
+        d=old_d,
+    )
+    cols = {
+        "pairs": new_pairs,
+        "first_pair": first_pair,
+        "first_number": first_pair + len(new_pairs),
+        "d": first_pair + len(new_pairs) + n_tail,
+    }
+    start, intercept = full_models.carried(path, cols)[5]
+    assert intercept == -3.0
+    assert np.array_equal(start[:first_pair], w[:first_pair])
+    pair_part = start[first_pair : first_pair + len(new_pairs)]
+    # B was column 1 of the pairs, C column 2, A column 0; D is new.
+    assert list(pair_part) == [w[first_pair + 1], 0.0, w[first_pair + 2], w[first_pair]]
+    assert np.array_equal(start[cols["first_number"] :], w[first_pair + len(old_pairs) :])
+
+
+def test_nothing_carries_over_without_a_previous_fold(tmp_path):
+    assert full_models.carried(tmp_path / "missing.npz", {"first_pair": 0}) == {}

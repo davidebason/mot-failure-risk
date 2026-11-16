@@ -14,6 +14,11 @@ with no column. A pair, fuel or class not found in the training rows has no colu
 carrying one has none set. The columns are held as a sparse matrix of 32-bit floats, built in
 place year by year, since the six-year fold sets about 1.6 billion values.
 
+Each entry's fit starts from its weights in the previous fold of the same kind, when it had a
+full model there (carried): the folds overlap, so the optimum is close, and since the problem is
+convex the start changes only how many iterations reaching it takes. The folds are therefore run
+in order, 2020 to 2025.
+
 An entry's model is trained on the rows of its classes, the other rows given a weight of 0, which
 leaves the fit as if they were not there, without copying the matrix. The entries are fitted in
 parallel by processes forked from the one that built the matrices, so they share them. Each
@@ -94,7 +99,10 @@ def prepare(con, test_year: int) -> dict:
     group_col = np.full(max(groups) + 1, -1, dtype=np.int32)
     group_col[groups] = N_ENTRIES + np.arange(len(groups), dtype=np.int32)
     first_band = base + len(folds.NUMBERS)
+    pairs = con.execute("SELECT make, model FROM pair_col ORDER BY col").fetchall()
     return {
+        "pairs": pairs,
+        "first_pair": base - n_pairs,
         "group_col": group_col,
         "entry_band": entry_band,
         "first_number": base,
@@ -233,6 +241,37 @@ def design(con, years: list[int], shuffled: bool, cols: dict, dtype=np.float32):
     return x, classes, np.concatenate(label_rows), np.concatenate(label_entries)
 
 
+def carried(previous: Path, cols: dict) -> dict[int, tuple[np.ndarray, float]]:
+    """Each entry's weights in the previous fold, placed in this fold's columns.
+
+    The columns before the make-and-model pairs, entries, groups, entries by band, classes and
+    fuels, keep their places when the fold has as many classes and fuels; pairs are matched by
+    make and model, and the numbers and bands by their order. A pair new to this fold starts at 0.
+    Returns nothing when the previous fold's file is missing or its columns do not line up.
+    """
+    if not previous.exists():
+        return {}
+    f = np.load(previous, allow_pickle=False)
+    if int(f["first_pair"]) != cols["first_pair"]:
+        return {}
+    place = {(m, n): i for i, (m, n) in enumerate(cols["pairs"])}
+    old_pairs = list(zip(f["pair_makes"].tolist(), f["pair_models"].tolist(), strict=True))
+    moved = [(i, place[k]) for i, k in enumerate(old_pairs) if k in place]
+    old_at = np.array([i for i, _ in moved], dtype=np.int64) + int(f["first_pair"])
+    new_at = np.array([j for _, j in moved], dtype=np.int64) + cols["first_pair"]
+    n_tail = len(folds.NUMBERS) + len(folds.BANDS_KEPT)
+    out = {}
+    for e, w, b in zip(f["entries"].tolist(), f["coef"], f["intercept"].tolist(), strict=True):
+        start = np.zeros(cols["d"], dtype=np.float64)
+        start[: cols["first_pair"]] = w[: cols["first_pair"]]
+        start[new_at] = w[old_at]
+        start[cols["first_number"] : cols["first_number"] + n_tail] = w[
+            int(f["first_number"]) : int(f["first_number"]) + n_tail
+        ]
+        out[int(e)] = (start, float(b))
+    return out
+
+
 def labels(label_rows, label_entries, n: int, entry: int) -> np.ndarray:
     y = np.zeros(n, dtype=bool)
     y[label_rows[label_entries == entry]] = True
@@ -246,9 +285,14 @@ def fit_one(entry: int):
     listed = s["entry_classes"][entry]
     weight = np.isin(s["train_classes"], listed).astype(np.float32)
     y = labels(s["train_label_rows"], s["train_label_entries"], s["x_train"].shape[0], entry)
-    model = LogisticRegression(C=1.0, tol=s["tol"], max_iter=folds.MAX_ITER).fit(
-        s["x_train"], y, sample_weight=weight
-    )
+    start = s.get("start", {}).get(entry)
+    model = LogisticRegression(C=1.0, tol=s["tol"], max_iter=folds.MAX_ITER, warm_start=True)
+    if start is not None:
+        # The previous fold's optimum as the starting point; the optimum itself is unchanged,
+        # since the problem is convex, and is reached in fewer iterations.
+        model.coef_ = start[0][None, :].astype(s["x_train"].dtype)
+        model.intercept_ = np.array([start[1]])
+    model.fit(s["x_train"], y, sample_weight=weight)
     mask = np.isin(s["test_classes"], listed)
     dtype = s["x_test"].dtype
     z = s["x_test"] @ model.coef_[0].astype(dtype) + dtype.type(model.intercept_[0])
@@ -268,6 +312,7 @@ def fit_one(entry: int):
         "band_rows": band_rows,
         "band_ones": band_ones,
         "n_iter": int(model.n_iter_[0]),
+        "warm": start is not None,
         "coef": model.coef_[0].astype(np.float32),
         "intercept": float(model.intercept_[0]),
         "seconds": time.perf_counter() - started,
@@ -283,6 +328,7 @@ def run(
     tol: float,
     only: int | None = None,
     dtype=np.float32,
+    warm: bool = True,
 ) -> None:
     started = time.perf_counter()
     kind = small_models.kind(shuffled)
@@ -331,7 +377,15 @@ def run(
                 f"entry {e}: {ones} ones in the matrix's labels, {ones_from_rows[e]} in the rows"
             )
 
+    # Each entry starts from its weights in the previous fold of the same kind, when it had them.
+    previous = OUT / f"full_{kind}_{test_year - 1}_coefs.npz"
+    start = carried(previous, cols) if warm else {}
+    say(
+        started,
+        f"starting {sum(e in start for e in chosen)} of {len(chosen)} entries from {previous}",
+    )
     SHARED.update(
+        start=start,
         x_train=x_train,
         train_classes=train_classes,
         train_label_rows=train_label_rows,
@@ -358,7 +412,8 @@ def run(
             results.append(r)
             say(
                 started,
-                f"entry {r['entry']}: {r['n_iter']} iterations, {r['seconds']:.0f} s, "
+                f"entry {r['entry']}: {'warm' if r['warm'] else 'cold'}, "
+                f"{r['n_iter']} iterations, {r['seconds']:.0f} s, "
                 f"tp {r['tp']:,} fp {r['fp']:,} fn {r['fn']:,}",
             )
 
@@ -388,6 +443,12 @@ def run(
         entries=np.array([r["entry"] for r in results]),
         coef=np.vstack([r["coef"] for r in results]) if results else np.empty((0, d)),
         intercept=np.array([r["intercept"] for r in results]),
+        # The layout, so that the next fold can carry the weights over (carried).
+        pair_makes=np.array([m for m, _ in cols["pairs"]]),
+        pair_models=np.array([m for _, m in cols["pairs"]]),
+        first_pair=cols["first_pair"],
+        first_number=cols["first_number"],
+        d=d,
     )
     say(started, f"wrote {stem}_*")
 
@@ -402,9 +463,10 @@ def main() -> None:
     parser.add_argument("--tol", type=float, default=1e-4, help="the solver's tolerance")
     parser.add_argument("--entry", type=int, help="measure only this full entry")
     parser.add_argument("--float64", action="store_true", help="64-bit inputs, not 32-bit")
+    parser.add_argument("--cold", action="store_true", help="start every fit from zero")
     a = parser.parse_args()
     dtype = np.float64 if a.float64 else np.float32
-    run(a.test_year, a.shuffled, a.entries, a.workers, a.memory, a.tol, a.entry, dtype)
+    run(a.test_year, a.shuffled, a.entries, a.workers, a.memory, a.tol, a.entry, dtype, not a.cold)
 
 
 if __name__ == "__main__":
