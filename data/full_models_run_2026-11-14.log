@@ -1,0 +1,542 @@
+started 2026-11-14 15:27:55 UTC, 2 workers, tolerance 1e-4
+[      1 s, peak   0.3 GB] model 2020: d 69,756, tolerance 0.0001
+[      2 s, peak   0.5 GB] 6 full entries, fitting 6 with 2 workers
+[      9 s, peak   5.0 GB] training matrix: 16,129,855 rows, 148,329,320 values
+[     23 s, peak  11.3 GB] test matrix: 27,230,182 rows, 263,696,785 values
+[     23 s, peak  11.3 GB] starting 0 of 6 entries from data/processed/train/full_model_2019_coefs.npz
+[    116 s, peak  11.3 GB] entry 291: cold, 97 iterations, 93 s, tp 15 fp 89 fn 2,007,658
+[    145 s, peak  11.3 GB] entry 247: cold, 129 iterations, 122 s, tp 199,439 fp 215,299 fn 1,041,204
+[    199 s, peak  11.3 GB] entry 305: cold, 87 iterations, 82 s, tp 5,154 fp 7,681 fn 2,173,113
+[    266 s, peak  11.3 GB] entry 3387: cold, 70 iterations, 68 s, tp 90,960 fp 110,959 fn 1,079,023
+[    281 s, peak  11.3 GB] entry 1854: cold, 122 iterations, 137 s, tp 2,602 fp 7,049 fn 4,713,142
+[    320 s, peak  11.3 GB] entry 3583: cold, 60 iterations, 54 s, tp 544 fp 1,080 fn 1,735,526
+[    320 s, peak  11.3 GB] wrote data/processed/train/full_model_2020_*
+model 2020 exit 0
+[      1 s, peak   0.3 GB] shuffled 2020: d 69,756, tolerance 0.0001
+[      2 s, peak   0.5 GB] 6 full entries, fitting 6 with 2 workers
+[     32 s, peak  11.3 GB] training matrix: 16,129,855 rows, 148,329,320 values
+[     46 s, peak  11.3 GB] test matrix: 27,230,182 rows, 263,696,785 values
+[     47 s, peak  11.3 GB] starting 0 of 6 entries from data/processed/train/full_shuffled_2019_coefs.npz
+[     67 s, peak  11.3 GB] entry 247: cold, 19 iterations, 20 s, tp 0 fp 0 fn 1,240,643
+[     67 s, peak  11.3 GB] entry 291: cold, 19 iterations, 20 s, tp 0 fp 0 fn 2,007,673
+[     87 s, peak  11.3 GB] entry 305: cold, 19 iterations, 20 s, tp 0 fp 0 fn 2,178,267
+[     98 s, peak  11.3 GB] entry 1854: cold, 28 iterations, 31 s, tp 0 fp 0 fn 4,715,744
+[    107 s, peak  11.3 GB] entry 3387: cold, 19 iterations, 20 s, tp 0 fp 0 fn 1,169,983
+[    120 s, peak  11.3 GB] entry 3583: cold, 25 iterations, 22 s, tp 0 fp 0 fn 1,736,070
+[    121 s, peak  11.3 GB] wrote data/processed/train/full_shuffled_2020_*
+shuffled 2020 exit 0
+[      2 s, peak   0.4 GB] model 2021: d 88,408, tolerance 0.0001
+[      4 s, peak   0.7 GB] 17 full entries, fitting 17 with 2 workers
+[     25 s, peak  12.0 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[     39 s, peak  14.7 GB] test matrix: 29,290,438 rows, 277,084,834 values
+[     41 s, peak  14.7 GB] starting 6 of 17 entries from data/processed/train/full_model_2020_coefs.npz
+[    132 s, peak  14.7 GB] entry 46: cold, 37 iterations, 90 s, tp 42,572 fp 48,627 fn 615,455
+[    163 s, peak  14.7 GB] entry 2: cold, 49 iterations, 121 s, tp 132 fp 331 fn 666,098
+[    176 s, peak  14.7 GB] entry 247: warm, 16 iterations, 45 s, tp 249,238 fp 243,762 fn 1,096,452
+[    192 s, peak  14.7 GB] entry 291: warm, 10 iterations, 29 s, tp 12 fp 55 fn 2,089,959
+[    240 s, peak  14.7 GB] entry 292: cold, 27 iterations, 64 s, tp 11 fp 127 fn 522,669
+[    285 s, peak  14.7 GB] entry 305: warm, 39 iterations, 93 s, tp 8,050 fp 12,612 fn 2,433,758
+[    320 s, peak  14.7 GB] entry 1239: cold, 33 iterations, 80 s, tp 25,499 fp 35,698 fn 717,427
+[    410 s, peak  14.7 GB] entry 1386: cold, 53 iterations, 126 s, tp 604 fp 4,541 fn 612,515
+[    468 s, peak  14.7 GB] entry 1647: cold, 65 iterations, 147 s, tp 2,426 fp 8,323 fn 873,787
+[    476 s, peak  14.7 GB] entry 1854: warm, 21 iterations, 66 s, tp 2,537 fp 6,705 fn 4,899,985
+[    537 s, peak  14.7 GB] entry 1855: cold, 27 iterations, 69 s, tp 58 fp 842 fn 761,739
+[    622 s, peak  14.7 GB] entry 1922: cold, 62 iterations, 146 s, tp 44,516 fp 50,966 fn 739,320
+[    712 s, peak  14.7 GB] entry 1925: cold, 73 iterations, 175 s, tp 21 fp 114 fn 914,057
+[    734 s, peak  14.7 GB] entry 2001: cold, 48 iterations, 112 s, tp 8,804 fp 16,762 fn 774,743
+[    802 s, peak  14.7 GB] entry 3387: warm, 26 iterations, 68 s, tp 125,121 fp 130,478 fn 1,213,639
+[    842 s, peak  14.7 GB] entry 3583: warm, 14 iterations, 40 s, tp 794 fp 1,182 fn 2,175,371
+[    889 s, peak  14.7 GB] entry 2121: cold, 76 iterations, 177 s, tp 25,023 fp 40,679 fn 1,280,131
+[    889 s, peak  14.7 GB] wrote data/processed/train/full_model_2021_*
+model 2021 exit 0
+[      2 s, peak   0.4 GB] shuffled 2021: d 88,408, tolerance 0.0001
+[      4 s, peak   0.7 GB] 17 full entries, fitting 17 with 2 workers
+[    282 s, peak  16.7 GB] training matrix: 43,360,037 rows, 412,051,470 values
+[    297 s, peak  16.7 GB] test matrix: 29,290,438 rows, 277,084,834 values
+[    299 s, peak  16.7 GB] starting 6 of 17 entries from data/processed/train/full_shuffled_2020_coefs.npz
+[    348 s, peak  16.7 GB] entry 46: cold, 20 iterations, 48 s, tp 0 fp 0 fn 658,027
+[    364 s, peak  16.7 GB] entry 2: cold, 26 iterations, 65 s, tp 0 fp 0 fn 666,230
+[    370 s, peak  16.7 GB] entry 247: warm, 7 iterations, 22 s, tp 0 fp 0 fn 1,345,690
+[    416 s, peak  16.7 GB] entry 291: warm, 19 iterations, 52 s, tp 0 fp 0 fn 2,089,971
+[    421 s, peak  16.7 GB] entry 292: cold, 21 iterations, 51 s, tp 0 fp 0 fn 522,680
+[    432 s, peak  16.7 GB] entry 305: warm, 3 iterations, 16 s, tp 0 fp 0 fn 2,441,808
+[    471 s, peak  16.7 GB] entry 1239: cold, 20 iterations, 50 s, tp 0 fp 0 fn 742,926
+[    479 s, peak  16.7 GB] entry 1386: cold, 20 iterations, 47 s, tp 0 fp 0 fn 613,119
+[    486 s, peak  16.7 GB] entry 1854: warm, 0 iterations, 6 s, tp 0 fp 0 fn 4,902,522
+[    518 s, peak  16.7 GB] entry 1647: cold, 20 iterations, 47 s, tp 0 fp 0 fn 876,213
+[    535 s, peak  16.7 GB] entry 1855: cold, 20 iterations, 49 s, tp 0 fp 0 fn 761,797
+[    570 s, peak  16.7 GB] entry 1922: cold, 22 iterations, 52 s, tp 0 fp 0 fn 783,836
+[    589 s, peak  16.7 GB] entry 1925: cold, 23 iterations, 54 s, tp 0 fp 0 fn 914,078
+[    620 s, peak  16.7 GB] entry 2001: cold, 21 iterations, 50 s, tp 0 fp 0 fn 783,547
+[    632 s, peak  16.7 GB] entry 3387: warm, 2 iterations, 12 s, tp 0 fp 0 fn 1,338,760
+[    634 s, peak  16.7 GB] entry 2121: cold, 19 iterations, 45 s, tp 0 fp 0 fn 1,305,154
+[    736 s, peak  16.7 GB] entry 3583: warm, 14 iterations, 105 s, tp 0 fp 0 fn 2,176,165
+[    737 s, peak  16.7 GB] wrote data/processed/train/full_shuffled_2021_*
+shuffled 2021 exit 0
+[      2 s, peak   0.4 GB] model 2022: d 96,323, tolerance 0.0001
+[      6 s, peak   0.8 GB] 27 full entries, fitting 27 with 2 workers
+[     41 s, peak  15.2 GB] training matrix: 72,650,475 rows, 689,148,512 values
+[     64 s, peak  17.2 GB] test matrix: 30,581,637 rows, 287,712,971 values
+[     69 s, peak  17.2 GB] starting 17 of 27 entries from data/processed/train/full_model_2021_coefs.npz
+[    105 s, peak  17.2 GB] entry 2: warm, 7 iterations, 35 s, tp 156 fp 411 fn 692,349
+[    157 s, peak  17.2 GB] entry 0: cold, 23 iterations, 87 s, tp 0 fp 0 fn 579,839
+[    281 s, peak  17.2 GB] entry 8: cold, 46 iterations, 176 s, tp 28,566 fp 41,363 fn 426,345
+[    289 s, peak  17.2 GB] entry 27: cold, 34 iterations, 132 s, tp 1,199 fp 6,167 fn 391,253
+[    326 s, peak  17.2 GB] entry 46: warm, 10 iterations, 46 s, tp 61,597 fp 67,817 fn 637,202
+[    347 s, peak  17.2 GB] entry 247: warm, 13 iterations, 58 s, tp 306,093 fp 289,511 fn 1,044,783
+[    406 s, peak  17.2 GB] entry 292: warm, 14 iterations, 59 s, tp 5 fp 70 fn 557,125
+[    416 s, peak  17.2 GB] entry 291: warm, 20 iterations, 90 s, tp 6 fp 46 fn 2,278,932
+[    482 s, peak  17.2 GB] entry 300: cold, 19 iterations, 76 s, tp 0 fp 4 fn 642,098
+[    493 s, peak  17.2 GB] entry 305: warm, 18 iterations, 77 s, tp 9,071 fp 12,856 fn 2,597,323
+[    497 s, peak  17.2 GB] entry 1239: warm, 1 iterations, 15 s, tp 34,501 fp 44,818 fn 740,826
+[    539 s, peak  17.2 GB] entry 1386: warm, 9 iterations, 42 s, tp 497 fp 3,430 fn 610,249
+[    631 s, peak  17.2 GB] entry 1298: cold, 38 iterations, 138 s, tp 5 fp 27 fn 545,270
+[    694 s, peak  17.2 GB] entry 1647: warm, 15 iterations, 64 s, tp 4,214 fp 11,452 fn 934,733
+[    705 s, peak  17.2 GB] entry 1474: cold, 44 iterations, 166 s, tp 79 fp 782 fn 427,440
+[    774 s, peak  17.2 GB] entry 1854: warm, 16 iterations, 80 s, tp 2,628 fp 6,918 fn 4,836,119
+[    775 s, peak  17.2 GB] entry 1855: warm, 17 iterations, 70 s, tp 25 fp 571 fn 734,640
+[    813 s, peak  17.2 GB] entry 1922: warm, 8 iterations, 39 s, tp 68,942 fp 78,384 fn 798,688
+[    814 s, peak  17.2 GB] entry 1925: warm, 8 iterations, 39 s, tp 13 fp 90 fn 764,653
+[    855 s, peak  17.2 GB] entry 2001: warm, 9 iterations, 42 s, tp 12,317 fp 20,404 fn 869,747
+[    927 s, peak  17.2 GB] entry 2121: warm, 16 iterations, 72 s, tp 37,824 fp 56,783 fn 1,390,855
+[    986 s, peak  17.2 GB] entry 2119: cold, 46 iterations, 172 s, tp 1,171 fp 5,303 fn 439,233
+[   1104 s, peak  17.2 GB] entry 2588: cold, 45 iterations, 177 s, tp 6,891 fp 16,186 fn 599,444
+[   1176 s, peak  17.2 GB] entry 2740: cold, 51 iterations, 190 s, tp 5,755 fp 13,728 fn 424,847
+[   1234 s, peak  17.2 GB] entry 3387: warm, 13 iterations, 58 s, tp 177,684 fp 167,621 fn 1,310,489
+[   1246 s, peak  17.2 GB] entry 2743: cold, 36 iterations, 142 s, tp 1,133 fp 4,736 fn 411,566
+[   1311 s, peak  17.2 GB] entry 3583: warm, 18 iterations, 77 s, tp 1,281 fp 1,744 fn 2,518,379
+[   1312 s, peak  17.2 GB] wrote data/processed/train/full_model_2022_*
+model 2022 exit 0
+[      2 s, peak   0.4 GB] shuffled 2022: d 96,323, tolerance 0.0001
+[      6 s, peak   0.8 GB] 27 full entries, fitting 27 with 2 workers
+[    636 s, peak  20.6 GB] training matrix: 72,650,475 rows, 689,148,512 values
+[    651 s, peak  20.6 GB] test matrix: 30,581,637 rows, 287,712,971 values
+[    657 s, peak  20.6 GB] starting 17 of 27 entries from data/processed/train/full_shuffled_2021_coefs.npz
+[    675 s, peak  20.6 GB] entry 2: warm, 2 iterations, 18 s, tp 0 fp 0 fn 692,505
+[    734 s, peak  20.6 GB] entry 0: cold, 20 iterations, 77 s, tp 0 fp 0 fn 579,839
+[    748 s, peak  20.6 GB] entry 8: cold, 19 iterations, 73 s, tp 0 fp 0 fn 454,911
+[    763 s, peak  20.6 GB] entry 46: warm, 1 iterations, 15 s, tp 0 fp 0 fn 698,799
+[    785 s, peak  20.6 GB] entry 247: warm, 3 iterations, 22 s, tp 0 fp 0 fn 1,350,876
+[    799 s, peak  20.6 GB] entry 27: cold, 17 iterations, 66 s, tp 0 fp 0 fn 392,452
+[    803 s, peak  20.6 GB] entry 291: warm, 2 iterations, 18 s, tp 0 fp 0 fn 2,278,938
+[    962 s, peak  20.6 GB] entry 292: warm, 7 iterations, 163 s, tp 0 fp 0 fn 557,130
+[    971 s, peak  20.6 GB] entry 300: cold, 21 iterations, 168 s, tp 0 fp 0 fn 642,098
+[    990 s, peak  20.6 GB] entry 1239: warm, 2 iterations, 19 s, tp 0 fp 0 fn 775,327
+[   1066 s, peak  20.6 GB] entry 1298: cold, 19 iterations, 76 s, tp 0 fp 0 fn 545,275
+[   1105 s, peak  20.6 GB] entry 305: warm, 7 iterations, 143 s, tp 0 fp 0 fn 2,606,394
+[   1189 s, peak  20.6 GB] entry 1386: warm, 6 iterations, 123 s, tp 0 fp 0 fn 610,746
+[   1208 s, peak  20.6 GB] entry 1647: warm, 2 iterations, 19 s, tp 0 fp 0 fn 938,947
+[   1237 s, peak  20.6 GB] entry 1854: warm, 3 iterations, 29 s, tp 0 fp 0 fn 4,838,747
+[   1265 s, peak  20.6 GB] entry 1474: cold, 21 iterations, 159 s, tp 0 fp 0 fn 427,519
+[   1378 s, peak  20.6 GB] entry 1922: warm, 6 iterations, 113 s, tp 0 fp 0 fn 867,630
+[   1443 s, peak  20.6 GB] entry 1855: warm, 16 iterations, 207 s, tp 0 fp 0 fn 734,665
+[   1458 s, peak  20.6 GB] entry 2001: warm, 1 iterations, 15 s, tp 0 fp 0 fn 882,064
+[   1487 s, peak  20.6 GB] entry 1925: warm, 5 iterations, 109 s, tp 0 fp 0 fn 764,666
+[   1509 s, peak  20.6 GB] entry 2121: warm, 3 iterations, 23 s, tp 0 fp 0 fn 1,428,679
+[   1514 s, peak  20.6 GB] entry 2119: cold, 14 iterations, 56 s, tp 0 fp 0 fn 440,404
+[   1576 s, peak  20.6 GB] entry 2588: cold, 16 iterations, 66 s, tp 0 fp 0 fn 606,335
+[   1577 s, peak  20.6 GB] entry 2740: cold, 16 iterations, 63 s, tp 0 fp 0 fn 430,602
+[   1602 s, peak  20.6 GB] entry 3387: warm, 3 iterations, 26 s, tp 0 fp 0 fn 1,488,173
+[   1773 s, peak  20.6 GB] entry 2743: cold, 28 iterations, 197 s, tp 0 fp 0 fn 412,699
+[   1789 s, peak  20.6 GB] entry 3583: warm, 7 iterations, 187 s, tp 0 fp 0 fn 2,519,660
+[   1790 s, peak  20.6 GB] wrote data/processed/train/full_shuffled_2022_*
+shuffled 2022 exit 0
+[      3 s, peak   0.4 GB] model 2023: d 102,803, tolerance 0.0001
+[      9 s, peak   0.8 GB] 41 full entries, fitting 41 with 2 workers
+[     58 s, peak  18.4 GB] training matrix: 103,232,112 rows, 976,877,175 values
+[     82 s, peak  19.5 GB] test matrix: 31,654,601 rows, 298,881,922 values
+[     92 s, peak  19.5 GB] starting 27 of 41 entries from data/processed/train/full_model_2022_coefs.npz
+[    118 s, peak  19.5 GB] entry 2: warm, 2 iterations, 25 s, tp 96 fp 333 fn 597,420
+[    118 s, peak  19.5 GB] entry 0: warm, 2 iterations, 25 s, tp 0 fp 0 fn 559,359
+[    186 s, peak  19.5 GB] entry 8: warm, 11 iterations, 68 s, tp 31,782 fp 45,101 fn 437,077
+[    195 s, peak  19.5 GB] entry 27: warm, 13 iterations, 78 s, tp 1,243 fp 6,144 fn 400,851
+[    221 s, peak  19.5 GB] entry 46: warm, 4 iterations, 35 s, tp 76,209 fp 82,467 fn 674,622
+[    395 s, peak  19.5 GB] entry 247: warm, 35 iterations, 200 s, tp 338,548 fp 300,715 fn 1,033,025
+[    508 s, peak  19.5 GB] entry 291: warm, 19 iterations, 113 s, tp 6 fp 25 fn 2,467,096
+[    533 s, peak  19.5 GB] entry 292: warm, 2 iterations, 25 s, tp 4 fp 40 fn 595,940
+[    587 s, peak  19.5 GB] entry 300: warm, 8 iterations, 53 s, tp 1 fp 4 fn 732,913
+[    644 s, peak  19.5 GB] entry 305: warm, 8 iterations, 57 s, tp 11,753 fp 15,124 fn 2,836,234
+[    808 s, peak  19.5 GB] entry 607: cold, 30 iterations, 164 s, tp 77 fp 285 fn 427,826
+[    906 s, peak  19.5 GB] entry 248: cold, 58 iterations, 686 s, tp 218 fp 1,574 fn 244,880
+[    961 s, peak  19.5 GB] entry 1239: warm, 7 iterations, 54 s, tp 41,923 fp 51,401 fn 762,769
+[   1021 s, peak  19.5 GB] entry 870: cold, 39 iterations, 213 s, tp 2,162 fp 8,722 fn 338,228
+[   1046 s, peak  19.5 GB] entry 1298: warm, 2 iterations, 25 s, tp 2 fp 31 fn 490,509
+[   1077 s, peak  19.5 GB] entry 1295: cold, 21 iterations, 117 s, tp 0 fp 0 fn 360,528
+[   1107 s, peak  19.5 GB] entry 1386: warm, 3 iterations, 30 s, tp 504 fp 3,436 fn 609,023
+[   1197 s, peak  19.5 GB] entry 1311: cold, 28 iterations, 151 s, tp 17 fp 284 fn 317,816
+[   1227 s, peak  19.5 GB] entry 1474: warm, 3 iterations, 30 s, tp 77 fp 776 fn 426,400
+[   1253 s, peak  19.5 GB] entry 1387: cold, 28 iterations, 146 s, tp 7 fp 339 fn 281,363
+[   1308 s, peak  19.5 GB] entry 1647: warm, 8 iterations, 55 s, tp 5,976 fp 14,620 fn 997,209
+[   1358 s, peak  19.5 GB] entry 1529: cold, 24 iterations, 131 s, tp 1,104 fp 3,308 fn 283,791
+[   1395 s, peak  19.5 GB] entry 1840: cold, 16 iterations, 87 s, tp 0 fp 0 fn 382,364
+[   1488 s, peak  19.5 GB] entry 1844: cold, 25 iterations, 131 s, tp 0 fp 2 fn 416,404
+[   1542 s, peak  19.5 GB] entry 1854: warm, 21 iterations, 147 s, tp 2,370 fp 5,991 fn 4,920,448
+[   1542 s, peak  19.5 GB] entry 1855: warm, 8 iterations, 54 s, tp 23 fp 406 fn 752,158
+[   1653 s, peak  19.5 GB] entry 1925: warm, 19 iterations, 111 s, tp 2 fp 68 fn 824,311
+[   1659 s, peak  19.5 GB] entry 1922: warm, 20 iterations, 118 s, tp 98,374 fp 109,150 fn 877,570
+[   1679 s, peak  19.5 GB] entry 2001: warm, 2 iterations, 26 s, tp 18,049 fp 29,466 fn 875,081
+[   1723 s, peak  19.5 GB] entry 2119: warm, 6 iterations, 44 s, tp 1,019 fp 4,445 fn 451,934
+[   1823 s, peak  19.5 GB] entry 2121: warm, 15 iterations, 100 s, tp 46,181 fp 67,360 fn 1,493,432
+[   1886 s, peak  19.5 GB] entry 2118: cold, 42 iterations, 227 s, tp 2,922 fp 7,709 fn 436,670
+[   2026 s, peak  19.5 GB] entry 2122: cold, 38 iterations, 203 s, tp 46 fp 510 fn 378,404
+[   2089 s, peak  19.5 GB] entry 2285: cold, 37 iterations, 204 s, tp 1,698 fp 5,236 fn 389,854
+[   2182 s, peak  19.5 GB] entry 2588: warm, 14 iterations, 93 s, tp 10,093 fp 21,294 fn 617,393
+[   2203 s, peak  19.5 GB] entry 2740: warm, 1 iterations, 20 s, tp 7,640 fp 17,489 fn 439,546
+[   2248 s, peak  19.5 GB] entry 2306: cold, 42 iterations, 222 s, tp 45,249 fp 53,696 fn 469,226
+[   2295 s, peak  19.5 GB] entry 2743: warm, 16 iterations, 93 s, tp 740 fp 3,269 fn 418,066
+[   2369 s, peak  19.5 GB] entry 3387: warm, 20 iterations, 121 s, tp 222,683 fp 207,599 fn 1,292,764
+[   2431 s, peak  19.5 GB] entry 3583: warm, 9 iterations, 62 s, tp 2,006 fp 2,629 fn 2,658,898
+[   2433 s, peak  19.5 GB] entry 3533: cold, 26 iterations, 137 s, tp 477 fp 2,562 fn 328,999
+[   2434 s, peak  19.5 GB] wrote data/processed/train/full_model_2023_*
+model 2023 exit 0
+[      3 s, peak   0.4 GB] shuffled 2023: d 102,803, tolerance 0.0001
+[      9 s, peak   0.8 GB] 41 full entries, fitting 41 with 2 workers
+[   1095 s, peak  24.0 GB] training matrix: 103,232,112 rows, 976,877,175 values
+[   1119 s, peak  24.0 GB] test matrix: 31,654,601 rows, 298,881,922 values
+[   1130 s, peak  24.0 GB] starting 27 of 41 entries from data/processed/train/full_shuffled_2022_coefs.npz
+[   1155 s, peak  24.0 GB] entry 0: warm, 2 iterations, 25 s, tp 0 fp 0 fn 559,359
+[   1179 s, peak  24.0 GB] entry 2: warm, 7 iterations, 49 s, tp 0 fp 0 fn 597,516
+[   1180 s, peak  24.0 GB] entry 8: warm, 2 iterations, 25 s, tp 0 fp 0 fn 468,859
+[   1200 s, peak  24.0 GB] entry 46: warm, 1 iterations, 20 s, tp 0 fp 0 fn 750,831
+[   1227 s, peak  24.0 GB] entry 27: warm, 4 iterations, 48 s, tp 0 fp 0 fn 402,094
+[   1254 s, peak  24.0 GB] entry 247: warm, 8 iterations, 54 s, tp 0 fp 0 fn 1,371,573
+[   1280 s, peak  24.0 GB] entry 291: warm, 2 iterations, 26 s, tp 0 fp 0 fn 2,467,102
+[   1465 s, peak  24.0 GB] entry 248: cold, 25 iterations, 238 s, tp 0 fp 0 fn 245,098
+[   1480 s, peak  24.0 GB] entry 292: warm, 5 iterations, 199 s, tp 0 fp 0 fn 595,944
+[   1604 s, peak  24.0 GB] entry 305: warm, 5 iterations, 125 s, tp 0 fp 0 fn 2,847,987
+[   1655 s, peak  24.0 GB] entry 300: warm, 5 iterations, 190 s, tp 0 fp 0 fn 732,914
+[   1706 s, peak  24.0 GB] entry 607: cold, 18 iterations, 102 s, tp 0 fp 0 fn 427,903
+[   1732 s, peak  24.0 GB] entry 1239: warm, 2 iterations, 25 s, tp 0 fp 0 fn 804,692
+[   1737 s, peak  24.0 GB] entry 870: cold, 15 iterations, 82 s, tp 0 fp 0 fn 340,390
+[   1762 s, peak  24.0 GB] entry 1298: warm, 2 iterations, 25 s, tp 0 fp 0 fn 490,511
+[   1855 s, peak  24.0 GB] entry 1311: cold, 17 iterations, 93 s, tp 0 fp 0 fn 317,833
+[   1937 s, peak  24.0 GB] entry 1295: cold, 18 iterations, 205 s, tp 0 fp 0 fn 360,528
+[   2013 s, peak  24.0 GB] entry 1386: warm, 6 iterations, 157 s, tp 0 fp 0 fn 609,527
+[   2196 s, peak  24.0 GB] entry 1387: cold, 21 iterations, 258 s, tp 0 fp 0 fn 281,370
+[   2284 s, peak  24.0 GB] entry 1529: cold, 15 iterations, 88 s, tp 0 fp 0 fn 284,895
+[   2438 s, peak  24.0 GB] entry 1474: warm, 16 iterations, 425 s, tp 0 fp 0 fn 426,477
+[   2530 s, peak  24.0 GB] entry 1840: cold, 17 iterations, 92 s, tp 0 fp 0 fn 382,364
+[   2598 s, peak  24.0 GB] entry 1647: warm, 8 iterations, 315 s, tp 0 fp 0 fn 1,003,185
+[   2612 s, peak  24.0 GB] entry 1844: cold, 15 iterations, 82 s, tp 0 fp 0 fn 416,404
+[   2716 s, peak  24.0 GB] entry 1854: warm, 3 iterations, 118 s, tp 0 fp 0 fn 4,922,818
+[   2801 s, peak  24.0 GB] entry 1855: warm, 6 iterations, 189 s, tp 0 fp 0 fn 752,181
+[   2926 s, peak  24.0 GB] entry 1922: warm, 7 iterations, 210 s, tp 0 fp 0 fn 975,944
+[   2966 s, peak  24.0 GB] entry 2001: warm, 4 iterations, 40 s, tp 0 fp 0 fn 893,130
+[   3058 s, peak  24.0 GB] entry 2118: cold, 15 iterations, 92 s, tp 0 fp 0 fn 439,592
+[   3075 s, peak  24.0 GB] entry 1925: warm, 7 iterations, 274 s, tp 0 fp 0 fn 824,313
+[   3097 s, peak  24.0 GB] entry 2119: warm, 5 iterations, 39 s, tp 0 fp 0 fn 452,953
+[   3179 s, peak  24.0 GB] entry 2122: cold, 15 iterations, 83 s, tp 0 fp 0 fn 378,450
+[   3276 s, peak  24.0 GB] entry 2285: cold, 18 iterations, 97 s, tp 0 fp 0 fn 391,552
+[   3338 s, peak  24.0 GB] entry 2121: warm, 8 iterations, 263 s, tp 0 fp 0 fn 1,539,613
+[   3349 s, peak  24.0 GB] entry 2588: warm, 0 iterations, 11 s, tp 0 fp 0 fn 627,486
+[   3369 s, peak  24.0 GB] entry 2740: warm, 1 iterations, 20 s, tp 0 fp 0 fn 447,186
+[   3394 s, peak  24.0 GB] entry 2743: warm, 2 iterations, 25 s, tp 0 fp 0 fn 418,806
+[   3547 s, peak  24.0 GB] entry 3387: warm, 6 iterations, 154 s, tp 0 fp 0 fn 1,515,447
+[   3635 s, peak  24.0 GB] entry 3533: cold, 15 iterations, 87 s, tp 0 fp 0 fn 329,476
+[   3665 s, peak  24.0 GB] entry 2306: cold, 20 iterations, 389 s, tp 0 fp 0 fn 514,475
+[   3782 s, peak  24.0 GB] entry 3583: warm, 4 iterations, 147 s, tp 0 fp 0 fn 2,660,904
+[   3783 s, peak  24.0 GB] wrote data/processed/train/full_shuffled_2023_*
+shuffled 2023 exit 0
+[     12 s, peak   0.4 GB] model 2024: d 108,914, tolerance 0.0001
+[     22 s, peak   0.8 GB] 52 full entries, fitting 52 with 2 workers
+[     87 s, peak  21.5 GB] training matrix: 134,886,713 rows, 1,275,802,971 values
+[    111 s, peak  23.4 GB] test matrix: 31,942,228 rows, 303,160,106 values
+[    129 s, peak  23.4 GB] starting 41 of 52 entries from data/processed/train/full_model_2023_coefs.npz
+[    167 s, peak  23.4 GB] entry 2: warm, 3 iterations, 39 s, tp 36 fp 147 fn 595,123
+[    181 s, peak  23.4 GB] entry 8: warm, 0 iterations, 13 s, tp 31,952 fp 45,968 fn 457,349
+[    191 s, peak  23.4 GB] entry 0: warm, 7 iterations, 62 s, tp 0 fp 0 fn 571,215
+[    212 s, peak  23.4 GB] entry 27: warm, 2 iterations, 32 s, tp 1,308 fp 6,598 fn 410,978
+[    223 s, peak  23.4 GB] entry 46: warm, 2 iterations, 32 s, tp 84,542 fp 87,079 fn 716,397
+[    482 s, peak  23.4 GB] entry 247: warm, 10 iterations, 270 s, tp 359,350 fp 321,063 fn 974,939
+[    524 s, peak  23.4 GB] entry 291: warm, 3 iterations, 41 s, tp 9 fp 35 fn 2,520,195
+[    556 s, peak  23.4 GB] entry 292: warm, 2 iterations, 32 s, tp 5 fp 39 fn 607,452
+[    656 s, peak  23.4 GB] entry 248: warm, 14 iterations, 432 s, tp 173 fp 1,304 fn 222,980
+[    697 s, peak  23.4 GB] entry 305: warm, 3 iterations, 42 s, tp 15,500 fp 20,563 fn 2,910,208
+[    712 s, peak  23.4 GB] entry 300: warm, 21 iterations, 156 s, tp 0 fp 7 fn 789,930
+[    729 s, peak  23.4 GB] entry 607: warm, 2 iterations, 32 s, tp 132 fp 550 fn 465,712
+[    799 s, peak  23.4 GB] entry 870: warm, 8 iterations, 69 s, tp 2,628 fp 9,968 fn 371,125
+[    837 s, peak  23.4 GB] entry 1239: warm, 3 iterations, 38 s, tp 51,407 fp 58,254 fn 794,101
+[    887 s, peak  23.4 GB] entry 1295: warm, 4 iterations, 50 s, tp 0 fp 0 fn 375,889
+[    925 s, peak  23.4 GB] entry 1298: warm, 3 iterations, 38 s, tp 2 fp 28 fn 490,699
+[    988 s, peak  23.4 GB] entry 869: cold, 40 iterations, 276 s, tp 1,811 fp 7,314 fn 366,299
+[   1001 s, peak  23.4 GB] entry 1311: warm, 0 iterations, 13 s, tp 13 fp 266 fn 320,241
+[   1039 s, peak  23.4 GB] entry 1386: warm, 3 iterations, 38 s, tp 573 fp 3,656 fn 596,408
+[   1064 s, peak  23.4 GB] entry 1304: cold, 19 iterations, 139 s, tp 3 fp 44 fn 279,820
+[   1071 s, peak  23.4 GB] entry 1387: warm, 2 iterations, 32 s, tp 6 fp 419 fn 264,466
+[   1096 s, peak  23.4 GB] entry 1474: warm, 2 iterations, 32 s, tp 79 fp 632 fn 418,056
+[   1189 s, peak  23.4 GB] entry 1529: warm, 12 iterations, 94 s, tp 439 fp 1,408 fn 282,242
+[   1228 s, peak  23.4 GB] entry 1475: cold, 23 iterations, 157 s, tp 2 fp 11 fn 231,347
+[   1304 s, peak  23.4 GB] entry 1647: warm, 15 iterations, 114 s, tp 9,191 fp 20,143 fn 1,040,538
+[   1404 s, peak  23.4 GB] entry 1649: cold, 26 iterations, 176 s, tp 65 fp 1,016 fn 263,780
+[   1505 s, peak  23.4 GB] entry 1794: cold, 29 iterations, 201 s, tp 12,541 fp 19,285 fn 276,280
+[   1561 s, peak  23.4 GB] entry 1840: warm, 6 iterations, 56 s, tp 0 fp 0 fn 412,904
+[   1574 s, peak  23.4 GB] entry 1844: warm, 0 iterations, 13 s, tp 0 fp 0 fn 429,413
+[   1594 s, peak  23.4 GB] entry 1839: cold, 27 iterations, 189 s, tp 1 fp 6 fn 428,525
+[   1626 s, peak  23.4 GB] entry 1855: warm, 2 iterations, 32 s, tp 22 fp 386 fn 745,148
+[   1665 s, peak  23.4 GB] entry 1854: warm, 9 iterations, 90 s, tp 2,430 fp 6,048 fn 5,115,683
+[   1748 s, peak  23.4 GB] entry 1922: warm, 10 iterations, 83 s, tp 121,146 fp 131,883 fn 915,873
+[   1811 s, peak  23.4 GB] entry 1925: warm, 7 iterations, 64 s, tp 3 fp 49 fn 667,501
+[   1838 s, peak  23.4 GB] entry 1857: cold, 12 iterations, 213 s, tp 0 fp 1 fn 662,378
+[   1887 s, peak  23.4 GB] entry 2001: warm, 9 iterations, 76 s, tp 27,006 fp 37,748 fn 931,766
+[   2034 s, peak  23.4 GB] entry 2002: cold, 28 iterations, 195 s, tp 15 fp 267 fn 277,814
+[   2069 s, peak  23.4 GB] entry 2118: warm, 24 iterations, 182 s, tp 2,773 fp 7,283 fn 482,778
+[   2153 s, peak  23.4 GB] entry 2119: warm, 15 iterations, 119 s, tp 1,509 fp 6,309 fn 490,216
+[   2271 s, peak  23.4 GB] entry 2122: warm, 16 iterations, 119 s, tp 28 fp 307 fn 412,546
+[   2285 s, peak  23.4 GB] entry 2285: warm, 0 iterations, 13 s, tp 2,132 fp 6,264 fn 405,336
+[   2356 s, peak  23.4 GB] entry 2121: warm, 37 iterations, 287 s, tp 57,008 fp 78,204 fn 1,645,480
+[   2369 s, peak  23.4 GB] entry 2588: warm, 0 iterations, 13 s, tp 12,021 fp 24,252 fn 653,843
+[   2546 s, peak  23.4 GB] entry 2589: cold, 25 iterations, 176 s, tp 140 fp 1,242 fn 249,782
+[   2757 s, peak  23.4 GB] entry 2306: warm, 18 iterations, 473 s, tp 69,433 fp 72,859 fn 606,052
+[   2790 s, peak  23.4 GB] entry 2591: cold, 34 iterations, 244 s, tp 8,214 fp 18,432 fn 267,274
+[   2822 s, peak  23.4 GB] entry 2743: warm, 2 iterations, 32 s, tp 799 fp 3,424 fn 438,683
+[   2839 s, peak  23.4 GB] entry 2740: warm, 10 iterations, 82 s, tp 8,729 fp 18,601 fn 473,044
+[   2957 s, peak  23.4 GB] entry 3387: warm, 15 iterations, 117 s, tp 246,014 fp 216,202 fn 1,340,547
+[   2960 s, peak  23.4 GB] entry 3288: cold, 19 iterations, 139 s, tp 868 fp 2,810 fn 255,747
+[   3044 s, peak  23.4 GB] entry 3533: warm, 11 iterations, 88 s, tp 375 fp 2,283 fn 332,419
+[   3205 s, peak  23.4 GB] entry 3583: warm, 34 iterations, 244 s, tp 2,787 fp 3,328 fn 2,835,087
+[   3206 s, peak  23.4 GB] wrote data/processed/train/full_model_2024_*
+model 2024 exit 0
+[      4 s, peak   0.4 GB] shuffled 2024: d 108,914, tolerance 0.0001
+[     11 s, peak   0.8 GB] 52 full entries, fitting 52 with 2 workers
+Traceback (most recent call last):
+  File "/home/azureuser/mot-failure-risk/src/motrisk/full_models.py", line 473, in <module>
+    main()
+  File "/home/azureuser/mot-failure-risk/src/motrisk/full_models.py", line 469, in main
+    run(a.test_year, a.shuffled, a.entries, a.workers, a.memory, a.tol, a.entry, dtype, not a.cold)
+  File "/home/azureuser/mot-failure-risk/src/motrisk/full_models.py", line 359, in run
+    x_train, train_classes, train_label_rows, train_label_entries = design(
+                                                                    ^^^^^^^
+  File "/home/azureuser/mot-failure-risk/src/motrisk/full_models.py", line 194, in design
+    p = year_arrays(con, y, shuffled, cols)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/mot-failure-risk/src/motrisk/full_models.py", line 133, in year_arrays
+    t = rel.to_arrow_table() if hasattr(rel, "to_arrow_table") else rel.arrow()
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/mot-failure-risk/.venv/lib/python3.12/site-packages/duckdb/_relation.py", line 3017, in guarded
+    raise _trimmed(error) from error.__cause__
+_duckdb.OutOfMemoryException: Out of Memory Error: failed to offload data block of size 96.0 KiB (12.7 GiB/12.7 GiB used).
+This limit was set by the 'max_temp_directory_size' setting.
+By default, this setting utilizes the available disk space on the drive where the 'temp_directory' is located.
+You can adjust this setting, by using (for example) PRAGMA max_temp_directory_size='10GiB'
+
+Possible solutions:
+* Reducing the number of threads (SET threads=X)
+* Disabling insertion-order preservation (SET preserve_insertion_order=false)
+* Increasing the memory limit (SET memory_limit='...GB')
+
+See also https://duckdb.org/docs/current/guides/performance/how_to_tune_workloads
+shuffled 2024 exit 1
+ended 2026-11-14 20:02:22 UTC
+started 2026-11-16 11:23:23 UTC, 2 workers, tolerance 1e-4
+model 2020: already written
+shuffled 2020: already written
+model 2021: already written
+shuffled 2021: already written
+model 2022: already written
+shuffled 2022: already written
+model 2023: already written
+shuffled 2023: already written
+model 2024: already written
+[      4 s, peak   0.4 GB] shuffled 2024: d 108,914, tolerance 0.0001
+[     11 s, peak   0.8 GB] 52 full entries, fitting 52 with 2 workers
+[   1645 s, peak  26.8 GB] training matrix: 134,886,713 rows, 1,275,802,971 values
+[   1669 s, peak  26.8 GB] test matrix: 31,942,228 rows, 303,160,106 values
+[   1687 s, peak  26.8 GB] starting 41 of 52 entries from data/processed/train/full_shuffled_2023_coefs.npz
+[   1724 s, peak  26.8 GB] entry 0: warm, 3 iterations, 38 s, tp 0 fp 0 fn 571,215
+[   1738 s, peak  26.8 GB] entry 8: warm, 0 iterations, 13 s, tp 0 fp 0 fn 489,301
+[   1950 s, peak  26.8 GB] entry 2: warm, 4 iterations, 263 s, tp 0 fp 0 fn 595,159
+[   1982 s, peak  26.8 GB] entry 46: warm, 2 iterations, 32 s, tp 0 fp 0 fn 800,939
+[   2111 s, peak  26.8 GB] entry 27: warm, 9 iterations, 373 s, tp 0 fp 0 fn 412,286
+[   2129 s, peak  26.8 GB] entry 247: warm, 4 iterations, 147 s, tp 0 fp 0 fn 1,334,289
+[   2274 s, peak  26.8 GB] entry 248: warm, 3 iterations, 163 s, tp 0 fp 0 fn 223,153
+[   2287 s, peak  26.8 GB] entry 292: warm, 0 iterations, 13 s, tp 0 fp 0 fn 607,457
+[   2379 s, peak  26.8 GB] entry 291: warm, 9 iterations, 249 s, tp 0 fp 0 fn 2,520,204
+[   2469 s, peak  26.8 GB] entry 300: warm, 8 iterations, 181 s, tp 0 fp 0 fn 789,930
+[   2512 s, peak  26.8 GB] entry 607: warm, 3 iterations, 43 s, tp 0 fp 0 fn 465,844
+[   2623 s, peak  26.8 GB] entry 869: cold, 16 iterations, 111 s, tp 0 fp 0 fn 368,110
+[   2628 s, peak  26.8 GB] entry 305: warm, 5 iterations, 249 s, tp 0 fp 0 fn 2,925,708
+[   2678 s, peak  26.8 GB] entry 870: warm, 5 iterations, 55 s, tp 0 fp 0 fn 373,753
+[   2786 s, peak  26.8 GB] entry 1239: warm, 4 iterations, 158 s, tp 0 fp 0 fn 845,508
+[   2846 s, peak  26.8 GB] entry 1295: warm, 5 iterations, 168 s, tp 0 fp 0 fn 375,889
+[   2962 s, peak  26.8 GB] entry 1298: warm, 4 iterations, 176 s, tp 0 fp 0 fn 490,701
+[   2964 s, peak  26.8 GB] entry 1304: cold, 17 iterations, 117 s, tp 0 fp 0 fn 279,823
+[   2993 s, peak  26.8 GB] entry 1311: warm, 2 iterations, 31 s, tp 0 fp 0 fn 320,254
+[   3145 s, peak  26.8 GB] entry 1386: warm, 4 iterations, 182 s, tp 0 fp 0 fn 596,981
+[   3227 s, peak  26.8 GB] entry 1387: warm, 6 iterations, 235 s, tp 0 fp 0 fn 264,472
+[   3465 s, peak  26.8 GB] entry 1475: cold, 15 iterations, 238 s, tp 0 fp 0 fn 231,349
+[   3525 s, peak  26.8 GB] entry 1474: warm, 8 iterations, 380 s, tp 0 fp 0 fn 418,135
+[   3550 s, peak  26.8 GB] entry 1529: warm, 9 iterations, 85 s, tp 0 fp 0 fn 282,681
+[   3677 s, peak  26.8 GB] entry 1647: warm, 1 iterations, 152 s, tp 0 fp 0 fn 1,049,729
+[   3794 s, peak  26.8 GB] entry 1794: cold, 17 iterations, 117 s, tp 0 fp 0 fn 288,821
+[   3806 s, peak  26.8 GB] entry 1649: cold, 15 iterations, 256 s, tp 0 fp 0 fn 263,845
+[   3837 s, peak  26.8 GB] entry 1840: warm, 2 iterations, 31 s, tp 0 fp 0 fn 412,904
+[   3862 s, peak  26.8 GB] entry 1844: warm, 1 iterations, 25 s, tp 0 fp 0 fn 429,413
+[   4022 s, peak  26.8 GB] entry 1854: warm, 2 iterations, 160 s, tp 0 fp 0 fn 5,118,113
+[   4233 s, peak  26.8 GB] entry 1855: warm, 4 iterations, 211 s, tp 0 fp 0 fn 745,170
+[   4274 s, peak  26.8 GB] entry 1839: cold, 32 iterations, 480 s, tp 0 fp 0 fn 428,526
+[   4409 s, peak  26.8 GB] entry 1922: warm, 2 iterations, 135 s, tp 0 fp 0 fn 1,037,019
+[   4584 s, peak  26.8 GB] entry 1857: cold, 14 iterations, 351 s, tp 0 fp 0 fn 662,378
+[   4616 s, peak  26.8 GB] entry 2001: warm, 2 iterations, 32 s, tp 0 fp 0 fn 958,772
+[   4699 s, peak  26.8 GB] entry 1925: warm, 12 iterations, 291 s, tp 0 fp 0 fn 667,504
+[   4734 s, peak  26.8 GB] entry 2002: cold, 17 iterations, 117 s, tp 0 fp 0 fn 277,829
+[   4746 s, peak  26.8 GB] entry 2119: warm, 0 iterations, 13 s, tp 0 fp 0 fn 491,725
+[   4767 s, peak  26.8 GB] entry 2118: warm, 6 iterations, 67 s, tp 0 fp 0 fn 485,551
+[   4779 s, peak  26.8 GB] entry 2122: warm, 0 iterations, 13 s, tp 0 fp 0 fn 412,574
+[   4810 s, peak  26.8 GB] entry 2285: warm, 2 iterations, 31 s, tp 0 fp 0 fn 407,468
+[   4887 s, peak  26.8 GB] entry 2121: warm, 3 iterations, 141 s, tp 0 fp 0 fn 1,702,488
+[   4900 s, peak  26.8 GB] entry 2588: warm, 0 iterations, 13 s, tp 0 fp 0 fn 665,864
+[   4943 s, peak  26.8 GB] entry 2306: warm, 3 iterations, 133 s, tp 0 fp 0 fn 675,485
+[   5067 s, peak  26.8 GB] entry 2591: cold, 17 iterations, 124 s, tp 0 fp 0 fn 275,488
+[   5092 s, peak  26.8 GB] entry 2740: warm, 1 iterations, 25 s, tp 0 fp 0 fn 481,773
+[   5175 s, peak  26.8 GB] entry 2589: cold, 16 iterations, 274 s, tp 0 fp 0 fn 249,922
+[   5196 s, peak  26.8 GB] entry 2743: warm, 10 iterations, 103 s, tp 0 fp 0 fn 439,482
+[   5341 s, peak  26.8 GB] entry 3288: cold, 21 iterations, 166 s, tp 0 fp 0 fn 256,615
+[   5372 s, peak  26.8 GB] entry 3533: warm, 2 iterations, 31 s, tp 0 fp 0 fn 332,794
+[   5415 s, peak  26.8 GB] entry 3387: warm, 5 iterations, 220 s, tp 0 fp 0 fn 1,586,561
+[   5571 s, peak  26.8 GB] entry 3583: warm, 8 iterations, 199 s, tp 0 fp 0 fn 2,837,874
+[   5572 s, peak  26.8 GB] wrote data/processed/train/full_shuffled_2024_*
+shuffled 2024 exit 0
+[     38 s, peak   0.4 GB] model 2025: d 114,060, tolerance 0.0001
+[     60 s, peak   0.8 GB] 64 full entries, fitting 64 with 2 workers
+[    139 s, peak  24.8 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[    164 s, peak  26.1 GB] test matrix: 32,244,374 rows, 308,332,182 values
+[    187 s, peak  26.1 GB] starting 52 of 64 entries from data/processed/train/full_model_2024_coefs.npz
+[    227 s, peak  26.1 GB] entry 0: warm, 2 iterations, 40 s, tp 0 fp 0 fn 590,379
+[    243 s, peak  26.1 GB] entry 8: warm, 0 iterations, 16 s, tp 33,039 fp 46,437 fn 473,814
+[    318 s, peak  26.1 GB] entry 2: warm, 13 iterations, 131 s, tp 26 fp 106 fn 590,742
+[    334 s, peak  26.1 GB] entry 27: warm, 0 iterations, 16 s, tp 1,480 fp 7,199 fn 387,029
+[    380 s, peak  26.1 GB] entry 46: warm, 3 iterations, 46 s, tp 96,271 fp 94,872 fn 746,111
+[    431 s, peak  26.1 GB] entry 10: cold, 21 iterations, 188 s, tp 0 fp 0 fn 201,330
+[    582 s, peak  26.1 GB] entry 247: warm, 2 iterations, 201 s, tp 364,120 fp 312,301 fn 921,301
+[    772 s, peak  26.1 GB] entry 291: warm, 20 iterations, 190 s, tp 7 fp 45 fn 2,503,847
+[    788 s, peak  26.1 GB] entry 292: warm, 0 iterations, 16 s, tp 7 fp 50 fn 576,131
+[    799 s, peak  26.1 GB] entry 248: warm, 10 iterations, 368 s, tp 151 fp 1,456 fn 185,751
+[    975 s, peak  26.1 GB] entry 300: warm, 4 iterations, 187 s, tp 1 fp 7 fn 837,507
+[   1111 s, peak  26.1 GB] entry 305: warm, 33 iterations, 312 s, tp 17,664 fp 22,781 fn 2,934,478
+[   1149 s, peak  26.1 GB] entry 604: cold, 20 iterations, 174 s, tp 21 fp 89 fn 225,069
+[   1239 s, peak  26.1 GB] entry 607: warm, 13 iterations, 128 s, tp 184 fp 885 fn 409,810
+[   1277 s, peak  26.1 GB] entry 869: warm, 2 iterations, 38 s, tp 2,320 fp 8,935 fn 378,874
+[   1307 s, peak  26.1 GB] entry 870: warm, 1 iterations, 31 s, tp 2,890 fp 11,593 fn 353,138
+[   1339 s, peak  26.1 GB] entry 1239: warm, 1 iterations, 32 s, tp 57,509 fp 61,227 fn 822,928
+[   1354 s, peak  26.1 GB] entry 1295: warm, 0 iterations, 15 s, tp 0 fp 0 fn 368,993
+[   1445 s, peak  26.1 GB] entry 1298: warm, 9 iterations, 90 s, tp 2 fp 28 fn 455,874
+[   1450 s, peak  26.1 GB] entry 608: cold, 35 iterations, 301 s, tp 30 fp 334 fn 192,232
+[   1466 s, peak  26.1 GB] entry 1304: warm, 0 iterations, 15 s, tp 5 fp 42 fn 270,758
+[   1481 s, peak  26.1 GB] entry 1311: warm, 0 iterations, 16 s, tp 19 fp 288 fn 303,516
+[   1618 s, peak  26.1 GB] entry 1299: cold, 20 iterations, 173 s, tp 0 fp 0 fn 165,049
+[   1836 s, peak  26.1 GB] entry 1315: cold, 43 iterations, 355 s, tp 6,759 fp 14,773 fn 299,247
+[   1874 s, peak  26.1 GB] entry 1333: cold, 31 iterations, 256 s, tp 6,742 fp 13,739 fn 273,052
+[   1973 s, peak  26.1 GB] entry 1371: cold, 16 iterations, 136 s, tp 0 fp 0 fn 210,653
+[   1979 s, peak  26.1 GB] entry 1386: warm, 11 iterations, 105 s, tp 533 fp 3,556 fn 570,508
+[   2024 s, peak  26.1 GB] entry 1474: warm, 3 iterations, 45 s, tp 70 fp 793 fn 400,990
+[   2122 s, peak  26.1 GB] entry 1475: warm, 10 iterations, 97 s, tp 0 fp 7 fn 223,870
+[   2123 s, peak  26.1 GB] entry 1387: warm, 16 iterations, 150 s, tp 6 fp 331 fn 253,442
+[   2162 s, peak  26.1 GB] entry 1647: warm, 2 iterations, 39 s, tp 11,765 fp 24,728 fn 1,061,354
+[   2167 s, peak  26.1 GB] entry 1529: warm, 2 iterations, 45 s, tp 613 fp 1,675 fn 271,131
+[   2198 s, peak  26.1 GB] entry 1794: warm, 1 iterations, 31 s, tp 15,189 fp 22,367 fn 272,341
+[   2215 s, peak  26.1 GB] entry 1649: warm, 4 iterations, 53 s, tp 76 fp 949 fn 257,619
+[   2245 s, peak  26.1 GB] entry 1840: warm, 1 iterations, 30 s, tp 0 fp 0 fn 428,182
+[   2288 s, peak  26.1 GB] entry 1839: warm, 8 iterations, 90 s, tp 0 fp 4 fn 469,863
+[   2343 s, peak  26.1 GB] entry 1854: warm, 3 iterations, 55 s, tp 2,767 fp 6,722 fn 5,057,344
+[   2358 s, peak  26.1 GB] entry 1844: warm, 11 iterations, 112 s, tp 0 fp 1 fn 415,819
+[   2388 s, peak  26.1 GB] entry 1855: warm, 3 iterations, 45 s, tp 14 fp 371 fn 686,327
+[   2556 s, peak  26.1 GB] entry 1922: warm, 18 iterations, 168 s, tp 145,284 fp 147,768 fn 978,212
+[   2601 s, peak  26.1 GB] entry 1925: warm, 3 iterations, 46 s, tp 4 fp 56 fn 775,773
+[   2640 s, peak  26.1 GB] entry 2001: warm, 2 iterations, 39 s, tp 35,249 fp 46,032 fn 986,755
+[   2656 s, peak  26.1 GB] entry 2002: warm, 0 iterations, 15 s, tp 22 fp 295 fn 289,206
+[   2827 s, peak  26.1 GB] entry 1857: warm, 7 iterations, 470 s, tp 0 fp 3 fn 699,233
+[   2866 s, peak  26.1 GB] entry 2118: warm, 2 iterations, 38 s, tp 3,152 fp 8,346 fn 505,838
+[   2896 s, peak  26.1 GB] entry 2119: warm, 1 iterations, 31 s, tp 1,751 fp 7,664 fn 474,005
+[   2983 s, peak  26.1 GB] entry 2121: warm, 8 iterations, 87 s, tp 70,190 fp 94,240 fn 1,744,385
+[   3028 s, peak  26.1 GB] entry 2122: warm, 3 iterations, 45 s, tp 26 fp 363 fn 405,764
+[   3314 s, peak  26.1 GB] entry 2128: cold, 35 iterations, 285 s, tp 6,184 fp 12,942 fn 303,817
+[   3442 s, peak  26.1 GB] entry 2285: warm, 14 iterations, 128 s, tp 2,112 fp 6,194 fn 393,479
+[   3554 s, peak  26.1 GB] entry 2075: cold, 36 iterations, 899 s, tp 41,880 fp 47,872 fn 428,094
+[   3796 s, peak  26.1 GB] entry 2298: cold, 29 iterations, 242 s, tp 60 fp 475 fn 248,763
+[   3810 s, peak  26.1 GB] entry 2286: cold, 43 iterations, 368 s, tp 107 fp 1,217 fn 213,261
+[   3894 s, peak  26.1 GB] entry 2588: warm, 7 iterations, 84 s, tp 14,971 fp 28,411 fn 652,035
+[   3909 s, peak  26.1 GB] entry 2589: warm, 0 iterations, 15 s, tp 147 fp 1,312 fn 228,790
+[   3924 s, peak  26.1 GB] entry 2591: warm, 0 iterations, 15 s, tp 9,825 fp 20,157 fn 254,475
+[   4015 s, peak  26.1 GB] entry 2740: warm, 9 iterations, 91 s, tp 10,585 fp 21,332 fn 504,175
+[   4091 s, peak  26.1 GB] entry 2743: warm, 7 iterations, 76 s, tp 1,004 fp 3,951 fn 437,867
+[   4151 s, peak  26.1 GB] entry 3288: warm, 4 iterations, 60 s, tp 816 fp 2,473 fn 250,928
+[   4239 s, peak  26.1 GB] entry 3387: warm, 8 iterations, 87 s, tp 280,178 fp 224,045 fn 1,448,160
+[   4405 s, peak  26.1 GB] entry 3522: cold, 20 iterations, 166 s, tp 18,795 fp 27,118 fn 266,254
+[   4425 s, peak  26.1 GB] entry 2306: warm, 11 iterations, 629 s, tp 106,080 fp 103,286 fn 730,110
+[   4442 s, peak  26.1 GB] entry 3533: warm, 2 iterations, 38 s, tp 425 fp 2,411 fn 324,252
+[   4467 s, peak  26.1 GB] entry 3583: warm, 2 iterations, 42 s, tp 4,315 fp 4,937 fn 2,863,544
+[   4468 s, peak  26.1 GB] wrote data/processed/train/full_model_2025_*
+model 2025 exit 0
+[     44 s, peak   0.4 GB] shuffled 2025: d 114,060, tolerance 0.0001
+[     66 s, peak   0.8 GB] 64 full entries, fitting 64 with 2 workers
+[   2568 s, peak  29.6 GB] training matrix: 166,828,941 rows, 1,579,006,374 values
+[   2593 s, peak  29.6 GB] test matrix: 32,244,374 rows, 308,332,182 values
+[   2618 s, peak  29.6 GB] starting 52 of 64 entries from data/processed/train/full_shuffled_2024_coefs.npz
+[   2659 s, peak  29.6 GB] entry 0: warm, 2 iterations, 41 s, tp 0 fp 0 fn 590,379
+[   2675 s, peak  29.6 GB] entry 8: warm, 0 iterations, 16 s, tp 0 fp 0 fn 506,853
+[   2833 s, peak  29.6 GB] entry 10: cold, 17 iterations, 157 s, tp 0 fp 0 fn 201,330
+[   2848 s, peak  29.6 GB] entry 2: warm, 3 iterations, 230 s, tp 0 fp 0 fn 590,768
+[   2889 s, peak  29.6 GB] entry 46: warm, 2 iterations, 41 s, tp 0 fp 0 fn 842,382
+[   3267 s, peak  29.6 GB] entry 27: warm, 6 iterations, 435 s, tp 0 fp 0 fn 388,509
+[   3294 s, peak  29.6 GB] entry 247: warm, 7 iterations, 405 s, tp 0 fp 0 fn 1,285,421
+[   3448 s, peak  29.6 GB] entry 248: warm, 2 iterations, 180 s, tp 0 fp 0 fn 185,902
+[   3542 s, peak  29.6 GB] entry 291: warm, 4 iterations, 248 s, tp 0 fp 0 fn 2,503,854
+[   3662 s, peak  29.6 GB] entry 292: warm, 2 iterations, 214 s, tp 0 fp 0 fn 576,138
+[   3845 s, peak  29.6 GB] entry 300: warm, 4 iterations, 303 s, tp 0 fp 0 fn 837,508
+[   3969 s, peak  29.6 GB] entry 604: cold, 13 iterations, 124 s, tp 0 fp 0 fn 225,090
+[   4058 s, peak  29.6 GB] entry 305: warm, 5 iterations, 396 s, tp 0 fp 0 fn 2,952,142
+[   4381 s, peak  29.6 GB] entry 607: warm, 9 iterations, 412 s, tp 0 fp 0 fn 409,994
+[   4485 s, peak  29.6 GB] entry 608: cold, 22 iterations, 427 s, tp 0 fp 0 fn 192,262
+[   4518 s, peak  29.6 GB] entry 870: warm, 1 iterations, 33 s, tp 0 fp 0 fn 356,028
+[   4559 s, peak  29.6 GB] entry 1239: warm, 2 iterations, 42 s, tp 0 fp 0 fn 880,437
+[   4661 s, peak  29.6 GB] entry 869: warm, 4 iterations, 279 s, tp 0 fp 0 fn 381,194
+[   4765 s, peak  29.6 GB] entry 1295: warm, 1 iterations, 205 s, tp 0 fp 0 fn 368,993
+[   4905 s, peak  29.6 GB] entry 1299: cold, 15 iterations, 141 s, tp 0 fp 0 fn 165,049
+[   4946 s, peak  29.6 GB] entry 1304: warm, 1 iterations, 41 s, tp 0 fp 0 fn 270,763
+[   4962 s, peak  29.6 GB] entry 1311: warm, 0 iterations, 16 s, tp 0 fp 0 fn 303,535
+[   4999 s, peak  29.6 GB] entry 1298: warm, 4 iterations, 338 s, tp 0 fp 0 fn 455,876
+[   5198 s, peak  29.6 GB] entry 1333: cold, 21 iterations, 199 s, tp 0 fp 0 fn 279,794
+[   5572 s, peak  29.6 GB] entry 1315: cold, 30 iterations, 610 s, tp 0 fp 0 fn 306,006
+[   5785 s, peak  29.6 GB] entry 1386: warm, 1 iterations, 213 s, tp 0 fp 0 fn 571,041
+[   5817 s, peak  29.6 GB] entry 1371: cold, 25 iterations, 619 s, tp 0 fp 0 fn 210,653
+[   5998 s, peak  29.6 GB] entry 1387: warm, 2 iterations, 213 s, tp 0 fp 0 fn 253,448
+[   6006 s, peak  29.6 GB] entry 1474: warm, 2 iterations, 189 s, tp 0 fp 0 fn 401,060
+[   6227 s, peak  29.6 GB] entry 1529: warm, 3 iterations, 221 s, tp 0 fp 0 fn 271,744
+[   6623 s, peak  29.6 GB] entry 1647: warm, 9 iterations, 396 s, tp 0 fp 0 fn 1,073,119
+[   6632 s, peak  29.6 GB] entry 1475: warm, 13 iterations, 633 s, tp 0 fp 0 fn 223,870
+[   6665 s, peak  29.6 GB] entry 1794: warm, 1 iterations, 33 s, tp 0 fp 0 fn 287,530
+[   7026 s, peak  29.6 GB] entry 1649: warm, 13 iterations, 404 s, tp 0 fp 0 fn 257,695
+[   7051 s, peak  29.6 GB] entry 1839: warm, 6 iterations, 386 s, tp 0 fp 0 fn 469,863
+[   7076 s, peak  29.6 GB] entry 1840: warm, 2 iterations, 49 s, tp 0 fp 0 fn 428,182
+[   7108 s, peak  29.6 GB] entry 1844: warm, 3 iterations, 57 s, tp 0 fp 0 fn 415,819
+[   7332 s, peak  29.6 GB] entry 1854: warm, 2 iterations, 257 s, tp 0 fp 0 fn 5,060,111
+[   7338 s, peak  29.6 GB] entry 1855: warm, 3 iterations, 230 s, tp 0 fp 0 fn 686,341
+[   7635 s, peak  29.6 GB] entry 1922: warm, 4 iterations, 296 s, tp 0 fp 0 fn 1,123,496
+[   7677 s, peak  29.6 GB] entry 1857: warm, 2 iterations, 345 s, tp 0 fp 0 fn 699,233
+[   7925 s, peak  29.6 GB] entry 2001: warm, 5 iterations, 248 s, tp 0 fp 0 fn 1,022,004
+[   7958 s, peak  29.6 GB] entry 2002: warm, 1 iterations, 33 s, tp 0 fp 0 fn 289,228
+[   7971 s, peak  29.6 GB] entry 1925: warm, 3 iterations, 336 s, tp 0 fp 0 fn 775,777
+[   8358 s, peak  29.6 GB] entry 2118: warm, 11 iterations, 388 s, tp 0 fp 0 fn 508,990
+[   8477 s, peak  29.6 GB] entry 2075: cold, 21 iterations, 519 s, tp 0 fp 0 fn 469,974
+[   8708 s, peak  29.6 GB] entry 2121: warm, 3 iterations, 231 s, tp 0 fp 0 fn 1,814,575
+[   8741 s, peak  29.6 GB] entry 2122: warm, 1 iterations, 33 s, tp 0 fp 0 fn 405,790
+[   8918 s, peak  29.6 GB] entry 2119: warm, 8 iterations, 560 s, tp 0 fp 0 fn 475,756
+[   8934 s, peak  29.6 GB] entry 2285: warm, 0 iterations, 17 s, tp 0 fp 0 fn 395,591
+[   9474 s, peak  29.6 GB] entry 2128: cold, 27 iterations, 733 s, tp 0 fp 0 fn 310,001
+[   9544 s, peak  29.6 GB] entry 2286: cold, 24 iterations, 609 s, tp 0 fp 0 fn 213,368
+[   9622 s, peak  29.6 GB] entry 2298: cold, 16 iterations, 148 s, tp 0 fp 0 fn 248,823
+[   9721 s, peak  29.6 GB] entry 2588: warm, 9 iterations, 99 s, tp 0 fp 0 fn 667,006
+[   9742 s, peak  29.6 GB] entry 2306: warm, 4 iterations, 198 s, tp 0 fp 0 fn 836,190
+[   9758 s, peak  29.6 GB] entry 2591: warm, 0 iterations, 16 s, tp 0 fp 0 fn 264,300
+[  10018 s, peak  29.6 GB] entry 2589: warm, 9 iterations, 296 s, tp 0 fp 0 fn 228,937
+[  10314 s, peak  29.6 GB] entry 2743: warm, 3 iterations, 297 s, tp 0 fp 0 fn 438,871
+[  10331 s, peak  29.6 GB] entry 3288: warm, 0 iterations, 16 s, tp 0 fp 0 fn 251,744
+[  10611 s, peak  29.6 GB] entry 2740: warm, 12 iterations, 853 s, tp 0 fp 0 fn 514,760
+[  10686 s, peak  29.6 GB] entry 3387: warm, 6 iterations, 355 s, tp 0 fp 0 fn 1,728,338
+[  10776 s, peak  29.6 GB] entry 3522: cold, 16 iterations, 165 s, tp 0 fp 0 fn 285,049
+[  11023 s, peak  29.6 GB] entry 3583: warm, 4 iterations, 248 s, tp 0 fp 0 fn 2,867,859
+[  11275 s, peak  29.6 GB] entry 3533: warm, 18 iterations, 589 s, tp 0 fp 0 fn 324,677
+[  11276 s, peak  29.6 GB] wrote data/processed/train/full_shuffled_2025_*
+shuffled 2025 exit 0
+exit 0
+ended 2026-11-16 17:18:45 UTC
