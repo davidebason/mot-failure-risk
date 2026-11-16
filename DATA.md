@@ -268,6 +268,12 @@ They are removed before the tests are grouped into slots (below), so they neithe
 - the vehicle's mileage and age at the target slot's first test, since both are known when the vehicle arrives for it, the moment of decision; and its other details as recorded at the previous slot's first test;
 - the gap between the first tests of the two slots, in bands (under "The models").
 
+**The groups of the previous slot enter as inputs**, the author's decision of 4 November 2026, because:
+- a vehicle's problems tend to recur within a component, not only as the same defect;
+- a group pools its defects, so that the rare ones, too few on their own to carry a weight, still count;
+- a group sees a component's condition whichever wording the tester chose among similar defects;
+- the small models keep only two facts about the previous slot, to save time, and the group is one of them.
+
 **A row's class is that of the previous slot's first test**, since that slot is what the row learns from. When a vehicle's class differs between the two slots, which [`evidence/12_class_changes.py`](evidence/12_class_changes.py) finds for 0.33% of vehicles, a defect listed only for the target slot's class cannot be predicted for that row.
 
 The prediction is made when the vehicle arrives for the target slot's first test, when that test's date is known. A vehicle's first slot serves only as input, and a vehicle with no later slot, whether scrapped, exported or off the road, gives no further row. A vehicle with more than one slot starting in a year has a row for each. The outcome of a test, `P`, `F`, `PRS` or `ABA`, is not predicted: what matters is the problems the vehicle had, not how its tests ended.
