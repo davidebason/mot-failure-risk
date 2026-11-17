@@ -25,6 +25,17 @@ from pathlib import Path
 import numpy as np
 
 ROWS = Path("data/training_rows")
+# How make and model enter the full model. "pairs": one column per make-and-model pair found in
+# the fold's training rows, the first run. "pooled": a column only for a pair with at least
+# POOL_MIN_ROWS training rows; the rarer pairs of a make share one column, when they add up to as
+# many rows, and every other pair shares one more. The author's comparison of 2026-11-17.
+ENCODINGS = ("pairs", "pooled")
+POOL_MIN_ROWS = 10_000
+# The model name of a make's shared column, and the make and model of the last shared column;
+# no make or model in the data starts with "<".
+REST = "<rest>"
+OTHER = ("<other>", "<other>")
+TRAIN_DIRS = {"pairs": Path("data/processed/train"), "pooled": Path("data/processed/train_pooled")}
 LOOKUP = Path("data/parquet/lookup/item_detail.parquet")
 FIRST_YEAR = 2019
 TEST_YEARS = range(2020, 2026)
@@ -69,6 +80,59 @@ def tier(ones: int, d: int) -> str:
     if ones >= 10 * (SMALL_INPUTS + 1):
         return "small"
     return "base_rate" if ones > 0 else "none"
+
+
+def pair_columns(con, test_year: int, encoding: str, rows: Path | None = None) -> None:
+    """Add pair_of to con: each make and model of the fold's rows with the column it is set in,
+    named by the make and model in pair_label_make and pair_label_model.
+
+    With "pairs", every pair of the training rows is its own column, and a pair found only in the
+    test year has none. With "pooled", the columns are counted on the training rows: a pair with
+    at least POOL_MIN_ROWS rows is its own column; a rarer pair goes to its make's shared column,
+    (make, REST), when the make's rarer pairs add up to POOL_MIN_ROWS rows, and to OTHER
+    otherwise. A pair found only in the test year goes where a rare pair of its make would, and
+    sets no column if that column is not one the training rows set. in_train marks the pairs of
+    the training rows, which alone decide the columns.
+    """
+    if encoding not in ENCODINGS:
+        raise ValueError(f"encoding {encoding!r}, not one of {ENCODINGS}")
+    rows = rows or ROWS
+    train = [str(rows / f"{y}.parquet") for y in training_years(test_year)]
+    test = rows / f"{test_year}.parquet"
+    pairs = f"SELECT make, model, count(*) AS n FROM read_parquet({train}) GROUP BY make, model"
+    if encoding == "pairs":
+        con.execute(
+            f"""CREATE OR REPLACE TEMP TABLE pair_of AS
+                SELECT make, model, make AS pair_label_make, model AS pair_label_model,
+                       true AS in_train
+                FROM ({pairs})"""
+        )
+        return
+    m = POOL_MIN_ROWS
+    seen = f"SELECT DISTINCT make, model FROM read_parquet({[*train, str(test)]})"
+    con.execute(
+        f"""CREATE OR REPLACE TEMP TABLE pair_of AS
+            WITH p AS ({pairs}),
+            shared AS (SELECT make FROM p WHERE n < {m} GROUP BY make HAVING sum(n) >= {m})
+            SELECT s.make, s.model,
+                   CASE WHEN p.n >= {m} THEN s.make
+                        WHEN shared.make IS NOT NULL THEN s.make
+                        ELSE '{OTHER[0]}' END AS pair_label_make,
+                   CASE WHEN p.n >= {m} THEN s.model
+                        WHEN shared.make IS NOT NULL THEN '{REST}'
+                        ELSE '{OTHER[1]}' END AS pair_label_model,
+                   p.n IS NOT NULL AS in_train
+            FROM ({seen}) AS s
+            LEFT JOIN p USING (make, model)
+            LEFT JOIN shared USING (make)"""
+    )
+
+
+def n_pair_columns(con) -> int:
+    """The number of make-and-model columns: those the fold's training rows set."""
+    return con.execute(
+        "SELECT count(DISTINCT (pair_label_make, pair_label_model)) FROM pair_of WHERE in_train"
+    ).fetchall()[0][0]
 
 
 def gap_band(days) -> np.ndarray:

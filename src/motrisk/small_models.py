@@ -15,9 +15,12 @@ stopped halfway is simply run again:
     python src/motrisk/small_models.py count 2019 --shuffled
     python src/motrisk/small_models.py fit 2020            # the fold of one test year
     python src/motrisk/small_models.py fit 2020 --shuffled
+    python src/motrisk/small_models.py fit 2020 --encoding pooled    # the second model's tiers
     python src/motrisk/small_models.py check-counts        # every row against counts, fold 2020
 
-Counts go to data/counts/<kind>/<year>.parquet, the fits' results to data/processed/train/.
+Counts go to data/counts/<kind>/<year>.parquet, the fits' results to data/processed/train/, or
+data/processed/train_pooled/ for the second model. The small models themselves do not read make
+and model; the encoding changes only d, and so which entries get the full model instead.
 """
 
 import argparse
@@ -33,7 +36,6 @@ from sklearn.linear_model import LogisticRegression
 from motrisk import baselines, folds
 
 COUNTS = Path("data/counts")
-OUT = Path("data/processed/train")
 BASELINE_COUNTS = Path("data/processed/baseline_counts.csv")
 
 
@@ -114,17 +116,18 @@ def count_year(con, year: int, shuffled: bool, rows: Path | None = None) -> Path
     return out
 
 
-def fold_inputs(con, test_year: int, rows: Path | None = None) -> int:
+def fold_inputs(con, test_year: int, rows: Path | None = None, encoding: str = "pairs") -> int:
     """d, the number of inputs of the fold's full model: one per entry, group, entry and band of
-    the gap, class, fuel and make-and-model pair found in its training rows, the three numbers,
-    and one per band of the gap."""
+    the gap, class and fuel found in its training rows, one per make-and-model column of the
+    encoding (folds.pair_columns), the three numbers, and one per band of the gap."""
     rows = rows or folds.ROWS
     files = [str(rows / f"{y}.parquet") for y in folds.training_years(test_year)]
-    (classes, fuels, pairs) = con.execute(
-        f"""SELECT count(DISTINCT test_class_id), count(DISTINCT fuel_type),
-                   count(DISTINCT (make, model))
+    (classes, fuels) = con.execute(
+        f"""SELECT count(DISTINCT test_class_id), count(DISTINCT fuel_type)
             FROM read_parquet({files})"""
     ).fetchall()[0]
+    folds.pair_columns(con, test_year, encoding, rows)
+    pairs = folds.n_pair_columns(con)
     (entries,) = con.execute("SELECT count(DISTINCT entry) FROM entry_classes").fetchall()[0]
     (groups,) = con.execute("SELECT count(DISTINCT group_id) FROM entry_groups").fetchall()[0]
     bands = len(folds.BANDS_KEPT)
@@ -186,7 +189,7 @@ def expected_ones(test_year: int) -> dict[int, int]:
     return ones
 
 
-def fit_fold(con, test_year: int, shuffled: bool) -> None:
+def fit_fold(con, test_year: int, shuffled: bool, encoding: str = "pairs") -> None:
     """Fit and score every small and base-rate entry of one fold, and record every entry's tier.
 
     Checks, before writing: each entry's ones in the training years are those counted from the
@@ -195,7 +198,7 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
     """
     started = time.perf_counter()
     years = folds.training_years(test_year)
-    d = fold_inputs(con, test_year)
+    d = fold_inputs(con, test_year, encoding=encoding)
     train = cells(con, years, shuffled)
     test = cells(con, [test_year], False)
     at_train, at_test = by_entry(train), by_entry(test)
@@ -253,8 +256,9 @@ def fit_fold(con, test_year: int, shuffled: bool) -> None:
             for b in np.flatnonzero(band_rows)
         ]
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    stem = OUT / f"small_{kind(shuffled)}_{test_year}"
+    out_dir = folds.TRAIN_DIRS[encoding]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stem = out_dir / f"small_{kind(shuffled)}_{test_year}"
     for suffix, header, rows in (
         ("scores", ["kind", "test_year", "entry", "tier", "tp", "fp", "fn", "n_iter"], scores),
         ("bands", ["kind", "test_year", "entry", "band", "rows", "ones"], bands),
@@ -369,6 +373,9 @@ def main() -> None:
         "year", type=int, nargs="?", help="target year to count, or test year to fit"
     )
     parser.add_argument("--shuffled", action="store_true", help="the shuffled-label check")
+    parser.add_argument(
+        "--encoding", choices=folds.ENCODINGS, default="pairs", help="make and model's columns"
+    )
     a = parser.parse_args()
     con = connect()
     started = time.perf_counter()
@@ -385,7 +392,7 @@ def main() -> None:
             if same > chance + 0.01:
                 raise SystemExit("the shuffle does not break the pairing")
     elif a.step == "fit":
-        fit_fold(con, a.year, a.shuffled)
+        fit_fold(con, a.year, a.shuffled, a.encoding)
     else:
         check_counts(con)
 

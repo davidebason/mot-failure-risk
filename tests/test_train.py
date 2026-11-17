@@ -319,3 +319,85 @@ def test_the_weights_carry_over_column_by_column(tmp_path):
 
 def test_nothing_carries_over_without_a_previous_fold(tmp_path):
     assert full_models.carried(tmp_path / "missing.npz", {"first_pair": 0}) == {}
+
+
+def _pairs_file(con, path, pairs: dict[tuple[str, str], int]) -> None:
+    """A Parquet file holding each (make, model) the given number of times."""
+    rows = [p for p, n in pairs.items() for _ in range(n)]
+    con.execute("CREATE OR REPLACE TABLE p (make VARCHAR, model VARCHAR)")
+    con.executemany("INSERT INTO p VALUES (?, ?)", rows)
+    con.execute(f"COPY p TO '{path}' (FORMAT parquet)")
+
+
+def test_the_pooled_encoding_pools_rare_pairs_by_make(tmp_path, monkeypatch):
+    # With 100 rows needed: A/1 is common; A/2 and A/3 are rare but together reach 100, so they
+    # share A's column; B/1 is rare and alone, so it goes to the last column. In the test year, a
+    # new model of A goes to A's shared column, and a new make to the last one.
+    monkeypatch.setattr(folds, "POOL_MIN_ROWS", 100)
+    con = duckdb.connect()
+    _pairs_file(con, tmp_path / "2019.parquet", {("A", "1"): 70, ("A", "2"): 60, ("B", "1"): 20})
+    _pairs_file(con, tmp_path / "2020.parquet", {("A", "1"): 40, ("A", "3"): 40, ("B", "1"): 20})
+    _pairs_file(con, tmp_path / "2021.parquet", {("A", "1"): 5, ("A", "9"): 5, ("C", "1"): 5})
+    folds.pair_columns(con, 2021, "pooled", tmp_path)
+    got = {
+        (m, n): ((lm, ln), t)
+        for m, n, lm, ln, t in con.execute(
+            "SELECT make, model, pair_label_make, pair_label_model, in_train FROM pair_of"
+        ).fetchall()
+    }
+    assert got == {
+        ("A", "1"): (("A", "1"), True),
+        ("A", "2"): (("A", folds.REST), True),
+        ("A", "3"): (("A", folds.REST), True),
+        ("B", "1"): (folds.OTHER, True),
+        ("A", "9"): (("A", folds.REST), False),
+        ("C", "1"): (folds.OTHER, False),
+    }
+    assert folds.n_pair_columns(con) == 3
+
+    # The first encoding: every pair of the training rows is a column of its own, and a pair
+    # found only in the test year has none.
+    folds.pair_columns(con, 2021, "pairs", tmp_path)
+    assert folds.n_pair_columns(con) == 4
+    (test_only,) = con.execute(
+        "SELECT count(*) FROM pair_of WHERE (make, model) IN (('A', '9'), ('C', '1'))"
+    ).fetchall()[0]
+    assert test_only == 0
+
+
+def test_a_test_pair_sets_no_column_the_training_rows_do_not_set(tmp_path, monkeypatch):
+    # Every training pair is common, so there is no last column for a new make to go to.
+    monkeypatch.setattr(folds, "POOL_MIN_ROWS", 10)
+    con = duckdb.connect()
+    _pairs_file(con, tmp_path / "2019.parquet", {("A", "1"): 10})
+    _pairs_file(con, tmp_path / "2020.parquet", {("A", "1"): 10})
+    _pairs_file(con, tmp_path / "2021.parquet", {("C", "1"): 1})
+    folds.pair_columns(con, 2021, "pooled", tmp_path)
+    assert folds.n_pair_columns(con) == 1
+    assert con.execute(
+        "SELECT pair_label_make, pair_label_model, in_train FROM pair_of WHERE make = 'C'"
+    ).fetchall() == [(*folds.OTHER, False)]
+
+
+def test_under_the_pooled_encoding_every_row_sets_one_make_and_model_column(toy, monkeypatch):
+    # The toy's training rows hold three pairs; the one with the most rows is the only one common
+    # enough, the other two are too rare for their make to have a shared column, and the test
+    # year adds a make of its own. Every row, training or test, then sets exactly one column.
+    files = [str(folds.ROWS / f"{y}.parquet") for y in (2019, 2020)]
+    counts = toy.execute(
+        f"SELECT make, model, count(*) AS n FROM read_parquet({files}) GROUP BY ALL ORDER BY n DESC"
+    ).fetchall()
+    assert counts[0][2] > counts[1][2]
+    monkeypatch.setattr(folds, "POOL_MIN_ROWS", counts[0][2])
+    cols = full_models.prepare(toy, 2021, "pooled")
+    assert cols["d"] == small_models.fold_inputs(toy, 2021, encoding="pooled")
+    assert cols["pairs"] == sorted([counts[0][:2], folds.OTHER])
+    for years in ([2019, 2020], [2021]):
+        x, *_ = full_models.design(toy, years, False, cols)
+        part = x[:, cols["first_pair"] : cols["first_number"]]
+        assert (part.getnnz(axis=1) == 1).all()
+    x_test, *_ = full_models.design(toy, [2021], False, cols)
+    rows = toy.execute(f"SELECT make FROM ({folds.rows_sql(2021, False)})").fetchall()
+    other = cols["first_pair"] + cols["pairs"].index(folds.OTHER)
+    tesla = [i for i, (make,) in enumerate(rows) if make == "TESLA"]
+    assert tesla and all(x_test[i, other] == 1 for i in tesla)

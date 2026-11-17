@@ -20,8 +20,13 @@ baselines score the same problems; and the tiers and the groups add up to the po
 Run from the repository's root:
 
     python analysis/01_next_test.py
+    python analysis/01_next_test.py --encoding pooled    # the second model
+
+The second model, with make and model pooled (folds.pair_columns), is read from
+data/processed/train_pooled/ and written to data/processed/evaluate_pooled/, beside the first.
 """
 
+import argparse
 import csv
 from pathlib import Path
 
@@ -29,14 +34,19 @@ import pandas as pd
 
 from motrisk import baselines, evaluate, folds
 
-TRAIN = Path("data/processed/train")
 DICTIONARY = Path("data/processed/entry_dictionary.csv")
-OUT = Path("data/processed/evaluate")
+OUT_DIRS = {
+    "pairs": Path("data/processed/evaluate"),
+    "pooled": Path("data/processed/evaluate_pooled"),
+}
 KINDS = ("model", "shuffled")
 TIERS = ("full", "small", "base_rate")
-# Our prediction for 2025, written down before any score was computed:
+# Our prediction for 2025, written down before any score was computed, for each model:
 # tau: (precision low, high), (recall low, high).
-PREDICTION = {0.5: ((0.42, 0.58), (0.010, 0.020)), 0.1: ((0.18, 0.32), (0.13, 0.25))}
+PREDICTIONS = {
+    "pairs": {0.5: ((0.42, 0.58), (0.010, 0.020)), 0.1: ((0.18, 0.32), (0.13, 0.25))},
+    "pooled": {},
+}
 
 
 def entries() -> set[int]:
@@ -44,10 +54,10 @@ def entries() -> set[int]:
         return {int(r["entry"]) for r in csv.DictReader(f)}
 
 
-def read_fold(kind: str, year: int) -> tuple[pd.DataFrame, pd.DataFrame]:
+def read_fold(kind: str, year: int, train: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     """A fold's cells, and every entry's tier and the counts at tau = 0.5 the run wrote."""
-    small = [pd.read_csv(TRAIN / f"small_{kind}_{year}_{s}.csv") for s in ("scores", "bands")]
-    full = [pd.read_csv(TRAIN / f"full_{kind}_{year}_{s}.csv") for s in ("scores", "bands")]
+    small = [pd.read_csv(train / f"small_{kind}_{year}_{s}.csv") for s in ("scores", "bands")]
+    full = [pd.read_csv(train / f"full_{kind}_{year}_{s}.csv") for s in ("scores", "bands")]
     cells = evaluate.fold_cells(small[0], small[1], full[0], full[1])
     written = pd.concat([small[0][small[0]["tier"] != "full"], full[0]]).set_index("entry")
     written = written[["tier", "tp", "fp", "fn"]].astype({"tp": int, "fp": int, "fn": int})
@@ -76,7 +86,8 @@ def add(counts: pd.DataFrame, part: pd.Series, what: str) -> None:
             raise SystemExit(f"{what} do not add up to the pooled {k}")
 
 
-def main() -> None:
+def main(encoding: str = "pairs") -> None:
+    train, out = folds.TRAIN_DIRS[encoding], OUT_DIRS[encoding]
     every = entries()
     groups = pd.read_csv(DICTIONARY, usecols=["entry", "group_id", "group_path"])
     paths = groups.drop_duplicates("group_id").set_index("group_id")["group_path"]
@@ -88,7 +99,7 @@ def main() -> None:
         b_year = base[base["test_year"] == year].set_index("entry")
         cells, tier = {}, None
         for kind in KINDS:
-            cells[kind], written = read_fold(kind, year)
+            cells[kind], written = read_fold(kind, year, train)
             check_fold(kind, year, cells[kind], written, b_year, every)
             if kind == "model":
                 tier = written["tier"]
@@ -159,7 +170,7 @@ def main() -> None:
         curves.append(evaluate.curve(cells["model"]).assign(test_year=year))
         previous = cells["model"]
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     tables = {
         "scores": pd.DataFrame(scores),
         "shuffled": pd.DataFrame(shuffled),
@@ -171,15 +182,15 @@ def main() -> None:
     for name, t in tables.items():
         lead = first.get(name, [])
         t = t[lead + [c for c in t.columns if c not in lead]]
-        t.to_csv(OUT / f"{name}.csv", index=False, lineterminator="\n")
-    summary(tables)
+        t.to_csv(out / f"{name}.csv", index=False, lineterminator="\n")
+    summary(tables, PREDICTIONS[encoding])
 
 
 def pct(x) -> str:
     return "   -   " if pd.isna(x) else f"{100 * x:6.2f}%"
 
 
-def summary(t: dict[str, pd.DataFrame]) -> None:
+def summary(t: dict[str, pd.DataFrame], prediction: dict) -> None:
     """The pooled scores, the shuffled check and calibration per year, then 2025 beside the
     prediction."""
     s = t["scores"][t["scores"]["scope"] == "pooled"].set_index(["test_year", "tau", "source"])
@@ -200,7 +211,7 @@ def summary(t: dict[str, pd.DataFrame]) -> None:
                 f"off {ch.loc[year, tau].get('off', '-')}"
             )
     print("2025 beside the prediction written down before any score was computed:")
-    for tau, ((p_lo, p_hi), (r_lo, r_hi)) in PREDICTION.items():
+    for tau, ((p_lo, p_hi), (r_lo, r_hi)) in prediction.items():
         m = s.loc[2025, tau, "model"]
         print(
             f"  tau {tau}: precision {pct(m['precision'])}, predicted {pct(p_lo)} to {pct(p_hi)}; "
@@ -209,4 +220,8 @@ def summary(t: dict[str, pd.DataFrame]) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Q1_NEXT_TEST, scored against both baselines.")
+    parser.add_argument(
+        "--encoding", choices=folds.ENCODINGS, default="pairs", help="which model to score"
+    )
+    main(parser.parse_args().encoding)
