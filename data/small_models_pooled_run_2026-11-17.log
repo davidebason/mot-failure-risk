@@ -1,0 +1,14 @@
+started 2026-11-17 13:12:06 UTC
+model 2020: d 24,858, tiers {'full': 23, 'small': 1548, 'base_rate': 2815, 'none': 435}, 30 s
+model 2021: d 25,029, tiers {'full': 70, 'small': 2004, 'base_rate': 2521, 'none': 226}, 69 s
+model 2022: d 25,134, tiers {'full': 101, 'small': 2273, 'base_rate': 2323, 'none': 124}, 96 s
+model 2023: d 25,217, tiers {'full': 121, 'small': 2427, 'base_rate': 2177, 'none': 96}, 107 s
+model 2024: d 25,286, tiers {'full': 130, 'small': 2568, 'base_rate': 2044, 'none': 79}, 120 s
+model 2025: d 25,363, tiers {'full': 150, 'small': 2654, 'base_rate': 1960, 'none': 57}, 131 s
+shuffled 2020: d 24,858, tiers {'full': 23, 'small': 1548, 'base_rate': 2815, 'none': 435}, 27 s
+shuffled 2021: d 25,029, tiers {'full': 70, 'small': 2004, 'base_rate': 2521, 'none': 226}, 52 s
+shuffled 2022: d 25,134, tiers {'full': 101, 'small': 2273, 'base_rate': 2323, 'none': 124}, 71 s
+shuffled 2023: d 25,217, tiers {'full': 121, 'small': 2427, 'base_rate': 2177, 'none': 96}, 90 s
+shuffled 2024: d 25,286, tiers {'full': 130, 'small': 2568, 'base_rate': 2044, 'none': 79}, 104 s
+shuffled 2025: d 25,363, tiers {'full': 150, 'small': 2654, 'base_rate': 1960, 'none': 57}, 114 s
+ended 2026-11-17 13:29:20 UTC
