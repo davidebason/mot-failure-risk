@@ -45,7 +45,7 @@ TIERS = ("full", "small", "base_rate")
 # tau: (precision low, high), (recall low, high).
 PREDICTIONS = {
     "pairs": {0.5: ((0.42, 0.58), (0.010, 0.020)), 0.1: ((0.18, 0.32), (0.13, 0.25))},
-    "pooled": {},
+    "pooled": {0.5: ((0.44, 0.52), (0.022, 0.026)), 0.1: ((0.185, 0.21), (0.265, 0.295))},
 }
 
 
