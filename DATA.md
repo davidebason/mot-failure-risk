@@ -382,3 +382,21 @@ The full models' run with the gap as a straight line, superseded on 13 November,
 - pooling keeps one column per group of makes and models, rather than a single number per make and model (below).
 
 The second model's small and base-rate models were fitted on 17 November 2026 in 17 minutes, every fold, plain and shuffled, passing its checks, as its record [`data/small_models_pooled_run_2026-11-17.log`](data/small_models_pooled_run_2026-11-17.log) shows; they read no make or model, so only which entries they cover changes. Their results are in `data/processed/train_pooled/small_*`.
+
+**We do not over-sample the rare problems, with SMOTE or otherwise**, the decision of 17 November 2026, because:
+- in a logistic regression, adding positive rows moves mainly the intercept, raising every probability, while the weights that rank one vehicle above another stay nearly the same (King and Zeng, 2001);
+- calibration would then bring the probabilities back down to their true, small values, so the model would end where it started;
+- the fleet manager's rule, to check a vehicle for a problem when $p \ge t/m$, needs probabilities that mean what they say, which over-sampling breaks until it is undone;
+- the problems it could apply to, those with a full model, have hundreds of thousands of cases each, while the rare ones have a small model on 0/1 inputs or a base rate, with nothing to interpolate.
+
+**We do not reduce the inputs with principal component analysis (PCA)**, the decision of 17 November 2026, because:
+- on the make-and-model columns, its first components come out close to the most frequent makes and models, which already have a column of their own;
+- it chooses its directions without looking at the label, so it can drop a direction that predicts a problem;
+- each weight would belong to a mix of thousands of inputs, and could no longer be read as the effect of one defect or one make and model;
+- it would turn the sparse inputs, about 1.6 billion values in the fold of 2025, into a dense matrix too large to hold.
+
+**We do not give each make and model a number in a single column (label encoding)**, the decision of 17 November 2026, because:
+- a logistic regression multiplies that number by one weight, so it would assume an order and a scale among makes and models, those of their numbering, alphabetical or any other, which no real effect follows;
+- it suits tree models, which split a number into ranges, not a linear model;
+- it would not make the inputs less sparse in any way that matters: each row sets one make-and-model value under either encoding, and what made the first model costly was its columns too rare to learn a weight from, which pooling removes;
+- every category column enters one-hot, so that no order among values is assumed, the decision of 4 November 2026.
