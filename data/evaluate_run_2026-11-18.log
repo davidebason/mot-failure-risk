@@ -1,0 +1,40 @@
+started 2026-11-18 09:41:13 UTC
+pooled, precision / recall; beats Repeat, Most popular; shuffled passes; off
+2020  0.1: model  18.85%  22.63%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  YY  shuffled passes  off False
+2020 0.25: model  31.56%   6.58%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off False
+2020  0.5: model  46.61%   0.62%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off True
+2021  0.1: model  19.19%  23.44%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  YY  shuffled passes  off False
+2021 0.25: model  33.43%   7.12%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  nn  shuffled passes  off False
+2021  0.5: model  47.08%   1.02%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  nn  shuffled passes  off True
+2022  0.1: model  19.02%  24.30%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  YY  shuffled passes  off False
+2022 0.25: model  33.37%   8.22%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  nn  shuffled passes  off False
+2022  0.5: model  47.22%   1.38%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  nn  shuffled passes  off True
+2023  0.1: model  19.20%  25.11%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  YY  shuffled passes  off False
+2023 0.25: model  33.57%   8.84%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  nY  shuffled passes  off False
+2023  0.5: model  47.50%   1.69%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  nn  shuffled passes  off True
+2024  0.1: model  19.49%  25.90%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  YY  shuffled passes  off False
+2024 0.25: model  34.23%   9.33%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  nY  shuffled passes  off False
+2024  0.5: model  47.71%   1.91%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  nn  shuffled passes  off True
+2025  0.1: model  19.48%  27.07%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nY  shuffled passes  off False
+2025 0.25: model  34.60%  10.33%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nY  shuffled passes  off False
+2025  0.5: model  48.28%   2.30%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nn  shuffled passes  off True
+money saved at p_crit = t/m: model, Repeat, Most popular
+2020: p_crit 0.1:  10.62%   4.99%   4.26%  p_crit 0.25:   1.37%  -8.22%  -3.98%  p_crit 0.5:  -0.04% -30.25% -17.71%
+2021: p_crit 0.1:  11.23%   6.01%   3.91%  p_crit 0.25:   1.79%  -7.07%  -4.22%  p_crit 0.5:  -0.06% -28.87% -17.76%
+2022: p_crit 0.1:  11.52%   6.71%   3.39%  p_crit 0.25:   2.06%  -6.44%  -4.70%  p_crit 0.5:  -0.08% -28.36% -18.19%
+2023: p_crit 0.1:  12.04%   7.28%   3.21%  p_crit 0.25:   2.26%  -5.98%  -4.82%  p_crit 0.5:  -0.09% -28.08% -18.22%
+2024: p_crit 0.1:  12.61%   7.79%   3.39%  p_crit 0.25:   2.52%  -5.39%  -4.46%  p_crit 0.5:  -0.09% -27.35% -17.55%
+2025: p_crit 0.1:  13.18%   8.67%   3.22%  p_crit 0.25:   2.87%  -4.83%  -4.64%  p_crit 0.5:  -0.08% -27.32% -17.75%
+Brier skill against the base rate, pooled: model, shuffled; the model's terms
+2020: model +0.0280  shuffled +0.0002  BS 4.728e-04, reliability 2.26e-07, resolution 3.24e-05, uncertainty 5.05e-04
+2021: model +0.0342  shuffled +0.0003  BS 4.757e-04, reliability 3.46e-07, resolution 3.59e-05, uncertainty 5.11e-04
+2022: model +0.0381  shuffled +0.0004  BS 4.763e-04, reliability 4.42e-07, resolution 3.78e-05, uncertainty 5.14e-04
+2023: model +0.0411  shuffled +0.0004  BS 4.779e-04, reliability 5.31e-07, resolution 3.99e-05, uncertainty 5.17e-04
+2024: model +0.0432  shuffled +0.0003  BS 4.873e-04, reliability 6.01e-07, resolution 4.26e-05, uncertainty 5.29e-04
+2025: model +0.0469  shuffled +0.0003  BS 4.848e-04, reliability 6.48e-07, resolution 4.45e-05, uncertainty 5.29e-04
+2025 beside the prediction written down before any score was computed:
+  Brier skill +0.0469, predicted +0.0450 to +0.0800
+  p_crit 0.5: precision  48.28%, predicted  42.00% to  58.00%; recall   2.30%, predicted   1.00% to   2.00%
+  p_crit 0.1: precision  19.48%, predicted  18.00% to  32.00%; recall  27.07%, predicted  13.00% to  25.00%
+exit 0
+ended 2026-11-18 09:41:16 UTC
