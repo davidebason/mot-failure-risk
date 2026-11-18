@@ -1,0 +1,19 @@
+started 2026-11-18 16:13:09 UTC
+== score, on the PC, from the test matrix and weights copied from the virtual machine
+[     54 s, peak   5.2 GB] entry 2475: 11 sets of weights scored
+[     88 s, peak   5.2 GB] entry 2546: 11 sets of weights scored
+[     88 s, peak   5.2 GB] wrote data/processed/train_pooled/tight_2025_fine.csv; the saved weights give the run's bands
+entry 2475: skill as the first model's small model +0.0830
+  full, penalty 1: saved weights +0.0699, 100 iterations +0.0755, 200 iterations +0.0764, 300 iterations +0.0762
+  full, penalty 10: saved weights +0.0699, 100 iterations +0.0759, 200 iterations +0.0764
+  full, penalty 100: saved weights +0.0699, 100 iterations +0.0767, 200 iterations +0.0767
+  full, penalty 1000: saved weights +0.0699, 100 iterations +0.0768, 200 iterations +0.0768
+  full, penalty 10000: saved weights +0.0699, 99 iterations +0.0752
+entry 2546: skill as the first model's small model +0.0592
+  full, penalty 1: saved weights +0.0453, 100 iterations +0.0496, 200 iterations +0.0505, 300 iterations +0.0505
+  full, penalty 10: saved weights +0.0453, 100 iterations +0.0498, 200 iterations +0.0505
+  full, penalty 100: saved weights +0.0453, 100 iterations +0.0508, 200 iterations +0.0508
+  full, penalty 1000: saved weights +0.0453, 100 iterations +0.0502, 200 iterations +0.0501
+  full, penalty 10000: saved weights +0.0453, 88 iterations +0.0473
+score exit 0
+ended 2026-11-18 16:14:38 UTC

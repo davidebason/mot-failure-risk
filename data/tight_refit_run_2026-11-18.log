@@ -1,0 +1,17 @@
+started 2026-11-18 10:04:30 UTC
+== build
+[     78 s, peak  10.6 GB] test: 32,244,374 rows, 308,359,677 values, saved
+[    453 s, peak  25.8 GB] train: 166,828,941 rows, 1,579,006,374 values, saved
+build exit 0
+== fit
+[    214 s, peak  21.9 GB] training matrix in 64 bits: 166,828,941 rows, 1,579,006,374 values
+[    223 s, peak  27.3 GB] entry 2475, saved weights: loss 0.0292950764
+[   1145 s, peak  30.0 GB] entry 2475, 100 iterations: loss 0.0288724995; 100 in 922 s, largest weight change 2.4947
+[   2053 s, peak  30.0 GB] entry 2475, 200 iterations: loss 0.0288457231; 100 in 908 s, largest weight change 0.9036
+[   2910 s, peak  30.0 GB] entry 2475, 300 iterations: loss 0.0288353157; 100 in 857 s, largest weight change 0.5967
+[   2917 s, peak  30.0 GB] entry 2546, saved weights: loss 0.0228283913
+[   3830 s, peak  30.0 GB] entry 2546, 100 iterations: loss 0.0222261037; 100 in 913 s, largest weight change 2.4245
+[   4710 s, peak  30.0 GB] entry 2546, 200 iterations: loss 0.0221923878; 100 in 880 s, largest weight change 1.0268
+[   5590 s, peak  30.0 GB] entry 2546, 300 iterations: loss 0.0221814424; 100 in 880 s, largest weight change 0.8062
+fit exit 0
+ended 2026-11-18 11:45:28 UTC

@@ -1,0 +1,12 @@
+started 2026-11-18 16:13:00 UTC
+2020: 17 entries full in the second model and small in the first, skill 0.0377 as small, 0.0455 as full; their full fits' median iterations 43, 0 with 5 or fewer; the first model's 6 full fits' 92, 0 with 5 or fewer
+2021: 53 entries full in the second model and small in the first, skill 0.0203 as small, 0.0235 as full; their full fits' median iterations 29, 0 with 5 or fewer; the first model's 17 full fits' 37, 0 with 5 or fewer
+2022: 74 entries full in the second model and small in the first, skill 0.0203 as small, 0.0213 as full; their full fits' median iterations 13, 21 with 5 or fewer; the first model's 27 full fits' 17, 1 with 5 or fewer
+2023: 80 entries full in the second model and small in the first, skill 0.0219 as small, 0.0213 as full; their full fits' median iterations 3, 47 with 5 or fewer; the first model's 41 full fits' 16, 9 with 5 or fewer
+  the most of it lost by entry 2546 32%, 3522 32%, 2475 27%
+2024: 78 entries full in the second model and small in the first, skill 0.0250 as small, 0.0225 as full; their full fits' median iterations 2, 60 with 5 or fewer; the first model's 52 full fits' 9.5, 20 with 5 or fewer
+  the most of it lost by entry 2475 13%, 2075 13%, 3522 11%
+2025: 86 entries full in the second model and small in the first, skill 0.0228 as small, 0.0196 as full; their full fits' median iterations 2, 57 with 5 or fewer; the first model's 64 full fits' 5.5, 32 with 5 or fewer
+  the most of it lost by entry 2475 10%, 2363 7%, 3535 7%
+moved exit 0
+ended 2026-11-18 16:13:02 UTC
