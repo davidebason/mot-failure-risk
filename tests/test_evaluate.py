@@ -1,4 +1,4 @@
-"""The evaluation: counts at tau, the scores, beating a baseline, calibration and the map.
+"""The evaluation: counts at p_crit, the scores, beating a baseline, calibration and the map.
 
 The bands are invented, in the form the training run writes them: each entry's rows and ones per
 band of probability 0.01 wide.
@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from motrisk import evaluate
+from motrisk import evaluate, rescore
 
 
 def cells(bands: dict[int, dict[int, tuple[int, int]]], tier: str = "small") -> pd.DataFrame:
@@ -31,7 +31,7 @@ ONE = {1: {5: (100, 2), 12: (50, 5), 24: (10, 1), 25: (10, 3), 30: (20, 6), 60: 
 
 
 @pytest.mark.parametrize(
-    "tau, expected",
+    "p_crit, expected",
     [
         # From 0.10: bands 12, 24, 25, 30 and 60.
         (0.1, (22, 78, 2)),
@@ -41,9 +41,9 @@ ONE = {1: {5: (100, 2), 12: (50, 5), 24: (10, 1), 25: (10, 3), 30: (20, 6), 60: 
         (0.5, (7, 3, 17)),
     ],
 )
-def test_counts_at_each_tau(tau, expected):
+def test_counts_at_each_p_crit(p_crit, expected):
     """Test 1: the counts at 0.1, 0.25 and 0.5 are those computed by hand."""
-    c = evaluate.counts_at(cells(ONE), tau)
+    c = evaluate.counts_at(cells(ONE), p_crit)
     assert tuple(int(c[k].iloc[0]) for k in ("tp", "fp", "fn")) == expected
 
 
@@ -129,3 +129,72 @@ def test_map_ignores_the_current_year():
     a, b = evaluate.remap(current, m), evaluate.remap(changed, m)
     assert a["p"].tolist() == b["p"].tolist()
     assert a["p"].tolist() == pytest.approx(m.predict(current["p"]).tolist())
+
+
+def test_money_saved():
+    """Two problems found, three checks for nothing, five left to the test, at p_crit 0.25: the
+    checks cost 5 t = 1.25 m and save 2 m, out of 7 m."""
+    s = pd.Series({"tp": 2, "fp": 3, "fn": 5})
+    assert evaluate.saved(s, 0.25) == pytest.approx(0.75 / 7)
+    recall, precision = 2 / 7, 2 / 5
+    assert evaluate.saved(s, 0.25) == pytest.approx(recall * (1 - 0.25 / precision))
+    assert evaluate.saved(s, 0.5) < 0
+    assert evaluate.saved(pd.Series({"tp": 0, "fp": 0, "fn": 4}), 0.25) == 0
+    assert np.isnan(evaluate.saved(pd.Series({"tp": 0, "fp": 3, "fn": 0}), 0.25))
+
+
+def sums(p, y, entry=1) -> pd.DataFrame:
+    """Cells one row each, through rescore.fine_tally, as rescore writes them."""
+    t = rescore.fine_tally(np.asarray(p, dtype=float), np.ones(len(p)), np.asarray(y))
+    b = np.flatnonzero(t["rows"])
+    return pd.DataFrame({"entry": entry, "fine_band": b, **{k: t[k][b] for k in rescore.SUMS}})
+
+
+# Ten vehicles, two with the problem: the example of 2026-11-17.
+Y = [1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+@pytest.mark.parametrize(
+    "p, expected",
+    [
+        # A, the base rate: honest, separates nothing.
+        ([0.2] * 10, (0.16, 0.0, 0.0)),
+        # B: 0.5 to four vehicles, two of which have it, 0 to six that do not.
+        ([0.5] * 4 + [0.0] * 6, (0.10, 0.0, 0.06)),
+        # C: the same four at 0.9, so it separates as B does and overstates.
+        ([0.9] * 4 + [0.0] * 6, (0.164, 0.064, 0.06)),
+    ],
+)
+def test_brier_and_its_terms(p, expected):
+    d = evaluate.decomposition(sums(p, Y))
+    bs, reliability, resolution = expected
+    assert d["brier"] == pytest.approx(bs)
+    assert d["reliability"] == pytest.approx(reliability)
+    assert d["resolution"] == pytest.approx(resolution)
+    assert d["uncertainty"] == pytest.approx(0.16)
+    assert d["within_variance"] == pytest.approx(0.0)
+
+
+def test_the_terms_add_up_with_spread_inside_the_bands():
+    """Probabilities spread inside each band: the within-band terms close the sum."""
+    rng = np.random.default_rng(1)
+    p = rng.random(5_000) ** 3
+    y = (rng.random(5_000) < p).astype(int)
+    d = evaluate.decomposition(sums(p, y))
+    assert d["brier"] == pytest.approx(np.mean((p - y) ** 2))
+    assert d["within_variance"] > 0
+
+
+def test_the_base_rate_reference():
+    """Each entry's test rows at its share of ones in the training rows; 0 with none there."""
+    reference = pd.DataFrame({"entry": [1, 2], "train_rows": [100, 50], "train_ones": [10, 0]})
+    totals = pd.DataFrame({"entry": [1, 2], "rows": [20, 30], "ones": [3, 1], "tier": "small"})
+    r = evaluate.reference_cells(reference, totals).set_index("entry")
+    assert r.loc[1, "sum_p"] == pytest.approx(2.0)
+    assert r.loc[1, "sum_p_ones"] == pytest.approx(0.3)
+    assert r.loc[2, "sum_p"] == 0
+    # 17 rows at 0.1 without the entry, 3 with it; 29 rows at 0 without, 1 with.
+    expected = (17 * 0.01 + 3 * 0.81 + 1) / 50
+    assert evaluate.brier(r.reset_index()) == pytest.approx(expected)
+    with pytest.raises(SystemExit, match="no base rate"):
+        evaluate.reference_cells(reference[reference["entry"] == 1], totals)

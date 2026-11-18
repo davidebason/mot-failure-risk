@@ -5,14 +5,20 @@ Run from the repository's root, for the fold of one test year:
     python src/motrisk/full_models.py 2025                     # every full entry of the fold
     python src/motrisk/full_models.py 2025 --shuffled          # the shuffled-label check
     python src/motrisk/full_models.py 2025 --entries 1 --workers 1    # measure one fit
+    python src/motrisk/full_models.py 2025 --encoding pooled   # the second model
 
 The inputs of a fold (DATA.md, "The models"): one column per entry of the previous slot, per group,
-per entry and band of the gap, per class, per fuel and per make-and-model pair found in the fold's
-training rows, then mileage, age and engine size, each standardised with the mean and deviation of
-the fold's training rows, and one column per band of the gap. About a year is the reference band,
-with no column. A pair, fuel or class not found in the training rows has no column, so a test row
-carrying one has none set. The columns are held as a sparse matrix of 32-bit floats, built in
-place year by year, since the six-year fold sets about 1.6 billion values.
+per entry and band of the gap, per class and per fuel found in the fold's training rows, per
+make-and-model column of the encoding (folds.pair_columns), then mileage, age and engine size,
+each standardised with the mean and deviation of the fold's training rows, and one column per band
+of the gap. About a year is the reference band, with no column. A fuel or class not found in the
+training rows has no column, nor does a pair under the first encoding, so a test row carrying one
+has none set; under the second, a pair new to the test year is set in its make's shared column, or
+the last one. The columns are held as a sparse matrix of 32-bit floats, built in place year by
+year, since the six-year fold sets about 1.6 billion values.
+
+The second encoding, --encoding pooled, writes to data/processed/train_pooled/ and starts each
+fold from that folder's previous fold, so the two models never mix.
 
 Each entry's fit starts from its weights in the previous fold of the same kind, when it had a
 full model there (carried): the folds overlap, so the optimum is close, and since the problem is
@@ -24,7 +30,7 @@ leaves the fit as if they were not there, without copying the matrix. The entrie
 parallel by processes forked from the one that built the matrices, so they share them. Each
 process scores its entry on the test year with folds.tally; the checks are those of the small
 models: ones in the training years as counted from the rows, true positives plus false negatives
-as the baselines', the bands agreeing with the counts at tau.
+as the baselines', the bands agreeing with the counts at p_crit.
 """
 
 import argparse
@@ -40,7 +46,6 @@ from sklearn.linear_model import LogisticRegression
 
 from motrisk import baselines, folds, small_models
 
-OUT = Path("data/processed/train")
 N_ENTRIES = 4821
 
 # Set in the parent before the workers are forked, and only read by them.
@@ -60,9 +65,10 @@ def say(started: float, message: str) -> None:
     )
 
 
-def prepare(con, test_year: int) -> dict:
-    """The fold's columns, in this order: entries, groups, entries by band, classes, fuels, pairs,
-    the three numbers, the bands; the maps to them, and the numbers' scaling."""
+def prepare(con, test_year: int, encoding: str = "pairs") -> dict:
+    """The fold's columns, in this order: entries, groups, entries by band, classes, fuels, the
+    make-and-model columns, the three numbers, the bands; the maps to them, and the numbers'
+    scaling. "pairs" lists each make-and-model column by the make and model it stands for."""
     years = folds.training_years(test_year)
     files = [str(folds.ROWS / f"{y}.parquet") for y in years]
     groups = [
@@ -85,12 +91,20 @@ def prepare(con, test_year: int) -> dict:
     )
     (n_fuels,) = con.execute("SELECT count(*) FROM fuel_col").fetchall()[0]
     base += n_fuels
+    folds.pair_columns(con, test_year, encoding)
     con.execute(
-        f"""CREATE OR REPLACE TEMP TABLE pair_col AS
-            SELECT make, model, {base} + row_number() OVER (ORDER BY make, model) - 1 AS col
-            FROM (SELECT DISTINCT make, model FROM read_parquet({files}))"""
+        f"""CREATE OR REPLACE TEMP TABLE pair_label AS
+            SELECT pair_label_make, pair_label_model,
+                   {base} + row_number() OVER (ORDER BY pair_label_make, pair_label_model) - 1
+                       AS col
+            FROM (SELECT DISTINCT pair_label_make, pair_label_model FROM pair_of WHERE in_train)"""
     )
-    (n_pairs,) = con.execute("SELECT count(*) FROM pair_col").fetchall()[0]
+    con.execute(
+        """CREATE OR REPLACE TEMP TABLE pair_col AS
+           SELECT o.make, o.model, l.col
+           FROM pair_of AS o JOIN pair_label AS l USING (pair_label_make, pair_label_model)"""
+    )
+    (n_pairs,) = con.execute("SELECT count(*) FROM pair_label").fetchall()[0]
     base += n_pairs
     numbers = ", ".join(f"avg({c}), stddev_pop({c})" for c in folds.NUMBERS)
     scaling = np.array(
@@ -99,7 +113,9 @@ def prepare(con, test_year: int) -> dict:
     group_col = np.full(max(groups) + 1, -1, dtype=np.int32)
     group_col[groups] = N_ENTRIES + np.arange(len(groups), dtype=np.int32)
     first_band = base + len(folds.NUMBERS)
-    pairs = con.execute("SELECT make, model FROM pair_col ORDER BY col").fetchall()
+    pairs = con.execute(
+        "SELECT pair_label_make, pair_label_model FROM pair_label ORDER BY col"
+    ).fetchall()
     return {
         "pairs": pairs,
         "first_pair": base - n_pairs,
@@ -329,15 +345,17 @@ def run(
     only: int | None = None,
     dtype=np.float32,
     warm: bool = True,
+    encoding: str = "pairs",
 ) -> None:
     started = time.perf_counter()
     kind = small_models.kind(shuffled)
+    out_dir = folds.TRAIN_DIRS[encoding]
     con = small_models.connect(memory_limit=memory)
-    cols = prepare(con, test_year)
-    d = small_models.fold_inputs(con, test_year)
+    d = small_models.fold_inputs(con, test_year, encoding=encoding)
+    cols = prepare(con, test_year, encoding)
     if cols["d"] != d:
         raise SystemExit(f"the matrix has {cols['d']} columns, the fold {d} inputs")
-    say(started, f"{kind} {test_year}: d {d:,}, tolerance {tol}")
+    say(started, f"{kind} {test_year}, encoding {encoding}: d {d:,}, tolerance {tol}")
 
     years = folds.training_years(test_year)
     ones_from_rows: dict[int, int] = {}
@@ -378,7 +396,7 @@ def run(
             )
 
     # Each entry starts from its weights in the previous fold of the same kind, when it had them.
-    previous = OUT / f"full_{kind}_{test_year - 1}_coefs.npz"
+    previous = out_dir / f"full_{kind}_{test_year - 1}_coefs.npz"
     start = carried(previous, cols) if warm else {}
     say(
         started,
@@ -420,8 +438,8 @@ def run(
     if entries_max:
         say(started, "measurement only: nothing written")
         return
-    OUT.mkdir(parents=True, exist_ok=True)
-    stem = OUT / f"full_{kind}_{test_year}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stem = out_dir / f"full_{kind}_{test_year}"
     results.sort(key=lambda r: r["entry"])
     with open(f"{stem}_scores.csv", "w", newline="") as f:
         out = csv.writer(f, lineterminator="\n")
@@ -464,9 +482,23 @@ def main() -> None:
     parser.add_argument("--entry", type=int, help="measure only this full entry")
     parser.add_argument("--float64", action="store_true", help="64-bit inputs, not 32-bit")
     parser.add_argument("--cold", action="store_true", help="start every fit from zero")
+    parser.add_argument(
+        "--encoding", choices=folds.ENCODINGS, default="pairs", help="make and model's columns"
+    )
     a = parser.parse_args()
     dtype = np.float64 if a.float64 else np.float32
-    run(a.test_year, a.shuffled, a.entries, a.workers, a.memory, a.tol, a.entry, dtype, not a.cold)
+    run(
+        a.test_year,
+        a.shuffled,
+        a.entries,
+        a.workers,
+        a.memory,
+        a.tol,
+        a.entry,
+        dtype,
+        not a.cold,
+        a.encoding,
+    )
 
 
 if __name__ == "__main__":

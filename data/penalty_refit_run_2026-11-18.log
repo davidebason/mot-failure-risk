@@ -1,0 +1,29 @@
+started 2026-11-18 12:31:43 UTC
+== fit
+[    228 s, peak  21.9 GB] training matrix in 64 bits: 166,828,941 rows, 1,579,006,374 values
+[    236 s, peak  27.3 GB] entry 2475, penalty 10, saved weights: objective 0.0292984870
+[   1168 s, peak  30.0 GB] entry 2475, penalty 10, 100 iterations: objective 0.0288872116; 100 in 932 s, largest weight change 2.3692
+[   2044 s, peak  30.0 GB] entry 2475, penalty 10, 200 iterations: objective 0.0288634604; 100 in 877 s, largest weight change 0.8847
+[   2050 s, peak  30.0 GB] entry 2475, penalty 100, saved weights: objective 0.0293325932
+[   3022 s, peak  30.0 GB] entry 2475, penalty 100, 100 iterations: objective 0.0289947251; 100 in 972 s, largest weight change 1.9687
+[   3938 s, peak  30.0 GB] entry 2475, penalty 100, 200 iterations: objective 0.0289871286; 100 in 915 s, largest weight change 0.4372
+[   3944 s, peak  30.0 GB] entry 2475, penalty 1000, saved weights: objective 0.0296736550
+[   4828 s, peak  30.0 GB] entry 2475, penalty 1000, 100 iterations: objective 0.0294175656; 100 in 884 s, largest weight change 1.3530
+[   5697 s, peak  30.0 GB] entry 2475, penalty 1000, 200 iterations: objective 0.0294173567; 100 in 869 s, largest weight change 0.0395
+[   5703 s, peak  30.0 GB] entry 2475, penalty 10000, saved weights: objective 0.0330842735
+[   6558 s, peak  30.0 GB] entry 2475, penalty 10000, 99 iterations: objective 0.0302407694; 99 in 856 s, largest weight change 1.5205
+[   6558 s, peak  30.0 GB] entry 2475, penalty 10000: converged
+[   6566 s, peak  30.0 GB] entry 2546, penalty 10, saved weights: objective 0.0228297315
+[   7473 s, peak  30.0 GB] entry 2546, penalty 10, 100 iterations: objective 0.0222342925; 100 in 907 s, largest weight change 2.5209
+[   8379 s, peak  30.0 GB] entry 2546, penalty 10, 200 iterations: objective 0.0222089556; 100 in 906 s, largest weight change 0.8079
+[   8385 s, peak  30.0 GB] entry 2546, penalty 100, saved weights: objective 0.0228431336
+[   9268 s, peak  30.0 GB] entry 2546, penalty 100, 100 iterations: objective 0.0223366518; 100 in 883 s, largest weight change 1.8788
+[  10174 s, peak  30.0 GB] entry 2546, penalty 100, 200 iterations: objective 0.0223270335; 100 in 906 s, largest weight change 0.4375
+[  10180 s, peak  30.0 GB] entry 2546, penalty 1000, saved weights: objective 0.0229771543
+[  11087 s, peak  30.0 GB] entry 2546, penalty 1000, 100 iterations: objective 0.0227399657; 100 in 907 s, largest weight change 1.1218
+[  11965 s, peak  30.0 GB] entry 2546, penalty 1000, 200 iterations: objective 0.0227397798; 100 in 878 s, largest weight change 0.0466
+[  11971 s, peak  30.0 GB] entry 2546, penalty 10000, saved weights: objective 0.0243173611
+[  12786 s, peak  30.0 GB] entry 2546, penalty 10000, 88 iterations: objective 0.0235278102; 88 in 815 s, largest weight change 1.1965
+[  12786 s, peak  30.0 GB] entry 2546, penalty 10000: converged
+fit exit 0
+ended 2026-11-18 16:05:00 UTC
