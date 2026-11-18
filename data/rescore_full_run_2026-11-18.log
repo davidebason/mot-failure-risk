@@ -1,0 +1,62 @@
+started 2026-11-18 07:24:13 UTC
+== pairs 2020
+[     22 s, peak   8.9 GB] pairs 2020: test matrix, 27,230,182 rows
+[     43 s, peak   8.9 GB] full model 2020: 6 entries, 0 rows in another band than the run's
+[     64 s, peak   8.9 GB] full shuffled 2020: 6 entries, 0 rows in another band than the run's
+== pairs 2021
+[     25 s, peak   9.5 GB] pairs 2021: test matrix, 29,290,438 rows
+[     89 s, peak   9.5 GB] full model 2021: 17 entries, 0 rows in another band than the run's
+[    133 s, peak   9.5 GB] full shuffled 2021: 17 entries, 0 rows in another band than the run's
+== pairs 2022
+[     27 s, peak   9.8 GB] pairs 2022: test matrix, 30,581,637 rows
+[    114 s, peak   9.8 GB] full model 2022: 27 entries, 0 rows in another band than the run's
+[    218 s, peak   9.8 GB] full shuffled 2022: 27 entries, 0 rows in another band than the run's
+== pairs 2023
+[     31 s, peak  10.3 GB] pairs 2023: test matrix, 31,654,601 rows
+[    170 s, peak  10.3 GB] full model 2023: 41 entries, 0 rows in another band than the run's
+[    308 s, peak  10.3 GB] full shuffled 2023: 41 entries, 0 rows in another band than the run's
+== pairs 2024
+[     28 s, peak  10.4 GB] pairs 2024: test matrix, 31,942,228 rows
+[    182 s, peak  10.4 GB] full model 2024: 52 entries, 0 rows in another band than the run's
+[    369 s, peak  10.4 GB] full shuffled 2024: 52 entries, 0 rows in another band than the run's
+== pairs 2025
+[     37 s, peak  10.7 GB] pairs 2025: test matrix, 32,244,374 rows
+[    249 s, peak  10.7 GB] full model 2025: 64 entries, 0 rows in another band than the run's
+[    502 s, peak  10.7 GB] full shuffled 2025: 64 entries, 0 rows in another band than the run's
+== pooled 2020
+[     26 s, peak   8.9 GB] pooled 2020: test matrix, 27,230,182 rows
+[    105 s, peak   8.9 GB] full model 2020: 23 entries, 0 rows in another band than the run's
+[    176 s, peak   8.9 GB] full shuffled 2020: 23 entries, 0 rows in another band than the run's
+== pooled 2021
+[     29 s, peak   9.5 GB] pooled 2021: test matrix, 29,290,438 rows
+[    284 s, peak   9.5 GB] full model 2021: 70 entries, 0 rows in another band than the run's
+[    497 s, peak   9.5 GB] full shuffled 2021: 70 entries, 0 rows in another band than the run's
+== pooled 2022
+[     41 s, peak   9.9 GB] pooled 2022: test matrix, 30,581,637 rows
+[    397 s, peak   9.9 GB] full model 2022: 101 entries, 0 rows in another band than the run's
+[    769 s, peak   9.9 GB] full shuffled 2022: 101 entries, 0 rows in another band than the run's
+== pooled 2023
+[     78 s, peak  10.3 GB] pooled 2023: test matrix, 31,654,601 rows
+[    478 s, peak  10.3 GB] full model 2023: 121 entries, 0 rows in another band than the run's
+[    890 s, peak  10.3 GB] full shuffled 2023: 121 entries, 0 rows in another band than the run's
+== pooled 2024
+[     75 s, peak  10.5 GB] pooled 2024: test matrix, 31,942,228 rows
+[    511 s, peak  10.5 GB] full model 2024: 130 entries, 0 rows in another band than the run's
+[    976 s, peak  10.5 GB] full shuffled 2024: 130 entries, 0 rows in another band than the run's
+== pooled 2025
+[     78 s, peak  10.6 GB] pooled 2025: test matrix, 32,244,374 rows
+[    623 s, peak  10.6 GB] full model 2025: 150 entries, 0 rows in another band than the run's
+[   1134 s, peak  10.6 GB] full shuffled 2025: 150 entries, 0 rows in another band than the run's
+pooled 2023 exit 0
+pooled 2024 exit 0
+pooled 2025 exit 0
+pooled 2021 exit 0
+pairs 2025 exit 0
+pooled 2022 exit 0
+pairs 2024 exit 0
+pairs 2022 exit 0
+pairs 2023 exit 0
+pairs 2020 exit 0
+pairs 2021 exit 0
+pooled 2020 exit 0
+ended 2026-11-18 07:58:00 UTC
