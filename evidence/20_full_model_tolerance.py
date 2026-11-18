@@ -3,7 +3,7 @@
 The full models were fitted at scikit-learn's default tolerance, 1e-4, each fold starting from the
 previous fold's weights. The folds of 2020 and 2021 had been fitted first at 1e-5, plain and
 shuffled, 23 full entries in all, and were kept to measure the gap. For each of those folds this
-prints, over its full entries at tau = 0.5, the true positives, false positives and false
+prints, over its full entries at p_crit = 0.5, the true positives, false positives and false
 negatives, precision and recall, and the iterations, at both tolerances. Reads the scores in
 data/processed/train/ and data/processed/train_tol1e-5/. Run from the repository's root:
 

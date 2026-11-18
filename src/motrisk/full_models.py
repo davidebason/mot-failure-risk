@@ -30,7 +30,7 @@ leaves the fit as if they were not there, without copying the matrix. The entrie
 parallel by processes forked from the one that built the matrices, so they share them. Each
 process scores its entry on the test year with folds.tally; the checks are those of the small
 models: ones in the training years as counted from the rows, true positives plus false negatives
-as the baselines', the bands agreeing with the counts at tau.
+as the baselines', the bands agreeing with the counts at p_crit.
 """
 
 import argparse

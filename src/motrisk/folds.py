@@ -16,7 +16,7 @@
   target year and class, by a fixed hash, so that each entry keeps its ones in every year and
   the pairing of inputs and labels is broken. The same SQL serves both machines.
 - **Tally.** Every model's predictions, row by row or cell by cell, become the same counts: true
-  positives, false positives and false negatives at tau = 0.5, and the rows and ones in each
+  positives, false positives and false negatives at p_crit = 0.5, and the rows and ones in each
   band of probability 0.01 wide.
 """
 
@@ -39,7 +39,7 @@ TRAIN_DIRS = {"pairs": Path("data/processed/train"), "pooled": Path("data/proces
 LOOKUP = Path("data/parquet/lookup/item_detail.parquet")
 FIRST_YEAR = 2019
 TEST_YEARS = range(2020, 2026)
-TAU = 0.5
+P_CRIT = 0.5
 BANDS = 100
 # The small model's inputs: u, g, the four bands, and the bands crossed with u and with g alone.
 SMALL_INPUTS = 14
@@ -187,7 +187,7 @@ def rows_sql(year: int, shuffled: bool, rows: Path | None = None) -> str:
 
 
 def tally(p, rows, ones) -> tuple[int, int, int, np.ndarray, np.ndarray]:
-    """True positives, false positives, false negatives at TAU, and rows and ones per band.
+    """True positives, false positives, false negatives at P_CRIT, and rows and ones per band.
 
     p, rows and ones are arrays of the same length: a probability, and the rows that carry it and
     how many of them hold the entry; one row each when the model predicts row by row. Band b holds
@@ -196,7 +196,7 @@ def tally(p, rows, ones) -> tuple[int, int, int, np.ndarray, np.ndarray]:
     p = np.asarray(p, dtype=np.float64)
     rows = np.asarray(rows, dtype=np.int64)
     ones = np.asarray(ones, dtype=np.int64)
-    flagged = p >= TAU
+    flagged = p >= P_CRIT
     tp = int(ones[flagged].sum())
     fp = int((rows - ones)[flagged].sum())
     fn = int(ones[~flagged].sum())
@@ -211,12 +211,12 @@ def tally(p, rows, ones) -> tuple[int, int, int, np.ndarray, np.ndarray]:
 
 
 def check_tally(entry, tp, fp, fn, band_rows, band_ones, rows, ones) -> None:
-    """Stop unless the bands add up to the rows and ones scored and agree with the counts at TAU.
+    """Stop unless the bands add up to the rows and ones scored and agree with the counts at P_CRIT.
 
-    The bands from 0.50 hold exactly the rows flagged at TAU, true and false positives, and the
+    The bands from 0.50 hold exactly the rows flagged at P_CRIT, true and false positives, and the
     ones among them, the true positives.
     """
-    first = int(TAU * BANDS)
+    first = int(P_CRIT * BANDS)
     if (
         band_rows.sum() != rows
         or band_ones.sum() != ones
@@ -224,4 +224,4 @@ def check_tally(entry, tp, fp, fn, band_rows, band_ones, rows, ones) -> None:
         or band_rows[first:].sum() != tp + fp
         or band_ones[first:].sum() != tp
     ):
-        raise SystemExit(f"entry {entry}: the bands and the counts at tau disagree")
+        raise SystemExit(f"entry {entry}: the bands and the counts at p_crit disagree")

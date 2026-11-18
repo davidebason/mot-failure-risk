@@ -1,4 +1,4 @@
-"""The evaluation: counts at tau, the scores, beating a baseline, calibration and the map.
+"""The evaluation: counts at p_crit, the scores, beating a baseline, calibration and the map.
 
 The bands are invented, in the form the training run writes them: each entry's rows and ones per
 band of probability 0.01 wide.
@@ -31,7 +31,7 @@ ONE = {1: {5: (100, 2), 12: (50, 5), 24: (10, 1), 25: (10, 3), 30: (20, 6), 60: 
 
 
 @pytest.mark.parametrize(
-    "tau, expected",
+    "p_crit, expected",
     [
         # From 0.10: bands 12, 24, 25, 30 and 60.
         (0.1, (22, 78, 2)),
@@ -41,9 +41,9 @@ ONE = {1: {5: (100, 2), 12: (50, 5), 24: (10, 1), 25: (10, 3), 30: (20, 6), 60: 
         (0.5, (7, 3, 17)),
     ],
 )
-def test_counts_at_each_tau(tau, expected):
+def test_counts_at_each_p_crit(p_crit, expected):
     """Test 1: the counts at 0.1, 0.25 and 0.5 are those computed by hand."""
-    c = evaluate.counts_at(cells(ONE), tau)
+    c = evaluate.counts_at(cells(ONE), p_crit)
     assert tuple(int(c[k].iloc[0]) for k in ("tp", "fp", "fn")) == expected
 
 
@@ -132,7 +132,7 @@ def test_map_ignores_the_current_year():
 
 
 def test_money_saved():
-    """Two problems found, three checks for nothing, five left to the test, at tau 0.25: the
+    """Two problems found, three checks for nothing, five left to the test, at p_crit 0.25: the
     checks cost 5 t = 1.25 m and save 2 m, out of 7 m."""
     s = pd.Series({"tp": 2, "fp": 3, "fn": 5})
     assert evaluate.saved(s, 0.25) == pytest.approx(0.75 / 7)

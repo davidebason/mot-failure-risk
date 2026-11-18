@@ -1,17 +1,17 @@
 """Q1_NEXT_TEST: how well the models predict each slot's problems, against the two baselines.
 
-For every test year, 2020 to 2025, and tau = 0.1, 0.25 and 0.5, this writes to
+For every test year, 2020 to 2025, and p_crit = 0.1, 0.25 and 0.5, this writes to
 data/processed/evaluate/:
 
 - scores.csv: the model, Repeat and Most popular, pooled over every entry and per tier, with
   whether the model beats each baseline (a higher precision and a higher recall), and the share
-  of money each saves at tau = t/m;
+  of money each saves at p_crit = t/m;
 - shuffled.csv: the models retrained on shuffled labels, pooled, against Most popular, which
   they must not beat;
 - groups.csv: the model's counts per group of the defects, precision read only from 100 flags
   and recall only from 100 problems;
 - calibration.csv: the calibration curve pooled over every entry, per band of probability;
-- calibration_check.csv: the precision promised and delivered at each tau, whether the year is
+- calibration_check.csv: the precision promised and delivered at each p_crit, whether the year is
   off, and, when it is, from 2021, the scores after an isotonic map fitted on the previous year;
 - brier.csv: the Brier score of the model, the shuffled models and the base rate, pooled and per
   tier, the skill of each against the base rate, and, pooled, the score's terms.
@@ -19,7 +19,7 @@ data/processed/evaluate/:
 It reads the training run's results in data/processed/train/, with the fine bands that
 src/motrisk/rescore.py adds to them, the baselines' counts and the entry dictionary, and stops
 unless: every fold holds each entry once, with the same full entries in its two files; the bands
-at tau = 0.5 give each entry the counts the run wrote; the model and both baselines score the
+at p_crit = 0.5 give each entry the counts the run wrote; the model and both baselines score the
 same problems; the tiers and the groups add up to the pooled counts; the fine bands hold each
 entry's rows and ones as the run's bands do; and the base-rate entries score as the base rate.
 Run from the repository's root:
@@ -51,20 +51,21 @@ KINDS = ("model", "shuffled")
 SOURCES = ("model", "repeat", "most_popular")
 TIERS = ("full", "small", "base_rate")
 # Our prediction for 2025, written down before any score was computed, for each model:
-# tau: (precision low, high), (recall low, high).
+# p_crit: (precision low, high), (recall low, high).
 PREDICTIONS = {
     "pairs": {0.5: ((0.42, 0.58), (0.010, 0.020)), 0.1: ((0.18, 0.32), (0.13, 0.25))},
     "pooled": {0.5: ((0.44, 0.52), (0.022, 0.026)), 0.1: ((0.185, 0.21), (0.265, 0.295))},
 }
 # Our prediction of 2026-11-18, written down before any Brier score or the second model's money
-# saved was computed: the Brier skill in 2025, (low, high), and the money saved in 2025 at each tau.
+# saved was computed: the Brier skill in 2025, (low, high), and the money saved in 2025 at each
+# p_crit.
 PREDICTED_SKILL = {"pairs": (0.045, 0.08), "pooled": (0.045, 0.088)}
 PREDICTED_SAVED = {"pooled": {0.1: (0.122, 0.155), 0.25: (0.025, 0.035), 0.5: (-0.003, 0.001)}}
 # The rule, fixed on 2026-11-18 before either was computed: the second model is better than the
 # first only if, in every test year, its Brier skill is higher, its money saved is higher at each
-# of RULE_TAUS, and its shuffled-label check passes. Otherwise the first is kept. At 0.5 neither
+# of RULE_P_CRITS, and its shuffled-label check passes. Otherwise the first is kept. At 0.5 neither
 # model saves money, so the two differ there by noise; it is reported, not compared.
-RULE_TAUS = (0.1, 0.25)
+RULE_P_CRITS = (0.1, 0.25)
 
 
 def entries() -> set[int]:
@@ -73,7 +74,7 @@ def entries() -> set[int]:
 
 
 def read_fold(kind: str, year: int, train: Path) -> tuple[pd.DataFrame, ...]:
-    """A fold's cells, its fine bands, and every entry's tier and the counts at tau = 0.5 the run
+    """A fold's cells, its fine bands, and every entry's tier and the counts at p_crit = 0.5 the run
     wrote."""
     small = [pd.read_csv(train / f"small_{kind}_{year}_{s}.csv") for s in ("scores", "bands")]
     full = [pd.read_csv(train / f"full_{kind}_{year}_{s}.csv") for s in ("scores", "bands")]
@@ -94,7 +95,7 @@ def check_fold(kind, year, cells, fine, written, baseline, every) -> None:
     problems, and the fine bands hold the rows and ones of the run's bands."""
     if set(written.index) != every or len(written) != len(every):
         raise SystemExit(f"{kind} {year}: the fold does not hold each entry once")
-    at_half = evaluate.counts_at(cells, folds.TAU).set_index("entry")[["tp", "fp", "fn"]]
+    at_half = evaluate.counts_at(cells, folds.P_CRIT).set_index("entry")[["tp", "fp", "fn"]]
     at_half = at_half.reindex(written.index, fill_value=0)
     if not at_half.equals(written[["tp", "fp", "fn"]]):
         raise SystemExit(f"{kind} {year}: the bands at 0.5 do not give the run's counts")
@@ -143,22 +144,22 @@ def main(encoding: str = "pairs") -> None:
             for t in TIERS:
                 b_score[name, t] = evaluate.score(b[b["tier"] == t])
 
-        for tau in evaluate.TAUS:
-            counts = evaluate.counts_at(cells["model"], tau)
+        for p_crit in evaluate.P_CRITS:
+            counts = evaluate.counts_at(cells["model"], p_crit)
             pooled = evaluate.score(counts)
             parts = sum(
                 evaluate.score(counts[counts["tier"] == t])[["tp", "fp", "fn"]] for t in TIERS
             )
-            add(counts, parts, f"{year} {tau}: the tiers")
+            add(counts, parts, f"{year} {p_crit}: the tiers")
             for scope in ("pooled", *TIERS):
                 s = pooled if scope == "pooled" else evaluate.score(counts[counts["tier"] == scope])
-                row = {"test_year": year, "tau": tau, "scope": scope}
+                row = {"test_year": year, "p_crit": p_crit, "scope": scope}
                 scores.append(
                     {
                         **row,
                         "source": "model",
                         **s.drop("promised"),
-                        "saved": evaluate.saved(s, tau),
+                        "saved": evaluate.saved(s, p_crit),
                         "beats_repeat": evaluate.beats(s, b_score["repeat", scope]),
                         "beats_most_popular": evaluate.beats(s, b_score["most_popular", scope]),
                     }
@@ -170,21 +171,21 @@ def main(encoding: str = "pairs") -> None:
                             **row,
                             "source": name,
                             **b.drop("promised"),
-                            "saved": evaluate.saved(b, tau),
+                            "saved": evaluate.saved(b, p_crit),
                         }
                     )
 
             g = evaluate.by_group(counts, groups)
-            add(counts, g[["tp", "fp", "fn"]].sum(), f"{year} {tau}: the groups")
+            add(counts, g[["tp", "fp", "fn"]].sum(), f"{year} {p_crit}: the groups")
             g.insert(1, "group_path", g["group_id"].map(paths))
-            by_group.append(g.assign(test_year=year, tau=tau))
+            by_group.append(g.assign(test_year=year, p_crit=p_crit))
 
-            sh = evaluate.score(evaluate.counts_at(cells["shuffled"], tau))
+            sh = evaluate.score(evaluate.counts_at(cells["shuffled"], p_crit))
             mp = b_score["most_popular", "pooled"]
             shuffled.append(
                 {
                     "test_year": year,
-                    "tau": tau,
+                    "p_crit": p_crit,
                     **sh.drop("promised"),
                     **{f"most_popular_{k}": v for k, v in mp.drop("promised").items()},
                     "passes": not evaluate.beats(sh, mp),
@@ -193,7 +194,7 @@ def main(encoding: str = "pairs") -> None:
 
             check = {
                 "test_year": year,
-                "tau": tau,
+                "p_crit": p_crit,
                 "promised": pooled["promised"],
                 "delivered": pooled["precision"],
             }
@@ -203,7 +204,7 @@ def main(encoding: str = "pairs") -> None:
                 if check["off"] and previous is not None:
                     mapping = evaluate.isotonic_map(previous)
                     after = evaluate.score(
-                        evaluate.counts_at(evaluate.remap(cells["model"], mapping), tau)
+                        evaluate.counts_at(evaluate.remap(cells["model"], mapping), p_crit)
                     )
                     check.update({f"after_{k}": v for k, v in after.items()})
             checks.append(check)
@@ -220,7 +221,7 @@ def main(encoding: str = "pairs") -> None:
         "calibration_check": pd.DataFrame(checks),
         "brier": pd.DataFrame(briers),
     }
-    first = {"groups": ["test_year", "tau"], "calibration": ["test_year"]}
+    first = {"groups": ["test_year", "p_crit"], "calibration": ["test_year"]}
     for name, t in tables.items():
         lead = first.get(name, [])
         t = t[lead + [c for c in t.columns if c not in lead]]
@@ -288,9 +289,11 @@ def compare() -> None:
             value[k, "skill"] = float(pooled.loc[pooled["source"] == "model", "skill"].iloc[0])
             s = t["scores"]
             s = s[(s["test_year"] == year) & (s["scope"] == "pooled") & (s["source"] == "model")]
-            for tau in RULE_TAUS:
-                value[k, f"saved at {tau}"] = float(s.loc[s["tau"] == tau, "saved"].iloc[0])
-        for measure in ["skill", *(f"saved at {tau}" for tau in RULE_TAUS)]:
+            for p_crit in RULE_P_CRITS:
+                value[k, f"saved at {p_crit}"] = float(
+                    s.loc[s["p_crit"] == p_crit, "saved"].iloc[0]
+                )
+        for measure in ["skill", *(f"saved at {p_crit}" for p_crit in RULE_P_CRITS)]:
             first, second = value["pairs", measure], value["pooled", measure]
             rows.append(
                 {
@@ -318,30 +321,31 @@ def compare() -> None:
 def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
     """The pooled scores, the shuffled check and calibration per year, then 2025 beside the
     prediction."""
-    s = t["scores"][t["scores"]["scope"] == "pooled"].set_index(["test_year", "tau", "source"])
-    sh = t["shuffled"].set_index(["test_year", "tau"])
-    ch = t["calibration_check"].set_index(["test_year", "tau"])
+    s = t["scores"][t["scores"]["scope"] == "pooled"].set_index(["test_year", "p_crit", "source"])
+    sh = t["shuffled"].set_index(["test_year", "p_crit"])
+    ch = t["calibration_check"].set_index(["test_year", "p_crit"])
     print("pooled, precision / recall; beats Repeat, Most popular; shuffled passes; off")
     for year in folds.TEST_YEARS:
-        for tau in evaluate.TAUS:
-            m = s.loc[year, tau, "model"]
-            r = s.loc[year, tau, "repeat"]
-            p = s.loc[year, tau, "most_popular"]
+        for p_crit in evaluate.P_CRITS:
+            m = s.loc[year, p_crit, "model"]
+            r = s.loc[year, p_crit, "repeat"]
+            p = s.loc[year, p_crit, "most_popular"]
             print(
-                f"{year} {tau:4}: model {pct(m['precision'])} {pct(m['recall'])}  "
+                f"{year} {p_crit:4}: model {pct(m['precision'])} {pct(m['recall'])}  "
                 f"repeat {pct(r['precision'])} {pct(r['recall'])}  "
                 f"most popular {pct(p['precision'])} {pct(p['recall'])}  "
                 f"{'Y' if m['beats_repeat'] else 'n'}{'Y' if m['beats_most_popular'] else 'n'}  "
-                f"shuffled {'passes' if sh.loc[year, tau]['passes'] else 'FAILS'}  "
-                f"off {ch.loc[year, tau].get('off', '-')}"
+                f"shuffled {'passes' if sh.loc[year, p_crit]['passes'] else 'FAILS'}  "
+                f"off {ch.loc[year, p_crit].get('off', '-')}"
             )
-    print("money saved at tau = t/m: model, Repeat, Most popular")
+    print("money saved at p_crit = t/m: model, Repeat, Most popular")
     for year in folds.TEST_YEARS:
         print(
             f"{year}: "
             + "  ".join(
-                f"tau {tau}: " + " ".join(pct(s.loc[year, tau, src]["saved"]) for src in SOURCES)
-                for tau in evaluate.TAUS
+                f"p_crit {p_crit}: "
+                + " ".join(pct(s.loc[year, p_crit, src]["saved"]) for src in SOURCES)
+                for p_crit in evaluate.P_CRITS
             )
         )
     b = t["brier"].set_index(["test_year", "scope", "source"])
@@ -357,13 +361,14 @@ def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
     lo, hi = PREDICTED_SKILL[encoding]
     m = b.loc[2025, "pooled", "model"]
     print(f"  Brier skill {m['skill']:+.4f}, predicted {lo:+.4f} to {hi:+.4f}")
-    for tau, (lo, hi) in PREDICTED_SAVED.get(encoding, {}).items():
-        saved = s.loc[2025, tau, "model"]["saved"]
-        print(f"  money saved at tau {tau}: {pct(saved)}, predicted {pct(lo)} to {pct(hi)}")
-    for tau, ((p_lo, p_hi), (r_lo, r_hi)) in PREDICTIONS[encoding].items():
-        m = s.loc[2025, tau, "model"]
+    for p_crit, (lo, hi) in PREDICTED_SAVED.get(encoding, {}).items():
+        saved = s.loc[2025, p_crit, "model"]["saved"]
+        print(f"  money saved at p_crit {p_crit}: {pct(saved)}, predicted {pct(lo)} to {pct(hi)}")
+    for p_crit, ((p_lo, p_hi), (r_lo, r_hi)) in PREDICTIONS[encoding].items():
+        m = s.loc[2025, p_crit, "model"]
         print(
-            f"  tau {tau}: precision {pct(m['precision'])}, predicted {pct(p_lo)} to {pct(p_hi)}; "
+            f"  p_crit {p_crit}: precision {pct(m['precision'])}, "
+            f"predicted {pct(p_lo)} to {pct(p_hi)}; "
             f"recall {pct(m['recall'])}, predicted {pct(r_lo)} to {pct(r_hi)}"
         )
 

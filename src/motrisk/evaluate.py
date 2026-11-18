@@ -1,22 +1,22 @@
-"""The evaluation: scores at any tau from the bands, against the baselines, and calibration.
+"""The evaluation: scores at any p_crit from the bands, against the baselines, and calibration.
 
 Every model's results are kept as each entry's rows and ones in bands of probability 0.01 wide,
-band b holding the probabilities from b/100 to (b + 1)/100 (folds.tally). At a cut-off tau that
-is a multiple of 0.01, the cells flagged are exactly those of the bands from 100 tau, so the true
+band b holding the probabilities from b/100 to (b + 1)/100 (folds.tally). At a cut-off p_crit that
+is a multiple of 0.01, the cells flagged are exactly those of the bands from 100 p_crit, so the true
 positives, false positives and false negatives follow exactly. The probability a band promises is
 taken as its midpoint, (b + 0.5)/100, which is within 0.5 points of the cells' own mean, the
-author's decision of 2026-11-16; the midpoint also flags exactly the bands from 100 tau, since
-(b + 0.5)/100 >= tau when and only when b >= 100 tau.
+author's decision of 2026-11-16; the midpoint also flags exactly the bands from 100 p_crit, since
+(b + 0.5)/100 >= p_crit when and only when b >= 100 p_crit.
 
-- **Beating a baseline** means a higher precision and a higher recall at the same tau.
-- **A test year is off** when, at a tau, the precision delivered differs from the precision
+- **Beating a baseline** means a higher precision and a higher recall at the same p_crit.
+- **A test year is off** when, at a p_crit, the precision delivered differs from the precision
   promised, the mean probability of the cells flagged, by more than 5 points or 10% of the
   promised value, whichever is larger.
 - **The step if off** is an isotonic map fitted on the previous test year's bands, pooled over
   every entry and weighted by rows, and applied to the year's bands.
-- **The money saved**, at tau = t/m, is the share of what leaving every problem to the test costs
+- **The money saved**, at p_crit = t/m, is the share of what leaving every problem to the test costs
   that checking the flags saves: (m TP - t (TP + FP)) / (m (TP + FN)), which is
-  recall (1 - tau / precision), the author's decision of 2026-11-17.
+  recall (1 - p_crit / precision), the author's decision of 2026-11-17.
 - **The Brier score** is the mean of (p - y)^2 over every cell, an entry on a test row of its
   classes, computed exactly from the sums the test years were scored again for (rescore.py); its
   **skill** is 1 - BS / BS of the base rate, each entry at its share of ones in the training rows,
@@ -34,7 +34,7 @@ from sklearn.isotonic import IsotonicRegression
 
 from motrisk import folds, rescore
 
-TAUS = (0.1, 0.25, 0.5)
+P_CRITS = (0.1, 0.25, 0.5)
 # Precision is read for a group only from this many flags, recall only from this many problems.
 MIN_FLAGS = 100
 MIN_PROBLEMS = 100
@@ -67,10 +67,10 @@ def fold_cells(small_scores, small_bands, full_scores, full_bands) -> pd.DataFra
     return cells[["entry", "tier", "band", "p", "rows", "ones"]].reset_index(drop=True)
 
 
-def counts_at(cells: pd.DataFrame, tau: float) -> pd.DataFrame:
-    """Each entry's counts at tau: entry, tier, tp, fp, fn, and promised, the sum of p over the
+def counts_at(cells: pd.DataFrame, p_crit: float) -> pd.DataFrame:
+    """Each entry's counts at p_crit: entry, tier, tp, fp, fn, and promised, the sum of p over the
     cells flagged, so that promised / (tp + fp) is the mean probability of the flags."""
-    flagged = cells["p"] >= tau
+    flagged = cells["p"] >= p_crit
     c = cells.assign(
         tp=np.where(flagged, cells["ones"], 0),
         fp=np.where(flagged, cells["rows"] - cells["ones"], 0),
@@ -155,12 +155,12 @@ def remap(cells: pd.DataFrame, mapping: IsotonicRegression) -> pd.DataFrame:
     return cells.assign(p=mapping.predict(cells["p"]))
 
 
-def saved(s: pd.Series, tau: float) -> float:
+def saved(s: pd.Series, p_crit: float) -> float:
     """The share of the cost of leaving every problem to the test that checking the flags saves,
-    at tau = t/m: (TP - tau (TP + FP)) / (TP + FN). 0 when nothing is flagged; negative when the
-    checks cost more than the problems they find; empty when there is no problem."""
+    at p_crit = t/m: (TP - p_crit (TP + FP)) / (TP + FN). 0 when nothing is flagged; negative
+    when the checks cost more than the problems they find; empty when there is no problem."""
     problems = s["tp"] + s["fn"]
-    return (s["tp"] - tau * (s["tp"] + s["fp"])) / problems if problems else np.nan
+    return (s["tp"] - p_crit * (s["tp"] + s["fp"])) / problems if problems else np.nan
 
 
 def fine_cells(small_fine, full_fine, tiers: pd.Series) -> pd.DataFrame:

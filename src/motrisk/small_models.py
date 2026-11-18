@@ -194,7 +194,7 @@ def fit_fold(con, test_year: int, shuffled: bool, encoding: str = "pairs") -> No
 
     Checks, before writing: each entry's ones in the training years are those counted from the
     rows by baselines.label_ones, which a shuffle must keep; in the test year, every entry's true
-    positives plus false negatives are the baselines'; the bands agree with the counts at tau.
+    positives plus false negatives are the baselines'; the bands agree with the counts at p_crit.
     """
     started = time.perf_counter()
     years = folds.training_years(test_year)
