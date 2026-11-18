@@ -29,6 +29,8 @@ Run from the repository's root:
 
 The second model, with make and model pooled (folds.pair_columns), is read from
 data/processed/train_pooled/ and written to data/processed/evaluate_pooled/, beside the first.
+Scored after the first, it is then compared with it under the rule fixed before either was
+scored, in compare.csv.
 """
 
 import argparse
@@ -54,6 +56,15 @@ PREDICTIONS = {
     "pairs": {0.5: ((0.42, 0.58), (0.010, 0.020)), 0.1: ((0.18, 0.32), (0.13, 0.25))},
     "pooled": {0.5: ((0.44, 0.52), (0.022, 0.026)), 0.1: ((0.185, 0.21), (0.265, 0.295))},
 }
+# Our prediction of 2026-11-18, written down before any Brier score or the second model's money
+# saved was computed: the Brier skill in 2025, (low, high), and the money saved in 2025 at each tau.
+PREDICTED_SKILL = {"pairs": (0.045, 0.08), "pooled": (0.045, 0.088)}
+PREDICTED_SAVED = {"pooled": {0.1: (0.122, 0.155), 0.25: (0.025, 0.035), 0.5: (-0.003, 0.001)}}
+# The rule, fixed on 2026-11-18 before either was computed: the second model is better than the
+# first only if, in every test year, its Brier skill is higher, its money saved is higher at each
+# of RULE_TAUS, and its shuffled-label check passes. Otherwise the first is kept. At 0.5 neither
+# model saves money, so the two differ there by noise; it is reported, not compared.
+RULE_TAUS = (0.1, 0.25)
 
 
 def entries() -> set[int]:
@@ -214,7 +225,9 @@ def main(encoding: str = "pairs") -> None:
         lead = first.get(name, [])
         t = t[lead + [c for c in t.columns if c not in lead]]
         t.to_csv(out / f"{name}.csv", index=False, lineterminator="\n")
-    summary(tables, PREDICTIONS[encoding])
+    summary(tables, encoding)
+    if encoding == "pooled":
+        compare()
 
 
 def in_scope(c: pd.DataFrame, scope: str) -> pd.DataFrame:
@@ -256,7 +269,53 @@ def pct(x) -> str:
     return "   -   " if pd.isna(x) else f"{100 * x:6.2f}%"
 
 
-def summary(t: dict[str, pd.DataFrame], prediction: dict) -> None:
+def compare() -> None:
+    """The second model against the first, year by year, under the rule; writes compare.csv
+    beside the second model's results and prints the verdict."""
+    read = {
+        k: {n: pd.read_csv(OUT_DIRS[k] / f"{n}.csv") for n in ("scores", "brier", "shuffled")}
+        for k in ("pairs", "pooled")
+        if (OUT_DIRS[k] / "brier.csv").exists()
+    }
+    if len(read) < 2:
+        raise SystemExit("score the first model with this version before comparing")
+    rows = []
+    for year in folds.TEST_YEARS:
+        value = {}
+        for k, t in read.items():
+            b = t["brier"]
+            pooled = b[(b["test_year"] == year) & (b["scope"] == "pooled")]
+            value[k, "skill"] = float(pooled.loc[pooled["source"] == "model", "skill"].iloc[0])
+            s = t["scores"]
+            s = s[(s["test_year"] == year) & (s["scope"] == "pooled") & (s["source"] == "model")]
+            for tau in RULE_TAUS:
+                value[k, f"saved at {tau}"] = float(s.loc[s["tau"] == tau, "saved"].iloc[0])
+        for measure in ["skill", *(f"saved at {tau}" for tau in RULE_TAUS)]:
+            first, second = value["pairs", measure], value["pooled", measure]
+            rows.append(
+                {
+                    "test_year": year,
+                    "measure": measure,
+                    "first": first,
+                    "second": second,
+                    "second_leads": second > first,
+                }
+            )
+        sh = read["pooled"]["shuffled"]
+        passes = bool(sh.loc[sh["test_year"] == year, "passes"].all())
+        rows.append({"test_year": year, "measure": "shuffled check", "second_leads": passes})
+    t = pd.DataFrame(rows)
+    t.to_csv(OUT_DIRS["pooled"] / "compare.csv", index=False, lineterminator="\n")
+    print("the second model against the first: where it does not lead")
+    print(t[~t["second_leads"]].to_string(index=False) if not t["second_leads"].all() else "  none")
+    better = bool(t["second_leads"].all())
+    print(
+        f"verdict: the second model is {'better' if better else 'not better'}; "
+        f"{'it replaces the first' if better else 'the first is kept'}"
+    )
+
+
+def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
     """The pooled scores, the shuffled check and calibration per year, then 2025 beside the
     prediction."""
     s = t["scores"][t["scores"]["scope"] == "pooled"].set_index(["test_year", "tau", "source"])
@@ -295,7 +354,13 @@ def summary(t: dict[str, pd.DataFrame], prediction: dict) -> None:
             f"resolution {m['resolution']:.2e}, uncertainty {m['uncertainty']:.2e}"
         )
     print("2025 beside the prediction written down before any score was computed:")
-    for tau, ((p_lo, p_hi), (r_lo, r_hi)) in prediction.items():
+    lo, hi = PREDICTED_SKILL[encoding]
+    m = b.loc[2025, "pooled", "model"]
+    print(f"  Brier skill {m['skill']:+.4f}, predicted {lo:+.4f} to {hi:+.4f}")
+    for tau, (lo, hi) in PREDICTED_SAVED.get(encoding, {}).items():
+        saved = s.loc[2025, tau, "model"]["saved"]
+        print(f"  money saved at tau {tau}: {pct(saved)}, predicted {pct(lo)} to {pct(hi)}")
+    for tau, ((p_lo, p_hi), (r_lo, r_hi)) in PREDICTIONS[encoding].items():
         m = s.loc[2025, tau, "model"]
         print(
             f"  tau {tau}: precision {pct(m['precision'])}, predicted {pct(p_lo)} to {pct(p_hi)}; "
