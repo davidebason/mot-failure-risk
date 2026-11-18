@@ -383,6 +383,8 @@ The full models' run with the gap as a straight line, superseded on 13 November,
 
 The second model's small and base-rate models were fitted on 17 November 2026 in 17 minutes, every fold, plain and shuffled, passing its checks, as its record [`data/small_models_pooled_run_2026-11-17.log`](data/small_models_pooled_run_2026-11-17.log) shows; they read no make or model, so only which entries they cover changes. Their results are in `data/processed/train_pooled/small_*`.
 
+**The second model's full run** started on 17 November 2026 at 13:44 UTC, three fits at a time in the folds of 2020 to 2022 and two after, and ended on 18 November at 05:01 UTC, every fold, plain and shuffled, passing its checks, 1,190 fits in all, with a peak of 30.2 GB of the machine's 32. Its record is [`data/full_models_pooled_run_2026-11-17.log`](data/full_models_pooled_run_2026-11-17.log) and [`data/full_memory_pooled_run_2026-11-17.log`](data/full_memory_pooled_run_2026-11-17.log); its scores and bands are in `data/processed/train_pooled/full_*`.
+
 **We do not over-sample the rare problems, with SMOTE or otherwise**, the decision of 17 November 2026, because:
 - in a logistic regression, adding positive rows moves mainly the intercept, raising every probability, while the weights that rank one vehicle above another stay nearly the same (King and Zeng, 2001);
 - calibration would then bring the probabilities back down to their true, small values, so the model would end where it started;
