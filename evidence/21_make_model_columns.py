@@ -8,7 +8,7 @@ many, and every other pair shares one last column. This prints:
 - for the fold of 2025, trained on the target years 2019 to 2024: the pairs, the rows each has,
   and the share of the training rows in each kind of column of the second model;
 - the first model's make-and-model weights in the fold of 2025 that are under 0.01 in absolute
-  value, from its weights in data/processed/train/, which stay on the author's computer;
+  value, from its weights in data/processed/train/, which stay on our computer;
 - for every fold and both encodings: d, the ones an entry needs for the full model, 10(d + 1),
   the entries that have them, and their share of the ones of the training rows, counted on rows
   of each entry's classes as the models count them.

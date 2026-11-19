@@ -28,7 +28,7 @@ ROWS = Path("data/training_rows")
 # How make and model enter the full model. "pairs": one column per make-and-model pair found in
 # the fold's training rows, the first run. "pooled": a column only for a pair with at least
 # POOL_MIN_ROWS training rows; the rarer pairs of a make share one column, when they add up to as
-# many rows, and every other pair shares one more. The author's comparison of 2026-11-17.
+# many rows, and every other pair shares one more (DATA.md, "The second model").
 ENCODINGS = ("pairs", "pooled")
 POOL_MIN_ROWS = 10_000
 # The model name of a make's shared column, and the make and model of the last shared column;
@@ -44,7 +44,7 @@ BANDS = 100
 # The small model's inputs: u, g, the four bands, and the bands crossed with u and with g alone.
 SMALL_INPUTS = 14
 NUMBERS = ["test_mileage", "age_years", "cylinder_capacity"]
-# The gap's band edges in days, the author's of 2026-11-13; band 1, about a year, is the reference.
+# The gap's band edges in days; band 1, about a year, is the reference.
 BAND_EDGES = (300, 431, 731, 1096)
 BANDS_KEPT = (0, 2, 3, 4)
 # scikit-learn divides the loss by the rows' total weight, so its default tolerance stops a fit

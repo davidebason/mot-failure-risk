@@ -1,0 +1,21 @@
+started 2026-11-18 16:26:50 UTC
+file                                           bytes  landed (UTC)         size  sha256  address
+dft_test_item_2018.zip                   383,516,863  2026-11-07 10:41:09  ok    ok    ok  
+dft_test_result_2022.zip               1,164,809,596  2026-11-07 10:43:26  ok    ok    ok  
+dft_test_item_2022.zip                   435,454,025  2026-11-07 10:51:25  ok    ok    ok  
+dft_test_result_2023.zip               1,192,881,905  2026-11-07 10:44:21  ok    ok    ok  
+dft_test_item_2023.zip                   460,112,607  2026-11-07 10:51:46  ok    ok    ok  
+dft_test_result_extracts_2024.zip      4,797,842,352  2026-11-07 10:47:44  ok    ok    ok  
+dft_test_item_extracts_2024.zip        4,329,520,730  2026-11-07 10:54:28  ok    ok    ok  
+dft_test_result_extracts_2025.zip      4,835,709,507  2026-11-07 10:51:06  ok    ok    ok  
+dft_test_item_extracts_2025.zip        4,359,554,510  2026-11-07 10:57:12  ok    ok    ok  
+dft_test_result_2018.zip               1,097,766,184  2026-11-07 10:37:52  ok    ok    ok  
+dft_test_result_2019.zip               1,114,491,154  2026-11-07 10:38:51  ok    ok    ok  
+dft_test_item_2019.zip                   412,100,977  2026-11-07 10:41:33  ok    ok    ok  
+dft_test_result_2020.zip               1,078,756,519  2026-11-07 10:39:45  ok    ok    ok  
+dft_test_item_2020.zip                   384,685,539  2026-11-07 10:41:52  ok    ok    ok  
+dft_test_result_2021.zip               1,245,550,103  2026-11-07 10:40:45  ok    ok    ok  
+dft_test_item_2021.zip                   630,748,090  2026-11-07 10:42:32  ok    ok    ok  
+lookup.zip                                   254,053  2026-11-07 10:57:13  ok    ok    ok  
+files logged: 17, files held: 17, problems: 0
+exit 0

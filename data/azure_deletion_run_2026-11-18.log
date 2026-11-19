@@ -1,0 +1,23 @@
+listed 2026-11-18 16:36:32 UTC
+== rg-mot-failure-risk
+stmotrisk	Microsoft.Storage/storageAccounts	northeurope
+vm-motriskNSG	Microsoft.Network/networkSecurityGroups	swedencentral
+vm-motriskPublicIP	Microsoft.Network/publicIPAddresses	swedencentral
+vm-motriskVNET	Microsoft.Network/virtualNetworks	swedencentral
+vm-motriskVMNic	Microsoft.Network/networkInterfaces	swedencentral
+vm-motrisk	Microsoft.Compute/virtualMachines	swedencentral
+vm-motrisk_OsDisk_1_72d81eef5e9442d08778764bf6e78763	Microsoft.Compute/disks	swedencentral
+log-motrisk	Microsoft.OperationalInsights/workspaces	northeurope
+ASP-rgmotfailurerisk-0356	Microsoft.Web/serverFarms	northeurope
+func-motrisk	Microsoft.Web/sites	northeurope
+func-motrisk	Microsoft.Insights/components	northeurope
+Application Insights Smart Detection	microsoft.insights/actiongroups	global
+== NetworkWatcherRG
+NetworkWatcher_swedencentral	Microsoft.Network/networkWatchers	swedencentral
+deleting rg-mot-failure-risk 2026-11-18 16:36:42 UTC
+exit 0
+deleting NetworkWatcherRG 2026-11-18 16:39:53 UTC
+exit 0
+rg-mot-failure-risk exists: false
+NetworkWatcherRG exists: false
+ended 2026-11-18 16:41:20 UTC

@@ -1,0 +1,70 @@
+started 2026-11-19 13:45:36 UTC
+pooled, precision / recall; beats Repeat, Most popular; shuffled passes; off
+2020  0.1: model  18.35%  23.09%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  YY  shuffled passes  off False
+2020 0.25: model  31.31%   6.53%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off False
+2020  0.5: model  43.77%   0.87%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off True
+2021  0.1: model  18.81%  23.65%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  YY  shuffled passes  off False
+2021 0.25: model  32.05%   7.47%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  nn  shuffled passes  off False
+2021  0.5: model  43.78%   1.21%  repeat  16.89%  14.73%  most popular  17.22%   9.33%  nn  shuffled passes  off True
+2022  0.1: model  18.72%  24.41%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  YY  shuffled passes  off False
+2022 0.25: model  32.30%   8.45%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  nn  shuffled passes  off False
+2022  0.5: model  44.53%   1.64%  repeat  17.65%  15.47%  most popular  16.28%   8.78%  nn  shuffled passes  off True
+2023  0.1: model  18.87%  25.21%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  YY  shuffled passes  off False
+2023 0.25: model  32.83%   9.16%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  nY  shuffled passes  off False
+2023  0.5: model  45.18%   1.94%  repeat  18.24%  16.13%  most popular  15.99%   8.57%  nn  shuffled passes  off True
+2024  0.1: model  19.22%  25.93%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  YY  shuffled passes  off False
+2024 0.25: model  33.55%   9.59%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  nY  shuffled passes  off False
+2024  0.5: model  45.72%   2.15%  repeat  18.86%  16.57%  most popular  16.47%   8.63%  nn  shuffled passes  off True
+2025  0.1: model  19.30%  27.12%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nY  shuffled passes  off False
+2025 0.25: model  34.19%  10.53%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nY  shuffled passes  off False
+2025  0.5: model  46.77%   2.52%  repeat  19.64%  17.67%  most popular  16.14%   8.46%  nn  shuffled passes  off True
+money saved at p_crit = t/m: model, Repeat, Most popular
+2020: p_crit 0.1:  10.50%   4.99%   4.26%  p_crit 0.25:   1.32%  -8.22%  -3.98%  p_crit 0.5:  -0.12% -30.25% -17.71%
+2021: p_crit 0.1:  11.08%   6.01%   3.91%  p_crit 0.25:   1.64%  -7.07%  -4.22%  p_crit 0.5:  -0.17% -28.87% -17.76%
+2022: p_crit 0.1:  11.37%   6.71%   3.39%  p_crit 0.25:   1.91%  -6.44%  -4.70%  p_crit 0.5:  -0.20% -28.36% -18.19%
+2023: p_crit 0.1:  11.85%   7.28%   3.21%  p_crit 0.25:   2.19%  -5.98%  -4.82%  p_crit 0.5:  -0.21% -28.08% -18.22%
+2024: p_crit 0.1:  12.44%   7.79%   3.39%  p_crit 0.25:   2.44%  -5.39%  -4.46%  p_crit 0.5:  -0.20% -27.35% -17.55%
+2025: p_crit 0.1:  13.07%   8.67%   3.22%  p_crit 0.25:   2.83%  -4.83%  -4.64%  p_crit 0.5:  -0.17% -27.32% -17.75%
+Brier skill against the base rate, pooled: model, shuffled; the model's terms
+2020: model +0.0296  shuffled +0.0002  BS 4.720e-04, reliability 4.41e-07, resolution 3.35e-05, uncertainty 5.05e-04
+2021: model +0.0351  shuffled +0.0003  BS 4.752e-04, reliability 6.46e-07, resolution 3.67e-05, uncertainty 5.11e-04
+2022: model +0.0384  shuffled +0.0004  BS 4.761e-04, reliability 8.01e-07, resolution 3.83e-05, uncertainty 5.14e-04
+2023: model +0.0410  shuffled +0.0004  BS 4.779e-04, reliability 8.73e-07, resolution 4.02e-05, uncertainty 5.17e-04
+2024: model +0.0428  shuffled +0.0003  BS 4.876e-04, reliability 9.33e-07, resolution 4.27e-05, uncertainty 5.29e-04
+2025: model +0.0466  shuffled +0.0003  BS 4.849e-04, reliability 9.07e-07, resolution 4.46e-05, uncertainty 5.29e-04
+groups in 2025 at p_crit 0.1: 452 with problems; money saved read for 184,  98.07% of the problems, 169 saving money; 191 with 100 problems or more never flagged,   1.81% of the problems
+  saves the most: Noise, emissions and leaks > Fluid leaks > Engine oil leaks, 1,772,120 problems, precision  28.55%, recall  51.98%, saved  33.77%
+  saves the most: Brakes > Rigid brake pipes, 1,541,267 problems, precision  24.13%, recall  56.46%, saved  33.06%
+  saves the most: Tyres > Tread depth, 6,514,159 problems, precision  17.00%, recall  75.56%, saved  31.10%
+  saves the least: Brakes > Brake performance > Parking brake performance > Rbt > Parking brake performance, 163,691 problems, precision   7.40%, recall   4.86%, saved  -1.71%
+  saves the least: Brakes > Brake performance > Service Brake Efficiency (sp) > Rbt (sp) > Service brake imbalance, 100,551 problems, precision   5.46%, recall   1.65%, saved  -1.37%
+  saves the least: Noise, emissions and leaks > Exhaust emissions > Spark ignition > Emissions not tested, 91,294 problems, precision   5.38%, recall   1.15%, saved  -0.99%
+  example, Brakes > Rigid brake pipes: money saved at p_crit 0.1:  33.06%, p_crit 0.25:  16.28%, p_crit 0.5:   1.68%
+  example, Tyres > Tread depth: money saved at p_crit 0.1:  31.10%, p_crit 0.25:   0.71%, p_crit 0.5:  -0.03%
+2025 beside the prediction written down before any score was computed:
+  Brier skill +0.0466, predicted +0.0450 to +0.0880
+  money saved at p_crit 0.1:  13.07%, predicted  12.20% to  15.50%
+  money saved at p_crit 0.25:   2.83%, predicted   2.50% to   3.50%
+  money saved at p_crit 0.5:  -0.17%, predicted  -0.30% to   0.10%
+  p_crit 0.5: precision  46.77%, predicted  44.00% to  52.00%; recall   2.52%, predicted   2.20% to   2.60%
+  p_crit 0.1: precision  19.30%, predicted  18.50% to  21.00%; recall  27.12%, predicted  26.50% to  29.50%
+the second model against the first: where it does not lead
+ test_year       measure    first   second  second_leads
+      2020  saved at 0.1 0.106230 0.105012         False
+      2020 saved at 0.25 0.013683 0.013156         False
+      2021  saved at 0.1 0.112253 0.110794         False
+      2021 saved at 0.25 0.017948 0.016425         False
+      2022  saved at 0.1 0.115236 0.113708         False
+      2022 saved at 0.25 0.020607 0.019081         False
+      2023         skill 0.041067 0.041000         False
+      2023  saved at 0.1 0.120352 0.118531         False
+      2023 saved at 0.25 0.022557 0.021851         False
+      2024         skill 0.043218 0.042762         False
+      2024  saved at 0.1 0.126143 0.124357         False
+      2024 saved at 0.25 0.025169 0.024450         False
+      2025         skill 0.046856 0.046619         False
+      2025  saved at 0.1 0.131778 0.130651         False
+      2025 saved at 0.25 0.028657 0.028307         False
+verdict: the second model is not better; the first is kept
+exit 0
+ended 2026-11-19 13:45:42 UTC

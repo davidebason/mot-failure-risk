@@ -3,18 +3,23 @@
 For every test year, 2020 to 2025, and p_crit = 0.1, 0.25 and 0.5, this writes to
 data/processed/evaluate/:
 
-- scores.csv: the model, Repeat and Most popular, pooled over every entry and per tier, with
+- scores.csv: the model, Repeat and Most popular, pooled over every entry, per tier and per way
+  a problem is recorded (failure, failure put right at the station, minor defect, advisory), with
   whether the model beats each baseline (a higher precision and a higher recall), and the share
   of money each saves at p_crit = t/m;
 - shuffled.csv: the models retrained on shuffled labels, pooled, against Most popular, which
   they must not beat;
 - groups.csv: the model's counts per group of the defects, precision read only from 100 flags
-  and recall only from 100 problems;
+  and recall only from 100 problems, and the money saved only where both are read;
 - calibration.csv: the calibration curve pooled over every entry, per band of probability;
 - calibration_check.csv: the precision promised and delivered at each p_crit, whether the year is
-  off, and, when it is, from 2021, the scores after an isotonic map fitted on the previous year;
+  off, and, when it is, from 2021, the scores and the money saved after an isotonic map fitted on
+  the previous year;
 - brier.csv: the Brier score of the model, the shuffled models and the base rate, pooled and per
-  tier, the skill of each against the base rate, and, pooled, the score's terms.
+  tier, the skill of each against the base rate, and, pooled, the score's terms;
+- slots.csv: the slots of each test year, and the share that record at least one failure, which
+  fails the vehicle's test and brings it back for a retest; with the first model only, since it
+  does not depend on the model.
 
 It reads the training run's results in data/processed/train/, with the fine bands that
 src/motrisk/rescore.py adds to them, the baselines' counts and the entry dictionary, and stops
@@ -37,6 +42,7 @@ import argparse
 import csv
 from pathlib import Path
 
+import duckdb
 import numpy as np
 import pandas as pd
 
@@ -49,7 +55,12 @@ OUT_DIRS = {
 }
 KINDS = ("model", "shuffled")
 SOURCES = ("model", "repeat", "most_popular")
+# The memo's example of a cut-off set per problem: Brakes > Rigid brake pipes, Tyres > Tread depth.
+EXAMPLE_GROUPS = (20033, 20233)
 TIERS = ("full", "small", "base_rate")
+# The ways a problem is recorded (DATA.md, "What the model predicts"), as scopes of scores.csv:
+# only a failure makes the vehicle fail its test and come back for a retest.
+WAYS = {"F": "failure", "P": "failure_put_right", "M": "minor_defect", "A": "advisory"}
 # Our prediction for 2025, written down before any score was computed, for each model:
 # p_crit: (precision low, high), (recall low, high).
 PREDICTIONS = {
@@ -118,11 +129,36 @@ def add(counts: pd.DataFrame, part: pd.Series, what: str) -> None:
             raise SystemExit(f"{what} do not add up to the pooled {k}")
 
 
+def failing_slots() -> pd.DataFrame:
+    """For each test year, the slots predicted, those whose label holds at least one failure, and
+    their share."""
+    entries = pd.read_csv(baselines.ENTRIES, usecols=["entry", "way"])
+    con = duckdb.connect()
+    con.register("failures", entries[entries["way"] == "F"][["entry"]])
+    rows = []
+    for year in folds.TEST_YEARS:
+        slots, failing = con.execute(
+            """
+            SELECT count(*),
+                   count(*) FILTER (WHERE (SELECT count(*)
+                                           FROM unnest(r.label_entries) AS u(e)
+                                           JOIN failures AS f ON f.entry = u.e) > 0)
+            FROM read_parquet(?) AS r
+            """,
+            [str(folds.ROWS / f"{year}.parquet")],
+        ).fetchone()
+        rows.append({"test_year": year, "slots": slots, "failing_slots": failing})
+    t = pd.DataFrame(rows)
+    return t.assign(failing_share=t["failing_slots"] / t["slots"])
+
+
 def main(encoding: str = "pairs") -> None:
     train, out = folds.TRAIN_DIRS[encoding], OUT_DIRS[encoding]
     every = entries()
     groups = pd.read_csv(DICTIONARY, usecols=["entry", "group_id", "group_path"])
     paths = groups.drop_duplicates("group_id").set_index("group_id")["group_path"]
+    way = pd.read_csv(baselines.ENTRIES, usecols=["entry", "way"]).set_index("entry")["way"]
+    way = way.map(WAYS)
     base = pd.read_csv(baselines.OUT)
     scores, shuffled, by_group, curves, checks, briers = [], [], [], [], [], []
     previous = None
@@ -139,10 +175,12 @@ def main(encoding: str = "pairs") -> None:
 
         b_score = {}
         for name, b in b_year.groupby("baseline"):
-            b = b.assign(tier=tier.reindex(b.index).values)
+            b = b.assign(tier=tier.reindex(b.index).values, way=way.reindex(b.index).values)
             b_score[name, "pooled"] = evaluate.score(b)
             for t in TIERS:
                 b_score[name, t] = evaluate.score(b[b["tier"] == t])
+            for w in WAYS.values():
+                b_score[name, w] = evaluate.score(b[b["way"] == w])
 
         for p_crit in evaluate.P_CRITS:
             counts = evaluate.counts_at(cells["model"], p_crit)
@@ -151,8 +189,18 @@ def main(encoding: str = "pairs") -> None:
                 evaluate.score(counts[counts["tier"] == t])[["tp", "fp", "fn"]] for t in TIERS
             )
             add(counts, parts, f"{year} {p_crit}: the tiers")
-            for scope in ("pooled", *TIERS):
-                s = pooled if scope == "pooled" else evaluate.score(counts[counts["tier"] == scope])
+            ways = counts["entry"].map(way)
+            parts = sum(
+                evaluate.score(counts[ways == w])[["tp", "fp", "fn"]] for w in WAYS.values()
+            )
+            add(counts, parts, f"{year} {p_crit}: the ways")
+            for scope in ("pooled", *TIERS, *WAYS.values()):
+                if scope == "pooled":
+                    s = pooled
+                else:
+                    s = evaluate.score(
+                        counts[(counts["tier"] if scope in TIERS else ways) == scope]
+                    )
                 row = {"test_year": year, "p_crit": p_crit, "scope": scope}
                 scores.append(
                     {
@@ -178,6 +226,9 @@ def main(encoding: str = "pairs") -> None:
             g = evaluate.by_group(counts, groups)
             add(counts, g[["tp", "fp", "fn"]].sum(), f"{year} {p_crit}: the groups")
             g.insert(1, "group_path", g["group_id"].map(paths))
+            read = g["precision"].notna() & g["recall"].notna()
+            saved = [evaluate.saved(r, p_crit) for _, r in g.iterrows()]
+            g["saved"] = pd.Series(saved, index=g.index).where(read)
             by_group.append(g.assign(test_year=year, p_crit=p_crit))
 
             sh = evaluate.score(evaluate.counts_at(cells["shuffled"], p_crit))
@@ -207,6 +258,7 @@ def main(encoding: str = "pairs") -> None:
                         evaluate.counts_at(evaluate.remap(cells["model"], mapping), p_crit)
                     )
                     check.update({f"after_{k}": v for k, v in after.items()})
+                    check["after_saved"] = evaluate.saved(after, p_crit)
             checks.append(check)
 
         curves.append(evaluate.curve(cells["model"]).assign(test_year=year))
@@ -221,6 +273,8 @@ def main(encoding: str = "pairs") -> None:
         "calibration_check": pd.DataFrame(checks),
         "brier": pd.DataFrame(briers),
     }
+    if encoding == "pairs":
+        tables["slots"] = failing_slots()
     first = {"groups": ["test_year", "p_crit"], "calibration": ["test_year"]}
     for name, t in tables.items():
         lead = first.get(name, [])
@@ -318,6 +372,34 @@ def compare() -> None:
     )
 
 
+def groups_2025(groups: pd.DataFrame) -> None:
+    """The groups in 2025: at p_crit = 0.1, those whose money saved is read, the three that save
+    the most and the three that save the least, and those never flagged; and the example groups'
+    money saved at each p_crit."""
+    year = groups[groups["test_year"] == 2025]
+    g = year[year["p_crit"] == 0.1]
+    problems = g["problems"].sum()
+    read = g[g["saved"].notna()].sort_values("saved", ascending=False)
+    never = g[(g["problems"] >= evaluate.MIN_PROBLEMS) & (g["flags"] == 0)]
+    print(
+        f"groups in 2025 at p_crit 0.1: {len(g)} with problems; money saved read for {len(read)}, "
+        f"{pct(read['problems'].sum() / problems)} of the problems, {(read['saved'] > 0).sum()} "
+        f"saving money; {len(never)} with {evaluate.MIN_PROBLEMS} problems or more never flagged, "
+        f"{pct(never['problems'].sum() / problems)} of the problems"
+    )
+    for label, rows in (("most", read.head(3)), ("least", read.tail(3).iloc[::-1])):
+        for _, r in rows.iterrows():
+            print(
+                f"  saves the {label}: {r['group_path']}, {r['problems']:,} problems, "
+                f"precision {pct(r['precision'])}, recall {pct(r['recall'])}, "
+                f"saved {pct(r['saved'])}"
+            )
+    for gid in EXAMPLE_GROUPS:
+        rows = year[year["group_id"] == gid].set_index("p_crit")
+        steps = ", ".join(f"p_crit {p}: {pct(rows.loc[p, 'saved'])}" for p in evaluate.P_CRITS)
+        print(f"  example, {rows['group_path'].iloc[0]}: money saved at {steps}")
+
+
 def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
     """The pooled scores, the shuffled check and calibration per year, then 2025 beside the
     prediction."""
@@ -357,6 +439,11 @@ def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
             f"  BS {m['brier']:.3e}, reliability {m['reliability']:.2e}, "
             f"resolution {m['resolution']:.2e}, uncertainty {m['uncertainty']:.2e}"
         )
+    groups_2025(t["groups"])
+    if "slots" in t:
+        print("slots with at least one failure, so a retest:")
+        for r in t["slots"].itertuples():
+            print(f"{r.test_year}: {r.failing_slots:,} of {r.slots:,}, {pct(r.failing_share)}")
     print("2025 beside the prediction written down before any score was computed:")
     lo, hi = PREDICTED_SKILL[encoding]
     m = b.loc[2025, "pooled", "model"]

@@ -4,9 +4,9 @@ Every model's results are kept as each entry's rows and ones in bands of probabi
 band b holding the probabilities from b/100 to (b + 1)/100 (folds.tally). At a cut-off p_crit that
 is a multiple of 0.01, the cells flagged are exactly those of the bands from 100 p_crit, so the true
 positives, false positives and false negatives follow exactly. The probability a band promises is
-taken as its midpoint, (b + 0.5)/100, which is within 0.5 points of the cells' own mean, the
-author's decision of 2026-11-16; the midpoint also flags exactly the bands from 100 p_crit, since
-(b + 0.5)/100 >= p_crit when and only when b >= 100 p_crit.
+taken as its midpoint, (b + 0.5)/100, which is within 0.5 points of the cells' own mean; the
+midpoint also flags exactly the bands from 100 p_crit, since (b + 0.5)/100 >= p_crit when and only
+when b >= 100 p_crit.
 
 - **Beating a baseline** means a higher precision and a higher recall at the same p_crit.
 - **A test year is off** when, at a p_crit, the precision delivered differs from the precision
@@ -16,13 +16,13 @@ author's decision of 2026-11-16; the midpoint also flags exactly the bands from 
   every entry and weighted by rows, and applied to the year's bands.
 - **The money saved**, at p_crit = t/m, is the share of what leaving every problem to the test costs
   that checking the flags saves: (m TP - t (TP + FP)) / (m (TP + FN)), which is
-  recall (1 - p_crit / precision), the author's decision of 2026-11-17.
+  recall (1 - p_crit / precision).
 - **The Brier score** is the mean of (p - y)^2 over every cell, an entry on a test row of its
   classes, computed exactly from the sums the test years were scored again for (rescore.py); its
-  **skill** is 1 - BS / BS of the base rate, each entry at its share of ones in the training rows,
-  the author's decision of the same day. Reliability, resolution and uncertainty are taken over
-  the fine bands pooled over every entry, with the two terms within the bands that make them add
-  up to the score exactly (Stephenson, Coelho and Jolliffe, 2008).
+  **skill** is 1 - BS / BS of the base rate, each entry at its share of ones in the training rows.
+  Reliability, resolution and uncertainty are taken over the fine bands pooled over every entry,
+  with the two terms within the bands that make them add up to the score exactly (Stephenson,
+  Coelho and Jolliffe, 2008).
 
 This module computes and reads no file; analysis/01_next_test.py reads the run's files and
 writes the results.

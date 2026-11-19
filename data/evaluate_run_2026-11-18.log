@@ -1,4 +1,4 @@
-started 2026-11-18 09:41:13 UTC
+started 2026-11-18 17:16:16 UTC
 pooled, precision / recall; beats Repeat, Most popular; shuffled passes; off
 2020  0.1: model  18.85%  22.63%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  YY  shuffled passes  off False
 2020 0.25: model  31.56%   6.58%  repeat  15.67%  13.80%  most popular  17.75%   9.75%  nn  shuffled passes  off False
@@ -32,9 +32,18 @@ Brier skill against the base rate, pooled: model, shuffled; the model's terms
 2023: model +0.0411  shuffled +0.0004  BS 4.779e-04, reliability 5.31e-07, resolution 3.99e-05, uncertainty 5.17e-04
 2024: model +0.0432  shuffled +0.0003  BS 4.873e-04, reliability 6.01e-07, resolution 4.26e-05, uncertainty 5.29e-04
 2025: model +0.0469  shuffled +0.0003  BS 4.848e-04, reliability 6.48e-07, resolution 4.45e-05, uncertainty 5.29e-04
+groups in 2025 at p_crit 0.1: 452 with problems; money saved read for 174,  96.07% of the problems, 167 saving money; 199 with 100 problems or more never flagged,   3.41% of the problems
+  saves the most: Noise, emissions and leaks > Fluid leaks > Engine oil leaks, 1,772,120 problems, precision  28.70%, recall  51.91%, saved  33.82%
+  saves the most: Brakes > Rigid brake pipes, 1,541,267 problems, precision  23.60%, recall  56.98%, saved  32.83%
+  saves the most: Tyres > Tread depth, 6,514,159 problems, precision  16.94%, recall  75.88%, saved  31.08%
+  saves the least: Brakes > Mechanical brake components > Brake cables, rods, levers and linkages > Rod, 396 problems, precision   8.67%, recall   3.79%, saved  -0.58%
+  saves the least: Brakes > ABS / EBS / ESC > Anti-lock braking system, 149,934 problems, precision   9.20%, recall   6.47%, saved  -0.56%
+  saves the least: Visibility > Wipers, 1,014,015 problems, precision   7.00%, recall   0.49%, saved  -0.21%
+  example, Brakes > Rigid brake pipes: money saved at p_crit 0.1:  32.83%, p_crit 0.25:  15.93%, p_crit 0.5:   1.64%
+  example, Tyres > Tread depth: money saved at p_crit 0.1:  31.08%, p_crit 0.25:   0.68%, p_crit 0.5:  -0.03%
 2025 beside the prediction written down before any score was computed:
   Brier skill +0.0469, predicted +0.0450 to +0.0800
   p_crit 0.5: precision  48.28%, predicted  42.00% to  58.00%; recall   2.30%, predicted   1.00% to   2.00%
   p_crit 0.1: precision  19.48%, predicted  18.00% to  32.00%; recall  27.07%, predicted  13.00% to  25.00%
 exit 0
-ended 2026-11-18 09:41:16 UTC
+ended 2026-11-18 17:16:20 UTC
