@@ -4,7 +4,7 @@
 # landed. Written to the file named as the first argument. Run from the repository's root, logged
 # in with az login:
 #
-#     bash azure/watcher_runs.sh data/watcher_runs_2026-11-16.log
+#     bash azure/watcher_runs.sh data/watcher_runs_2026-11-18.log
 set -euo pipefail
 OUT=${1:?output file}
 QUERY="requests
