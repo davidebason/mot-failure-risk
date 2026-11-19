@@ -14,7 +14,7 @@ floats, CHUNK iterations at a time for at most --chunks chunks, the test year sc
   the run's, --penalty k, that is C = 1/k, which shrinks a weight whose column carries fewer
   than about k expected ones and leaves the columns with many alone.
 
-The figures above, fold by fold, come from the results the runs saved, on the author's computer;
+The figures above, fold by fold, come from the results the runs saved, on our computer;
 the tests take three steps, each its own process, so that their memory peaks never add up: in one
 process, the 64-bit training matrix and the test matrix exceed the virtual machine's 32 GB.
 

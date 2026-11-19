@@ -1,4 +1,4 @@
-"""The small and base-rate models, fitted on counts on the author's computer (DATA.md).
+"""The small and base-rate models, fitted on counts on our computer (DATA.md).
 
 A small model's inputs come from three facts about a row: u, whether the previous slot recorded
 the entry; g, whether it recorded any entry of the entry's group; and the days between the two
