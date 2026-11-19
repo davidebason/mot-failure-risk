@@ -9,10 +9,11 @@ data/processed/evaluate/:
 - shuffled.csv: the models retrained on shuffled labels, pooled, against Most popular, which
   they must not beat;
 - groups.csv: the model's counts per group of the defects, precision read only from 100 flags
-  and recall only from 100 problems;
+  and recall only from 100 problems, and the money saved only where both are read;
 - calibration.csv: the calibration curve pooled over every entry, per band of probability;
 - calibration_check.csv: the precision promised and delivered at each p_crit, whether the year is
-  off, and, when it is, from 2021, the scores after an isotonic map fitted on the previous year;
+  off, and, when it is, from 2021, the scores and the money saved after an isotonic map fitted on
+  the previous year;
 - brier.csv: the Brier score of the model, the shuffled models and the base rate, pooled and per
   tier, the skill of each against the base rate, and, pooled, the score's terms.
 
@@ -49,6 +50,8 @@ OUT_DIRS = {
 }
 KINDS = ("model", "shuffled")
 SOURCES = ("model", "repeat", "most_popular")
+# The memo's example of a cut-off set per problem: Brakes > Rigid brake pipes, Tyres > Tread depth.
+EXAMPLE_GROUPS = (20033, 20233)
 TIERS = ("full", "small", "base_rate")
 # Our prediction for 2025, written down before any score was computed, for each model:
 # p_crit: (precision low, high), (recall low, high).
@@ -178,6 +181,9 @@ def main(encoding: str = "pairs") -> None:
             g = evaluate.by_group(counts, groups)
             add(counts, g[["tp", "fp", "fn"]].sum(), f"{year} {p_crit}: the groups")
             g.insert(1, "group_path", g["group_id"].map(paths))
+            read = g["precision"].notna() & g["recall"].notna()
+            saved = [evaluate.saved(r, p_crit) for _, r in g.iterrows()]
+            g["saved"] = pd.Series(saved, index=g.index).where(read)
             by_group.append(g.assign(test_year=year, p_crit=p_crit))
 
             sh = evaluate.score(evaluate.counts_at(cells["shuffled"], p_crit))
@@ -207,6 +213,7 @@ def main(encoding: str = "pairs") -> None:
                         evaluate.counts_at(evaluate.remap(cells["model"], mapping), p_crit)
                     )
                     check.update({f"after_{k}": v for k, v in after.items()})
+                    check["after_saved"] = evaluate.saved(after, p_crit)
             checks.append(check)
 
         curves.append(evaluate.curve(cells["model"]).assign(test_year=year))
@@ -318,6 +325,34 @@ def compare() -> None:
     )
 
 
+def groups_2025(groups: pd.DataFrame) -> None:
+    """The groups in 2025: at p_crit = 0.1, those whose money saved is read, the three that save
+    the most and the three that save the least, and those never flagged; and the example groups'
+    money saved at each p_crit."""
+    year = groups[groups["test_year"] == 2025]
+    g = year[year["p_crit"] == 0.1]
+    problems = g["problems"].sum()
+    read = g[g["saved"].notna()].sort_values("saved", ascending=False)
+    never = g[(g["problems"] >= evaluate.MIN_PROBLEMS) & (g["flags"] == 0)]
+    print(
+        f"groups in 2025 at p_crit 0.1: {len(g)} with problems; money saved read for {len(read)}, "
+        f"{pct(read['problems'].sum() / problems)} of the problems, {(read['saved'] > 0).sum()} "
+        f"saving money; {len(never)} with {evaluate.MIN_PROBLEMS} problems or more never flagged, "
+        f"{pct(never['problems'].sum() / problems)} of the problems"
+    )
+    for label, rows in (("most", read.head(3)), ("least", read.tail(3).iloc[::-1])):
+        for _, r in rows.iterrows():
+            print(
+                f"  saves the {label}: {r['group_path']}, {r['problems']:,} problems, "
+                f"precision {pct(r['precision'])}, recall {pct(r['recall'])}, "
+                f"saved {pct(r['saved'])}"
+            )
+    for gid in EXAMPLE_GROUPS:
+        rows = year[year["group_id"] == gid].set_index("p_crit")
+        steps = ", ".join(f"p_crit {p}: {pct(rows.loc[p, 'saved'])}" for p in evaluate.P_CRITS)
+        print(f"  example, {rows['group_path'].iloc[0]}: money saved at {steps}")
+
+
 def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
     """The pooled scores, the shuffled check and calibration per year, then 2025 beside the
     prediction."""
@@ -357,6 +392,7 @@ def summary(t: dict[str, pd.DataFrame], encoding: str) -> None:
             f"  BS {m['brier']:.3e}, reliability {m['reliability']:.2e}, "
             f"resolution {m['resolution']:.2e}, uncertainty {m['uncertainty']:.2e}"
         )
+    groups_2025(t["groups"])
     print("2025 beside the prediction written down before any score was computed:")
     lo, hi = PREDICTED_SKILL[encoding]
     m = b.loc[2025, "pooled", "model"]
